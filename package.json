@@ -7,6 +7,7 @@
     "node": ">=22.11.0"
   },
   "scripts": {
+    "clean": "git clean -xdf node_modules build .react-router",
     "preinstall": "npx only-allow npm",
     "lint": "eslint .",
     "dev": "react-router dev"
@@ -25,6 +26,7 @@
     "@react-router/fs-routes": "^7.2.0",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/node": "^22.13.5",
+    "@types/react": "^19.0.10",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-typescript": "^3.8.3",

@@ -1,5 +1,5 @@
 /** @type {import("@react-router/dev/config").Config} */
 export default {
-  appDirectory: "app",
+  appDirectory: "./src/firetrack_client",
   ssr: false,
 }
