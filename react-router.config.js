@@ -1,6 +1,6 @@
-import type { Config } from "@react-router/dev/config";
 
 /** @type {import("@react-router/dev/config").Config} */
 export default {
+  appDirectory: "app",
   ssr: false,
-} satisfies Config;
+}

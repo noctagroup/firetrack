@@ -141,6 +141,10 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+# React Router
+/.react-router/
+/build/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
