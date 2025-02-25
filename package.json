@@ -4,5 +4,8 @@
   "engineStrict": true,
   "engines": {
     "node": ">=22.11.0"
+  },
+  "scripts": {
+    "preinstall": "npx only-allow npm"
   }
 }
