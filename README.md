@@ -12,3 +12,9 @@ uv sync
 uv venv
 source .venv/bin/activate
 ```
+
+```sh
+nvm install
+nvm use
+npm install
+```

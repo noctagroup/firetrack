@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "name": "firetrack",
+  "engineStrict": true,
+  "engines": {
+    "node": ">=22.11.0"
+  }
+}
