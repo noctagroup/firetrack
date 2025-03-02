@@ -7,10 +7,13 @@
     "node": ">=22.11.0"
   },
   "scripts": {
-    "clean": "git clean -xdf node_modules build .react-router",
     "preinstall": "npx only-allow npm",
-    "lint": "eslint .",
-    "dev": "react-router dev"
+    "postinstall": "react-router typegen",
+    "clean": "git clean -xdf node_modules build .react-router",
+    "typecheck": "react-router typegen && tsc -b",
+    "dev": "react-router dev",
+    "build": "react-router build",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@react-router/node": "^7.2.0",
