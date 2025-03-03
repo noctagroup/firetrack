@@ -18,7 +18,6 @@ export function DO_NOT_USE_INTERNAL_MAPBOX() {
       dragRotate={false}
       renderWorldCopies={false}
       RTLTextPlugin={false}
-      antialias={true}
       maxZoom={20}
       minZoom={0}></Mapbox>
   )
