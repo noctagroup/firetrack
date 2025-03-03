@@ -15,7 +15,6 @@ cd apps/api
 uv sync
 uv venv
 source .venv/bin/activate
-cp .env.example .env
 uv run uvicorn --reload firetrack.main:app
 ```
 
