@@ -3,11 +3,11 @@ from starlette.config import Config
 
 config: Config = Config(env_file=".env", env_prefix="FASTAPI_")
 
-POSTGRES_DB: str = config("POSTGRES_DB", default="postgres")
-POSTGRES_USER: str = config("POSTGRES_USER", default="postgres")
-POSTGRES_PASSWORD: str = config("POSTGRES_PASSWORD", default="postgres")
-POSTGRES_HOST: str = config("POSTGRES_HOST", default="localhost")
-POSTGRES_PORT: int = config("POSTGRES_PORT", default=5432, cast=int)
+POSTGRES_DB: str = config("POSTGRES_DB")
+POSTGRES_USER: str = config("POSTGRES_USER")
+POSTGRES_PASSWORD: str = config("POSTGRES_PASSWORD")
+POSTGRES_HOST: str = config("POSTGRES_HOST")
+POSTGRES_PORT: int = config("POSTGRES_PORT", cast=int)
 
 POSTGRES_URL: str = str(
     PostgresDsn.build(
