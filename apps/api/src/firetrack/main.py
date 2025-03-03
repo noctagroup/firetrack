@@ -1,20 +1,14 @@
 from fastapi import FastAPI
-from sqlalchemy import Column, Integer
+from fastapi.responses import ORJSONResponse
+from starlette.middleware.cors import CORSMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 
+from firetrack.api import api
 from firetrack.database.core import async_engine
-from firetrack.database.dependencies import AsyncSessionDep
 from firetrack.database.model import Model
 
 
-class User(Model):
-    id = Column(Integer, primary_key=True, index=True)
-
-
-class Scar(Model):
-    id = Column(Integer, primary_key=True, index=True)
-
-
-async def lifespan(app: FastAPI):
+async def lifespan(_: FastAPI):
     # TODO: FIXME: isso aqui é uma gambiarra, as migrações deveriam ser controladas pelo alembic
     async with async_engine.begin() as conn:
         try:
@@ -24,11 +18,16 @@ async def lifespan(app: FastAPI):
             await conn.rollback()
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(lifespan=lifespan, default_response_class=ORJSONResponse)
 
 
-@app.get("/")
-async def root(db: AsyncSessionDep):
-    return {
-        "hello": "world",
-    }
+app.add_middleware(GZipMiddleware, minimum_size=512)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+app.include_router(api, prefix="/api/v1")

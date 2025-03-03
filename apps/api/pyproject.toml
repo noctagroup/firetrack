@@ -11,6 +11,7 @@ requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115.11",
     "geoalchemy2>=0.17.1",
+    "orjson>=3.10.15",
     "pydantic>=2.10.6",
     "sqlalchemy[mypy,postgresql-asyncpg]>=2.0.38",
     "starlette>=0.46.0",
