@@ -2,11 +2,11 @@ from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
     async_sessionmaker,
     create_async_engine,
 )
-from sqlalchemy.ext.asyncio.engine import AsyncEngine
-from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import DeclarativeBase
 
 from firetrack.config import POSTGRES_URL
