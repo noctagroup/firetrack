@@ -1,7 +1,8 @@
 from pydantic import PostgresDsn
 from starlette.config import Config
 
-config: Config = Config(env_file=".env", env_prefix="FASTAPI_")
+config: Config = Config()
+
 
 POSTGRES_DB: str = config("POSTGRES_DB", default="postgres")
 POSTGRES_USER: str = config("POSTGRES_USER", default="postgres")
