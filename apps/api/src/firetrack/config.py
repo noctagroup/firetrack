@@ -8,6 +8,7 @@ POSTGRES_USER: str = config("POSTGRES_USER", default="postgres")
 POSTGRES_PASSWORD: str = config("POSTGRES_PASSWORD", default="postgres")
 POSTGRES_HOST: str = config("POSTGRES_HOST", default="localhost")
 POSTGRES_PORT: int = config("POSTGRES_PORT", default=5432, cast=int)
+
 POSTGRES_URL: str = str(
     PostgresDsn.build(
         scheme="postgresql+asyncpg",
