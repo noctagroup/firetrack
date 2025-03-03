@@ -7,8 +7,10 @@ from firetrack.database.model import Model
 
 
 class User(Model):
-    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
 
+
+class Scar(Model):
     id = Column(Integer, primary_key=True, index=True)
 
 
