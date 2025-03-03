@@ -2,6 +2,7 @@ from enum import Enum
 
 
 class ProcessingStates(Enum):
+    IDLE = "IDLE"
     STARTED = "STARTED"
     BBOX_SELECTED = "BBOX_SELECTED"
     PERIOD_SELECTED = "PERIOD_SELECTED"

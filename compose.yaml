@@ -16,5 +16,11 @@ services:
       retries: 5
     restart: on-failure
 
+  redis:
+    image: eqalpha/keydb
+    ports:
+      - 6379:6379
+    restart: on-failure
+
 volumes:
   postgis:

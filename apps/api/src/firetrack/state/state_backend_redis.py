@@ -29,11 +29,7 @@ class StateBackendRedis(StateBackend):
             str: ID gerado para o `StateManager`.
         """
         manager_id = f"state_manager:{id(new_manager)}"
-        data = {
-            "current_state": str(new_manager.get_current_state()),
-            "transitions": json.dumps(new_manager.transitions),
-        }
-        self.redis_client.hmset(manager_id, data)
+        self.redis_client.set(manager_id, json.dumps(new_manager.to_dict()))
         return manager_id
 
     def load_manager(self, manager_id: str) -> StateManager:
@@ -49,18 +45,11 @@ class StateBackendRedis(StateBackend):
         Raises:
             KeyError: Se o `StateManager` não for encontrado.
         """
-        data = self.redis_client.hgetall(manager_id)
+        data = self.redis_client.get(manager_id)
         if not data:
             raise KeyError(f"StateManager with ID '{manager_id}' not found.")
 
-        # Desserializa os dados armazenados
-        current_state = data["current_state"]
-        transitions = json.loads(data["transitions"])
-
-        # Reconstrói o `StateManager`
-        manager = StateManager(transitions=[], initial_state=current_state)
-        manager.transitions = transitions
-        return manager
+        return StateManager.from_dict(json.loads(data))
 
     def update_manager(self, manager_id: str, manager: StateManager):
         """
@@ -73,8 +62,4 @@ class StateBackendRedis(StateBackend):
         if not self.redis_client.exists(manager_id):
             raise KeyError(f"StateManager with ID '{manager_id}' not found.")
 
-        data = {
-            "current_state": str(manager.get_current_state()),
-            "transitions": json.dumps(manager.transitions),
-        }
-        self.redis_client.hmset(manager_id, data)
+        self.redis_client.set(manager_id, json.dumps(manager.to_dict()))

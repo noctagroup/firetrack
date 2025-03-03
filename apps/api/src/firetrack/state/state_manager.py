@@ -37,10 +37,9 @@ class StateManager:
         """
         for transition in transitions:
             when_key = self._normalize_event(transition.when)
-            self.transitions.setdefault(when_key, []).append({
-                "from": transition.state_from,
-                "to": transition.state_to
-            })
+            self.transitions.setdefault(when_key, []).append(
+                {"from": transition.state_from, "to": transition.state_to}
+            )
 
     def change(self, when: str | Enum):
         """
@@ -63,10 +62,12 @@ class StateManager:
         for transition in possible_transitions:
             if transition["from"] == self.__current_state:
                 self.__current_state = transition["to"]
-                print(f"✅ Transitioned from {transition['from']} to {transition['to']}.")
+                print(f"Transitioned from {transition['from']} to {transition['to']}.")
                 return
 
-        raise ValueError(f"Invalid transition from '{self.__current_state}' using event '{when}'.")
+        raise ValueError(
+            f"Invalid transition from '{self.__current_state}' using event '{when}'."
+        )
 
     def get_current_state(self) -> str | Enum:
         """
@@ -76,3 +77,32 @@ class StateManager:
             str | Enum: O estado atual da máquina.
         """
         return self.__current_state
+
+    def to_dict(self):
+        return {
+            "current_state": self._normalize_event(self.__current_state),
+            "transitions": {
+                event: [
+                    {
+                        "from": self._normalize_event(t["from"]),
+                        "to": self._normalize_event(t["to"]),
+                    }
+                    for t in transitions
+                ]
+                for event, transitions in self.transitions.items()
+            },
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict) -> "StateManager":
+        """
+        Converte um dicionário salvo no Redis de volta para um StateManager.
+        """
+        initial_state = data["current_state"]
+        transitions = {
+            event: [{"from": state["from"], "to": state["to"]} for state in states]
+            for event, states in data["transitions"].items()
+        }
+        manager = cls(transitions=[], initial_state=initial_state)
+        manager.transitions = transitions
+        return manager
