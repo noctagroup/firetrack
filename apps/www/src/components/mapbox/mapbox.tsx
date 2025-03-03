@@ -12,6 +12,7 @@ export function DO_NOT_USE_INTERNAL_MAPBOX() {
       mapLib={mapboxGl}
       mapboxAccessToken={env.MAPBOX_ACCESS_TOKEN}
       projection="mercator"
+      language="name_pt"
       // https://docs.mapbox.com/api/maps/styles/#classic-mapbox-styles
       mapStyle="mapbox://styles/mapbox/satellite-streets-v12"
       dragRotate={false}
