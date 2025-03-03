@@ -16,6 +16,7 @@ dependencies = [
     "pystac-client>=0.8.6",
     "pytest>=8.3.5",
     "pytest-cov>=6.0.0",
+    "redis>=5.2.1",
     "schemathesis>=3.39.11",
     "sqlalchemy[mypy,postgresql-asyncpg]>=2.0.38",
     "starlette>=0.46.0",

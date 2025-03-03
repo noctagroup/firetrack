@@ -1,11 +1,25 @@
-from firetrack.services.stac_service import StacService
+# Conectar ao Redis
+from firetrack.state.state_backend_redis import StateBackendRedis
+from firetrack.state.state_machine import StateMachine
+from firetrack.state.transition import Transition
 
-stac_service = StacService("https://data.inpe.br/bdc/stac/v1/")
+backend = StateBackendRedis(redis_host="localhost", redis_port=6379)
 
-filtered_items = stac_service.get_collection_items_filtered(
-    bbox=(-61.7960, -9.0374, -61.7033, -8.9390),
-    datetime="2024-02-01/2024-02-28",
-    collections=["CB4-WFI-L2-DN-1"]
-)
+# Criar máquina de estados
+state_machine = StateMachine(backend)
 
-print(filtered_items)
+# Criar transições
+t1 = Transition.create("IDLE", "RUNNING", "start_command")
+t2 = Transition.create("RUNNING", "STOPPED", "stop_command")
+
+# Criar um novo StateManager e salvar no Redis
+manager_id = state_machine.create_state_manager([t1, t2], "IDLE")
+print(f"StateManager salvo no Redis com ID: {manager_id}")
+
+# Alterar estado e salvar no Redis
+state_machine.change_state(manager_id, "start_command")
+print(f"Novo estado salvo: {state_machine.get_current_state(manager_id)}")  # RUNNING
+
+# Carregar do Redis e verificar estado
+loaded_manager = backend.load_manager(manager_id)
+print(f"Estado carregado do Redis: {loaded_manager.get_current_state()}")  # RUNNING
