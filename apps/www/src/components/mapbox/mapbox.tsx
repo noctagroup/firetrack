@@ -1,13 +1,15 @@
 import "mapbox-gl/dist/mapbox-gl.css"
 
 import mapboxGl from "mapbox-gl"
+import type { ComponentProps } from "react"
 import Mapbox from "react-map-gl/mapbox"
 
 import { env } from "~/env"
 
-export function DO_NOT_USE_INTERNAL_MAPBOX() {
+export function DO_NOT_USE_INTERNAL_MAPBOX({ ...props }: ComponentProps<typeof Mapbox>) {
   return (
     <Mapbox
+      {...props}
       style={{ height: "100%" }}
       mapLib={mapboxGl}
       mapboxAccessToken={env.MAPBOX_ACCESS_TOKEN}

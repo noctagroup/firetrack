@@ -87,5 +87,11 @@ export default tseslint.config(
 
   ...query.configs["flat/recommended"],
 
+  {
+    rules: {
+      "@typescript-eslint/no-non-null-assertion": "off",
+    },
+  },
+
   prettier
 )

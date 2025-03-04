@@ -49,7 +49,7 @@ export default function App() {
       </Sidebar>
 
       <SidebarInset>
-        <header className="h-12 px-4 border-b flex gap-2 items-center shrink-0">
+        <header className="h-14 px-4 border-b flex gap-2 items-center shrink-0">
           <Breadcrumb>
             <BreadcrumbList>
               {matches.map((match, matchIndex) => {
