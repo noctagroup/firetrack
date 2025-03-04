@@ -80,7 +80,7 @@ export default function App() {
           </Breadcrumb>
         </header>
 
-        <div className="flex-1">
+        <div className="grow-1 shrink-0 basis-auto">
           <Outlet />
         </div>
       </SidebarInset>
