@@ -3,7 +3,6 @@ import { Suspense } from "react"
 import { Mapbox } from "~/components/mapbox"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable"
 import { Skeleton } from "~/components/ui/skeleton"
-import { Typography } from "~/components/ui/typography"
 
 import { RESIZABLE_HANDLE_ID } from "./constants"
 import { useResizableMapRef } from "./hooks"
@@ -18,10 +17,7 @@ export default function AppIndex() {
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel className="px-6 py-8" defaultSize={25} minSize={20} maxSize={40}>
-        <Typography variant="h1">h1</Typography>
-        <Typography variant="h2">h2</Typography>
-        <Typography variant="h3">h3</Typography>
-        <Typography variant="h4">h4</Typography>
+        asdf
       </ResizablePanel>
 
       <ResizableHandle id={RESIZABLE_HANDLE_ID} withHandle />
