@@ -10,20 +10,7 @@ export const handle = {
 }
 
 export default function AppIndex() {
-  const mapRef = useRef<MapRef>(null)
-
-  useEffect(() => {
-    const handleEl = document.getElementById(RESIZABLE_HANDLE_ID)!
-    const observer = new MutationObserver(() => {
-      if (!mapRef.current?.resize) return undefined
-
-      mapRef.current.resize()
-    })
-
-    observer.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
-
-    return () => observer.disconnect()
-  }, [])
+  const mapRef = useResizableMapRef()
 
   return (
     <ResizablePanelGroup direction="horizontal">
@@ -38,6 +25,25 @@ export default function AppIndex() {
       </ResizablePanel>
     </ResizablePanelGroup>
   )
+}
+
+function useResizableMapRef() {
+  const ref = useRef<MapRef>(null)
+
+  useEffect(() => {
+    const handleEl = document.getElementById(RESIZABLE_HANDLE_ID)!
+    const observer = new MutationObserver(() => {
+      if (!ref.current?.resize) return undefined
+
+      ref.current.resize()
+    })
+
+    observer.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
+
+    return () => observer.disconnect()
+  }, [])
+
+  return ref
 }
 
 const RESIZABLE_HANDLE_ID = "resizable-handle"
