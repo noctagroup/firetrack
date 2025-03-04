@@ -25,24 +25,137 @@ paths:
       description: Creates a blank process and starts it on the state machine.
       operationId: createProcess
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Process'
-        '500':
-          description: It was impossible to start a new process
-  
+                $ref: "#/components/schemas/CreateProcess"
+        "500":
+          description: Internal server error
+
   /process/addAoi/{processId}:
-    put:
+    patch:
       tags:
         - process
-      summary: Change a blank process AOI.
+      summary: Change a blank process AOI to the given bounding box.
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "140441511793744"
+      requestBody:
+        description: The min_x, max_x, min_y and max_y.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                min_x:
+                  type: number
+                  format: float
+                  example: -123.123
+                max_x:
+                  type: number
+                  format: float
+                  example: 123.123
+                min_y:
+                  type: number
+                  format: float
+                  example: -45.123
+                max_y:
+                  type: number
+                  format: float
+                  example: 45.123
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddProcessAoi"
+        "400":
+          description: Invalid input
+        "404":
+          description: Process not found
+        "500":
+          description: Internal server error
 
+  /process/addPeriod/{processId}:
+    patch:
+      tags:
+        - process
+      summary: Change a blank process period to the one given.
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "140441511793744"
+      requestBody:
+        description: The period in the isoformat.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                start_datetime:
+                  type: string
+                  format: isoformat
+                  example: "2021-08-01T00:00:00Z"
+                end_datetime:
+                  type: string
+                  format: isoformat
+                  example: "2021-08-31T23:59:59Z"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddProcessAoi"
+        "400":
+          description: Invalid input
+        "404":
+          description: Process not found
+        "500":
+          description: Internal server error
+  /process/confirm/{processId}:
+    patch:
+      tags:
+        - process
+      summary: Confirm the given information and start the visual analysis phase.
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "140441511793744"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddProcessAoi"
+        "400":
+          description: Invalid input
+        "404":
+          description: Process not found
+        "500":
+          description: Internal server error
 components:
   schemas:
-    Process:
+    CreateProcess:
       type: object
       properties:
         id:
@@ -54,25 +167,54 @@ components:
           description: The current status of the fire scar classification process.
           enum:
             - IDLE
-            - STARTED
-            - BBOX_SELECTED
-            - PERIOD_SELECTED
-            - READY_FOR_VISUAL_ANALYSIS
-            - IN_VISUAL_ANALYSIS
-            - READY_FOR_VALID_PAIR_SEPARATION
-            - IN_VALID_PAIR_SEPARATION
-            - READY_FOR_INDEXES_CREATION
-            - IN_INDEXES_CREATION
-            - READY_FOR_DIFFERENCE_IMAGE_CREATION
-            - IN_DIFFERENCE_IMAGE_CREATION
-            - READY_FOR_AI_CLASSIFICATION
-            - IN_AI_CLASSIFICATION
-            - READY_FOR_PUBLISH
-            - PUBLISHED
             - ABORTED
             - INTERRUPTED
           example: STARTED
-
+    AddProcessAoi:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "140441511793744"
+        status:
+          type: string
+          description: The current status of the fire scar classification process.
+          enum:
+            - BBOX_SELECTED
+            - ABORTED
+            - INTERRUPTED
+          example: BBOX_SELECTED
+    AddProcessPeriod:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "140441511793744"
+        status:
+          type: string
+          description: The current status of the fire scar classification process.
+          enum:
+            - PERIOD_SELECTED
+            - ABORTED
+            - INTERRUPTED
+          example: PERIOD_SELECTED
+    ConfirmProcess:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "140441511793744"
+        status:
+          type: string
+          description: The current status of the fire scar classification process.
+          enum:
+            - READY_FOR_VISUAL_ANALYSIS
+            - ABORTED
+            - INTERRUPTED
+          example: READY_FOR_VISUAL_ANALYSIS
     ApiResponse:
       type: object
       properties:
