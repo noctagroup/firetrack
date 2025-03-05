@@ -33,10 +33,6 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:nightly
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:${{ github.sha }}
-
-      - name: 🔄 Trigger Backend server update
-        run: |
-          curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/backend/v1/update
     
       # Frontend 🎨
       #- name: 🏗️ Build and tag Frontend Docker image
@@ -50,10 +46,6 @@ jobs:
       #    docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:nightly
       #    docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:${{ github.sha }}
 
-      # - name: 🔄 Trigger Frontend server update
-      #   run: |
-      #     curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/frontend/v1/update
-
       # Docs 📚
       - name: 🏗️ Build and tag Docs Docker image
         working-directory: ./apps/docs
@@ -66,6 +58,7 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:nightly
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:${{ github.sha }}
 
-      - name: 🔄 Trigger Docs server update
+      # Watchtower 🗼
+      - name: 🔄 Trigger server update
         run: |
-          curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/docs/v1/update
+          curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/v1/update

@@ -153,6 +153,32 @@ paths:
           description: Process not found
         "500":
           description: Internal server error
+  /process/TESTE/{processId}:
+    patch:
+      tags:
+        - process
+      summary: Confirm the given information and start the visual analysis phase.
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "140441511793744"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmProcess"
+        "400":
+          description: Invalid input
+        "404":
+          description: Process not found
+        "500":
+          description: Internal server error
 components:
   schemas:
     CreateProcess:
