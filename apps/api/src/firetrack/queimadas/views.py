@@ -39,7 +39,7 @@ async def create(
     "/{cicatriz_queimadas_id}/stac",
     response_model=List[CicatrizQueimadasThumbnailSchema],
 )
-async def thumbnails(session: AsyncSessionDep, cicatriz_queimadas_id: int):
+async def stac(session: AsyncSessionDep, cicatriz_queimadas_id: int):
     cicatriz_queimadas = await get_cicatriz_queimadas(session, cicatriz_queimadas_id)
 
     if not cicatriz_queimadas:
@@ -54,14 +54,13 @@ async def thumbnails(session: AsyncSessionDep, cicatriz_queimadas_id: int):
         cicatriz_queimadas_validated
     )
 
-    bbox = cicatriz_queimadas_serialized.get("bbox")
-    periodo_start_at = cicatriz_queimadas_serialized.get("periodo_start_at")
-    periodo_end_at = cicatriz_queimadas_serialized.get("periodo_end_at")
-
-    thumbnails = stac_client.search(
-        bbox=bbox,
-        datetime=(periodo_start_at, periodo_end_at),
+    search_result = stac_client.search(
+        bbox=cicatriz_queimadas_serialized.get("bbox"),
+        datetime=(
+            cicatriz_queimadas_serialized.get("periodo_start_at"),
+            cicatriz_queimadas_serialized.get("periodo_end_at"),
+        ),
         collections=["CB4-WFI-L2-DN-1"],
     )
 
-    return thumbnails.items()
+    return search_result.items()
