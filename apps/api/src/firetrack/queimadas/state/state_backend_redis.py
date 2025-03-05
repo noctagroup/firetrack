@@ -2,8 +2,8 @@ import json
 
 import redis
 
-from firetrack.state.state_backend import StateBackend
-from firetrack.state.state_manager import StateManager
+from firetrack.queimadas.state.state_backend import StateBackend
+from firetrack.queimadas.state.state_manager import StateManager
 
 
 class StateBackendRedis(StateBackend):
@@ -16,7 +16,9 @@ class StateBackendRedis(StateBackend):
             redis_port (int): Porta do Redis.
             redis_db (int): Número do banco de dados Redis.
         """
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, decode_responses=True)
+        self.redis_client = redis.StrictRedis(
+            host=redis_host, port=redis_port, db=redis_db, decode_responses=True
+        )
 
     def save_manager(self, new_manager: StateManager) -> str:
         """

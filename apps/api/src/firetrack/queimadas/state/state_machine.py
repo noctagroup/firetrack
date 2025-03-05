@@ -1,9 +1,9 @@
 from enum import Enum
 from typing import Dict, List
 
-from firetrack.state.state_backend import StateBackend
-from firetrack.state.state_manager import StateManager
-from firetrack.state.transition import Transition
+from firetrack.queimadas.state.state_backend import StateBackend
+from firetrack.queimadas.state.state_manager import StateManager
+from firetrack.queimadas.state.transition import Transition
 
 
 class StateMachine:
@@ -17,7 +17,9 @@ class StateMachine:
         self.__backend = backend
         self.__state_managers: Dict[str, StateManager] = {}
 
-    def create_state_manager(self, transitions: List[Transition], initial_state: str | Enum) -> str:
+    def create_state_manager(
+        self, transitions: List[Transition], initial_state: str | Enum
+    ) -> str:
         """
         Cria um novo gerenciador de estados e persiste no banco.
 

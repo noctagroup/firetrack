@@ -3,9 +3,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from firetrack.services.stac_service import (
-    StacService,
-)
+from firetrack.queimadas.stac import StacService
 
 
 @pytest.fixture
@@ -41,7 +39,9 @@ def test_stac_service_initialization_with_invalid_uri():
     """
     Test that ValueError is raised when an invalid URI is provided.
     """
-    with pytest.raises(ValueError, match="STAC URI deve ser uma string válida não vazia."):
+    with pytest.raises(
+        ValueError, match="STAC URI deve ser uma string válida não vazia."
+    ):
         StacService(server_uri="")
 
 
@@ -50,7 +50,9 @@ def test_stac_service_connection_failure():
     Test that ConnectionError is raised when the STAC server fails to connect.
     """
     with patch("pystac_client.Client.open", side_effect=Exception("Connection failed")):
-        with pytest.raises(ConnectionError, match="Erro ao conectar ao STAC Server: Connection failed"):
+        with pytest.raises(
+            ConnectionError, match="Erro ao conectar ao STAC Server: Connection failed"
+        ):
             StacService(server_uri="https://invalid-url.com")
 
 
@@ -69,7 +71,7 @@ def test_fetch_collections(mock_stac_client):
     assert result == {
         "data": [
             {"id": "collection1", "desc": "Test Collection 1"},
-            {"id": "collection2", "desc": "Test Collection 2"}
+            {"id": "collection2", "desc": "Test Collection 2"},
         ]
     }
 
@@ -90,7 +92,7 @@ def test_get_collection_items(mock_stac_client):
             bbox=[-66.1, -13.8, -56.6, -5.6],
         )
     ]
-    
+
     mock_stac_client.get_collection.return_value = mock_collection
 
     service = StacService(server_uri="https://mock-stac-server.com")
@@ -104,9 +106,9 @@ def test_get_collection_items(mock_stac_client):
                 "datapas": "2024-02-19T14:06:00Z",
                 "image": "https://mock-stac.com/image1.png",
                 "bbox": [-66.1, -13.8, -56.6, -5.6],
-                "assets": ["https://mock-stac.com/data1.tif"]
+                "assets": ["https://mock-stac.com/data1.tif"],
             }
-        ]
+        ],
     }
 
     assert result == expected
@@ -128,14 +130,14 @@ def test_get_collection_items_filtered(mock_stac_client):
             bbox=[-66.1, -13.8, -56.6, -5.6],
         )
     ]
-    
+
     mock_stac_client.search.return_value = mock_search
 
     service = StacService(server_uri="https://mock-stac-server.com")
     result = service.get_collection_items_filtered(
         bbox=(-61.79, -9.03, -61.70, -8.93),
         datetime="2018-08-01/2019-07-31",
-        collections=["S2-16D-2"]
+        collections=["S2-16D-2"],
     )
 
     expected = {
@@ -148,9 +150,9 @@ def test_get_collection_items_filtered(mock_stac_client):
                 "datapas": "2024-02-19T14:06:00Z",
                 "image": "https://mock-stac.com/image1.png",
                 "bbox": [-66.1, -13.8, -56.6, -5.6],
-                "assets": ["https://mock-stac.com/data1.tif"]
+                "assets": ["https://mock-stac.com/data1.tif"],
             }
-        ]
+        ],
     }
 
     assert result == expected

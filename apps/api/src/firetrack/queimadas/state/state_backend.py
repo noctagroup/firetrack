@@ -1,6 +1,6 @@
 from abc import ABC
 
-from firetrack.state.state_manager import StateManager
+from firetrack.queimadas.state.state_manager import StateManager
 
 
 class StateBackend(ABC):

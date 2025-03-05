@@ -16,9 +16,11 @@ export default function AppIndex() {
 
   return (
     <ResizablePanelGroup direction="horizontal">
-      <ResizablePanel className="px-6 py-8" defaultSize={25} minSize={20} maxSize={40}>
-        asdf
-      </ResizablePanel>
+      <ResizablePanel
+        className="px-6 py-8"
+        defaultSize={25}
+        minSize={20}
+        maxSize={40}></ResizablePanel>
 
       <ResizableHandle id={RESIZABLE_HANDLE_ID} withHandle />
 

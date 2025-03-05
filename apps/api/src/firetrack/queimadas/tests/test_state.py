@@ -1,11 +1,10 @@
 # Conectar ao Redis
 
-from firetrack.enums.processing_events import ProcessingEvents
-from firetrack.enums.processing_states import ProcessingStates
-from firetrack.state.reserved_enums import ReservedEvents, ReservedStates
-from firetrack.state.state_backend_redis import StateBackendRedis
-from firetrack.state.state_machine import StateMachine
-from firetrack.state.transition import Transition
+from firetrack.queimadas.enums import ProcessingEvents, ProcessingStates
+from firetrack.queimadas.state.reserved_enums import ReservedEvents, ReservedStates
+from firetrack.queimadas.state.state_backend_redis import StateBackendRedis
+from firetrack.queimadas.state.state_machine import StateMachine
+from firetrack.queimadas.state.transition import Transition
 
 backend = StateBackendRedis(redis_host="localhost", redis_port=6379)
 

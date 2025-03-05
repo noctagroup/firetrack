@@ -1,6 +1,6 @@
 from enum import Enum
 
-from firetrack.state.transition import Transition
+from firetrack.queimadas.state.transition import Transition
 
 
 class StateManager:

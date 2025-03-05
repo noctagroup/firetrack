@@ -40,7 +40,7 @@ class StacService:
 
         Returns:
             Dict[str, List[Dict[str, str]]]: Um dicionário contendo a lista de coleções.
-        
+
         Raises:
             RuntimeError: Se houver um erro ao buscar as coleções.
         """
@@ -73,32 +73,41 @@ class StacService:
             collection = self.__stac_service.get_collection(collection_id)
             if not collection:
                 raise ValueError(f"Collection '{collection_id}' não encontrada.")
-            
+
             items = []
             for item in collection.get_items():
-                image = item.assets["thumbnail"].href if "thumbnail" in item.assets else None
-                other_assets = [asset.href for key, asset in item.assets.items() if key != "thumbnail"]
+                image = (
+                    item.assets["thumbnail"].href
+                    if "thumbnail" in item.assets
+                    else None
+                )
+                other_assets = [
+                    asset.href
+                    for key, asset in item.assets.items()
+                    if key != "thumbnail"
+                ]
 
-                items.append({
-                    "id": item.id,
-                    "datapas": item.datetime.isoformat() if item.datetime else None,
-                    "image": image,
-                    "bbox": item.bbox,
-                    "assets": other_assets
-                })
-            
-            return {
-                "collection": collection_id,
-                "data": items
-            }
+                items.append(
+                    {
+                        "id": item.id,
+                        "datapas": item.datetime.isoformat() if item.datetime else None,
+                        "image": image,
+                        "bbox": item.bbox,
+                        "assets": other_assets,
+                    }
+                )
+
+            return {"collection": collection_id, "data": items}
         except Exception as e:
-            raise RuntimeError(f"Erro ao buscar itens da coleção '{collection_id}': {str(e)}")
+            raise RuntimeError(
+                f"Erro ao buscar itens da coleção '{collection_id}': {str(e)}"
+            )
 
     def get_collection_items_filtered(
         self,
         bbox: Tuple[float, float, float, float],
         datetime: str,
-        collections: List[str]
+        collections: List[str],
     ) -> dict:
         """
         Obtém itens filtrados com base em bbox, intervalo de datas e coleções.
@@ -116,29 +125,37 @@ class StacService:
         """
         try:
             search_result = self.__stac_service.search(
-                bbox=bbox,
-                datetime=datetime,
-                collections=collections
+                bbox=bbox, datetime=datetime, collections=collections
             )
 
             items = []
             for item in search_result.items():
-                image = item.assets["thumbnail"].href if "thumbnail" in item.assets else None
-                other_assets = [asset.href for key, asset in item.assets.items() if key != "thumbnail"]
+                image = (
+                    item.assets["thumbnail"].href
+                    if "thumbnail" in item.assets
+                    else None
+                )
+                other_assets = [
+                    asset.href
+                    for key, asset in item.assets.items()
+                    if key != "thumbnail"
+                ]
 
-                items.append({
-                    "id": item.id,
-                    "datapas": item.datetime.isoformat() if item.datetime else None,
-                    "image": image,
-                    "bbox": item.bbox,
-                    "assets": other_assets
-                })
+                items.append(
+                    {
+                        "id": item.id,
+                        "datapas": item.datetime.isoformat() if item.datetime else None,
+                        "image": image,
+                        "bbox": item.bbox,
+                        "assets": other_assets,
+                    }
+                )
 
             return {
                 "collections": collections,
                 "bbox": list(bbox),
                 "datetime": datetime,
-                "items_found": items
+                "items_found": items,
             }
 
         except Exception as e:
