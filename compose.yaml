@@ -16,6 +16,19 @@ services:
       retries: 5
     restart: on-failure
 
+  django:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    ports:
+      - 8001:8001
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgis
+      POSTGRES_PORT: 5432
+
   redis:
     image: eqalpha/keydb
     ports:

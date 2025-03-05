@@ -75,20 +75,20 @@ WSGI_APPLICATION = "firetrack.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-POSTGIS_DATABASE_NAME = config("POSTGIS_DATABASE_NAME", default="postgres")
-POSTGIS_DATABASE_USER = config("POSTGIS_DATABASE_USER", default="postgres")
-POSTGIS_DATABASE_PASSWORD = config("POSTGIS_DATABASE_PASSWORD", default="postgres")
-POSTGIS_DATABASE_HOST = config("POSTGIS_DATABASE_HOST", default="localhost")
-POSTGIS_DATABASE_PORT = config("POSTGIS_DATABASE_PORT", default=5432)
+POSTGRES_DB = config("POSTGRES_DB", default="postgres")
+POSTGRES_USER = config("POSTGRES_USER", default="postgres")
+POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", default="postgres")
+POSTGRES_HOST = config("POSTGRES_HOST", default="localhost")
+POSTGRES_PORT = config("POSTGRES_PORT", default=5432)
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": POSTGIS_DATABASE_NAME,
-        "USER": POSTGIS_DATABASE_USER,
-        "PASSWORD": POSTGIS_DATABASE_PASSWORD,
-        "HOST": POSTGIS_DATABASE_HOST,
-        "PORT": POSTGIS_DATABASE_PORT,
+        "NAME": POSTGRES_DB,
+        "USER": POSTGRES_USER,
+        "PASSWORD": POSTGRES_PASSWORD,
+        "HOST": POSTGRES_HOST,
+        "PORT": POSTGRES_PORT,
     }
 }
 

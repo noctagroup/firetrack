@@ -22,5 +22,5 @@ from firetrack import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("pm/", views.pintomucho),
+    path("pm/", views.test),
 ]

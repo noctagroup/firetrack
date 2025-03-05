@@ -1,5 +1,5 @@
 from django.http import JsonResponse
 
 
-def pintomucho(request):
+def test(request):
     return JsonResponse({"message": "abc"})
