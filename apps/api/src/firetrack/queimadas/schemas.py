@@ -1,8 +1,9 @@
 from datetime import datetime
+from typing import Any, Optional
 
 from geoalchemy2 import WKBElement
 from geoalchemy2.shape import to_shape
-from pydantic import BaseModel, ConfigDict, field_serializer
+from pydantic import BaseModel, ConfigDict, field_serializer, model_validator
 
 from firetrack.queimadas.enums import CicatrizQueimadasStatus
 
@@ -31,11 +32,22 @@ class CicatrizQueimadasThumbnailAssetSchema(BaseModel):
 
 
 class CicatrizQueimadasThumbnailSchema(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: str
     collection_id: str
     bbox: BBox
     datetime: datetime
     assets: dict[str, CicatrizQueimadasThumbnailAssetSchema]
+    thumbnail: Optional[CicatrizQueimadasThumbnailAssetSchema] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def separe_thumbnail_assets(cls, data: Any):
+        if "thumbnail" in data.assets:
+            data.thumbnail = data.assets.pop("thumbnail")
+
+        return data
 
 
 class CicatrizQueimadasInSchema(BaseModel):
