@@ -23,3 +23,5 @@ POSTGRES_URL: str = str(
         path=POSTGRES_DB,
     )
 )
+
+SRID: int = 4326

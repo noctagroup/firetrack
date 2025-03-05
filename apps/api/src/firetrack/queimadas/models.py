@@ -4,6 +4,7 @@ from geoalchemy2 import Geometry, WKBElement
 from sqlalchemy import DateTime, Enum, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
+from firetrack.config import SRID
 from firetrack.database.model import Model
 from firetrack.queimadas.enums import ProcessingStates
 
@@ -13,7 +14,7 @@ class CicatrizQueimadas(Model):
         Integer, autoincrement=True, primary_key=True, index=True, nullable=False
     )
     bbox: Mapped[WKBElement] = mapped_column(
-        Geometry(geometry_type="POLYGON", srid=4326, nullable=False),
+        Geometry(geometry_type="POLYGON", srid=SRID, nullable=False),
     )
     created_at: Mapped[DateTime] = mapped_column(
         DateTime(timezone=True),

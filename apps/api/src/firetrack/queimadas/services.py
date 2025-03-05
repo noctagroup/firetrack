@@ -5,6 +5,7 @@ from shapely import box
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from firetrack.config import SRID
 from firetrack.queimadas.models import CicatrizQueimadas
 from firetrack.queimadas.schemas import CicatrizQueimadasInSchema
 
@@ -24,7 +25,7 @@ async def create_cicatriz_queimadas(
 
     cicatriz.bbox = from_shape(
         box(*cicatriz_queimadas_in.bbox),
-        srid=4326,
+        srid=SRID,
     )
 
     session.add(cicatriz)
