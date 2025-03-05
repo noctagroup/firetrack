@@ -6,7 +6,6 @@
     },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "mypy.runUsingActiveInterpreter": true,
   "python.analysis.autoImportCompletions": true,
   "python.analysis.indexing": true,
   "python.analysis.typeCheckingMode": "off",
