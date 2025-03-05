@@ -10,7 +10,7 @@ readme = "readme.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115.11",
-    "geoalchemy2>=0.17.1",
+    "geoalchemy2[shapely]>=0.17.1",
     "orjson>=3.10.15",
     "pydantic>=2.10.6",
     "pystac-client>=0.8.6",
@@ -27,6 +27,7 @@ dependencies = [
 dev = [
     "mypy>=1.15.0",
     "ruff>=0.9.7",
+    "types-shapely>=2.0.0.20250202",
 ]
 
 [tool.ruff]
