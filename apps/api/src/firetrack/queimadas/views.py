@@ -4,7 +4,7 @@ from fastapi import APIRouter
 
 from firetrack.database.dependencies import AsyncSessionDep
 from firetrack.queimadas.schemas import (
-    CicatrizQueimadasCreateSchema,
+    CicatrizQueimadasInSchema,
     CicatrizQueimadasSchema,
 )
 from firetrack.queimadas.services import (
@@ -22,13 +22,10 @@ async def list(session: AsyncSessionDep):
     return cicatriz_queimadas
 
 
-@router.post(
-    "/",
-    response_model=CicatrizQueimadasSchema,
-)
+@router.post("/", response_model=CicatrizQueimadasSchema)
 async def create(
     session: AsyncSessionDep,
-    cicatriz_queimadas_in: CicatrizQueimadasCreateSchema,
+    cicatriz_queimadas_in: CicatrizQueimadasInSchema,
 ):
     cicatriz_queimadas = await create_cicatriz_queimadas(session, cicatriz_queimadas_in)
 

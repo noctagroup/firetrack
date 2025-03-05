@@ -6,7 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from firetrack.queimadas.models import CicatrizQueimadas
-from firetrack.queimadas.schemas import CicatrizQueimadasCreateSchema
+from firetrack.queimadas.schemas import CicatrizQueimadasInSchema
 
 
 async def list_cicatriz_queimadas(session: AsyncSession) -> Sequence[CicatrizQueimadas]:
@@ -18,7 +18,7 @@ async def list_cicatriz_queimadas(session: AsyncSession) -> Sequence[CicatrizQue
 
 async def create_cicatriz_queimadas(
     session: AsyncSession,
-    cicatriz_queimadas_in: CicatrizQueimadasCreateSchema,
+    cicatriz_queimadas_in: CicatrizQueimadasInSchema,
 ) -> CicatrizQueimadas:
     cicatriz = CicatrizQueimadas()
 

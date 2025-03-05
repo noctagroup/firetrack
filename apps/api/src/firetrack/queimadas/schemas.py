@@ -23,5 +23,5 @@ class CicatrizQueimadasSchema(BaseModel):
         return to_shape(bbox).bounds
 
 
-class CicatrizQueimadasCreateSchema(BaseModel):
+class CicatrizQueimadasInSchema(BaseModel):
     bbox: BBox
