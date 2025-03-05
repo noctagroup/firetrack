@@ -1,12 +1,13 @@
 from typing import List
 
 import pystac_client
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from firetrack.database.dependencies import AsyncSessionDep
 from firetrack.queimadas.schemas import (
     CicatrizQueimadasInSchema,
     CicatrizQueimadasSchema,
+    CicatrizQueimadasThumbnailSchema,
 )
 from firetrack.queimadas.services import (
     create_cicatriz_queimadas,
@@ -34,26 +35,33 @@ async def create(
     return cicatriz_queimadas
 
 
-@router.get("/{cicatriz_queimadas_id}/thumbnails")
+@router.get(
+    "/{cicatriz_queimadas_id}/thumbnails",
+    response_model=List[CicatrizQueimadasThumbnailSchema],
+)
 async def thumbnails(session: AsyncSessionDep, cicatriz_queimadas_id: int):
     cicatriz_queimadas = await get_cicatriz_queimadas(session, cicatriz_queimadas_id)
+
+    if not cicatriz_queimadas:
+        raise HTTPException(
+            status_code=404, detail="Cicatriz de queimadas não encontrada"
+        )
+
     cicatriz_queimadas_validated = CicatrizQueimadasSchema.model_validate(
         cicatriz_queimadas.__dict__,
     )
-    cicatriz_queimadas_dumped = CicatrizQueimadasSchema.model_dump(
+    cicatriz_queimadas_serialized = CicatrizQueimadasSchema.model_dump(
         cicatriz_queimadas_validated
     )
 
+    bbox = cicatriz_queimadas_serialized.get("bbox")
+    periodo_start_at = cicatriz_queimadas_serialized.get("periodo_start_at")
+    periodo_end_at = cicatriz_queimadas_serialized.get("periodo_end_at")
+
     thumbnails = pystac_client.Client.open("https://data.inpe.br/bdc/stac/v1/").search(
-        bbox=cicatriz_queimadas_dumped.get("bbox"),
-        datetime=(
-            cicatriz_queimadas_dumped.get("periodo_end_at"),
-            cicatriz_queimadas_dumped.get("periodo_start_at"),
-        ),
+        bbox=bbox,
+        datetime=(periodo_start_at, periodo_end_at),
         collections=["CB4-WFI-L2-DN-1"],
     )
 
-    thumbnails
-    # cicatriz_queimadas = await create_cicatriz_queimadas(session, cicatriz_queimadas_in)
-
-    # return cicatriz_queimadas
+    return thumbnails.items()

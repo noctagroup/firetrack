@@ -25,6 +25,19 @@ class CicatrizQueimadasSchema(BaseModel):
         return to_shape(bbox).bounds
 
 
+class CicatrizQueimadasThumbnailAssetSchema(BaseModel):
+    href: str
+    media_type: str
+
+
+class CicatrizQueimadasThumbnailSchema(BaseModel):
+    id: str
+    collection_id: str
+    bbox: BBox
+    datetime: datetime
+    assets: dict[str, CicatrizQueimadasThumbnailAssetSchema]
+
+
 class CicatrizQueimadasInSchema(BaseModel):
     bbox: BBox
     periodo_start_at: datetime
