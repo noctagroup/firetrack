@@ -17,6 +17,15 @@ async def list_cicatriz_queimadas(session: AsyncSession) -> Sequence[CicatrizQue
     return result.scalars().all()
 
 
+async def get_cicatriz_queimadas(
+    session: AsyncSession, id: int
+) -> CicatrizQueimadas | None:
+    statement = select(CicatrizQueimadas).where(CicatrizQueimadas.id == id)
+    result = await session.execute(statement)
+
+    return result.scalars().first()
+
+
 async def create_cicatriz_queimadas(
     session: AsyncSession,
     cicatriz_queimadas_in: CicatrizQueimadasInSchema,
