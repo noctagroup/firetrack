@@ -1,4 +1,4 @@
-name: Build and Publish Docker Images
+name: 🚀 Build and Publish Docker Images
 
 on:
   push:
@@ -10,62 +10,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
+      - name: 🛠️ Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
+      - name: 🔑 Login to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Backend
-      - name: Build and tag Docker image
+      # Backend 🚀
+      - name: 🏗️ Build and tag Backend Docker image
         working-directory: ./apps/api
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:nightly .
           docker tag ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:nightly ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:${{ github.sha }}
 
-      - name: Push Docker image to DockerHub
+      - name: 📤 Push Backend Docker image to DockerHub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:nightly
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-backend:${{ github.sha }}
 
-      - name: Trigger server update
+      - name: 🔄 Trigger Backend server update
         run: |
           curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/backend/v1/update
     
-      # Frontend
-      #- name: Build and tag Docker image
+      # Frontend 🎨
+      #- name: 🏗️ Build and tag Frontend Docker image
       #  working-directory: ./apps/www
       #  run: |
       #    docker build -t ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:nightly .
       #    docker tag ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:nightly ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:${{ github.sha }}
 
-      #- name: Push Docker image to DockerHub
+      #- name: 📤 Push Frontend Docker image to DockerHub
       #  run: |
       #    docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:nightly
       #    docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-frontend:${{ github.sha }}
 
-      # - name: Trigger server update
+      # - name: 🔄 Trigger Frontend server update
       #   run: |
       #     curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/frontend/v1/update
 
-      # Docs
-      - name: Build and tag Docker image
+      # Docs 📚
+      - name: 🏗️ Build and tag Docs Docker image
         working-directory: ./apps/docs
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:nightly .
           docker tag ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:nightly ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:${{ github.sha }}
 
-      - name: Push Docker image to DockerHub
+      - name: 📤 Push Docs Docker image to DockerHub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:nightly
           docker push ${{ secrets.DOCKER_USERNAME }}/firetrack-docs:${{ github.sha }}
 
-      - name: Trigger server update
+      - name: 🔄 Trigger Docs server update
         run: |
           curl -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" https://nocta-software-dsm.com/dev/ci/docs/v1/update
