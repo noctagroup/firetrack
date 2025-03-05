@@ -1,9 +1,9 @@
 from typing import List
 
-import pystac_client
 from fastapi import APIRouter, HTTPException
 
 from firetrack.database.dependencies import AsyncSessionDep
+from firetrack.queimadas.clients import stac_client
 from firetrack.queimadas.schemas import (
     CicatrizQueimadasInSchema,
     CicatrizQueimadasSchema,
@@ -36,7 +36,7 @@ async def create(
 
 
 @router.get(
-    "/{cicatriz_queimadas_id}/thumbnails",
+    "/{cicatriz_queimadas_id}/stac",
     response_model=List[CicatrizQueimadasThumbnailSchema],
 )
 async def thumbnails(session: AsyncSessionDep, cicatriz_queimadas_id: int):
@@ -58,7 +58,7 @@ async def thumbnails(session: AsyncSessionDep, cicatriz_queimadas_id: int):
     periodo_start_at = cicatriz_queimadas_serialized.get("periodo_start_at")
     periodo_end_at = cicatriz_queimadas_serialized.get("periodo_end_at")
 
-    thumbnails = pystac_client.Client.open("https://data.inpe.br/bdc/stac/v1/").search(
+    thumbnails = stac_client.search(
         bbox=bbox,
         datetime=(periodo_start_at, periodo_end_at),
         collections=["CB4-WFI-L2-DN-1"],
