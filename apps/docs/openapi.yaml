@@ -146,7 +146,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AddProcessAoi"
+                $ref: "#/components/schemas/ConfirmProcess"
+        "400":
+          description: Invalid input
+        "404":
+          description: Process not found
+        "500":
+          description: Internal server error
+  /process/TESTE2:
+    patch:
+      tags:
+        - process
+      summary: Confirm the given information and start the visual analysis phase.
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "140441511793744"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfirmProcess"
         "400":
           description: Invalid input
         "404":
@@ -158,7 +184,7 @@ components:
     CreateProcess:
       type: object
       properties:
-        id:
+        processId:
           type: string
           format: uuid
           example: "140441511793744"
@@ -173,7 +199,7 @@ components:
     AddProcessAoi:
       type: object
       properties:
-        id:
+        processId:
           type: string
           format: uuid
           example: "140441511793744"
@@ -188,7 +214,7 @@ components:
     AddProcessPeriod:
       type: object
       properties:
-        id:
+        processId:
           type: string
           format: uuid
           example: "140441511793744"
@@ -203,7 +229,7 @@ components:
     ConfirmProcess:
       type: object
       properties:
-        id:
+        processId:
           type: string
           format: uuid
           example: "140441511793744"

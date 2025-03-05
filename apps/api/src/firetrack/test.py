@@ -21,11 +21,11 @@ transitions = Transition.create_many(
         ],  # Inicia o processo
         [
             ProcessingStates.STARTED,
-            ProcessingStates.BBOX_SELECTED,
-            ProcessingEvents.SELECT_BBOX,
+            ProcessingStates.AOI_SELECTED,
+            ProcessingEvents.SELECT_AOI,
         ],  # Seleciona a área de interesse (Bounding Box)
         [
-            ProcessingStates.BBOX_SELECTED,
+            ProcessingStates.AOI_SELECTED,
             ProcessingStates.PERIOD_SELECTED,
             ProcessingEvents.SELECT_PERIOD,
         ],  # Define o período de análise
