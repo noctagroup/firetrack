@@ -5,7 +5,7 @@ from sqlalchemy import DateTime, Enum, Integer
 from sqlalchemy.orm import Mapped, mapped_column
 
 from firetrack.config import SRID
-from firetrack.database.model import Model
+from firetrack.database.models import Model
 from firetrack.queimadas.enums import ProcessingStates
 
 

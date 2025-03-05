@@ -5,7 +5,7 @@ from starlette.middleware.gzip import GZipMiddleware
 
 from firetrack.api import api
 from firetrack.database.core import async_engine
-from firetrack.database.model import Model
+from firetrack.database.models import Model
 
 
 async def lifespan(_: FastAPI):
