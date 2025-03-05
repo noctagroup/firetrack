@@ -24,7 +24,7 @@ async def list(session: AsyncSessionDep):
 
 @router.post(
     "/",
-    # response_model=CicatrizQueimadasSchema,
+    response_model=CicatrizQueimadasSchema,
 )
 async def create(
     session: AsyncSessionDep,
@@ -32,4 +32,4 @@ async def create(
 ):
     cicatriz_queimadas = await create_cicatriz_queimadas(session, cicatriz_queimadas_in)
 
-    # return cicatriz_queimadas
+    return cicatriz_queimadas
