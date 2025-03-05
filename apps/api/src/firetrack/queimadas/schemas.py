@@ -4,7 +4,7 @@ from geoalchemy2 import WKBElement
 from geoalchemy2.shape import to_shape
 from pydantic import BaseModel, ConfigDict, field_serializer
 
-from firetrack.queimadas.enums import ProcessingStates
+from firetrack.queimadas.enums import CicatrizQueimadasStatus
 
 type BBox = tuple[float, float, float, float]
 
@@ -16,7 +16,9 @@ class CicatrizQueimadasSchema(BaseModel):
     bbox: WKBElement
     created_at: datetime
     updated_at: datetime
-    status: ProcessingStates
+    periodo_start_at: datetime
+    periodo_end_at: datetime
+    status: CicatrizQueimadasStatus
 
     @field_serializer("bbox")
     def serialize_bbox(self, bbox: WKBElement) -> BBox:
@@ -25,3 +27,5 @@ class CicatrizQueimadasSchema(BaseModel):
 
 class CicatrizQueimadasInSchema(BaseModel):
     bbox: BBox
+    periodo_start_at: datetime
+    periodo_end_at: datetime

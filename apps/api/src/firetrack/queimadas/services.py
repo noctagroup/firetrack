@@ -27,6 +27,8 @@ async def create_cicatriz_queimadas(
         box(*cicatriz_queimadas_in.bbox),
         srid=SRID,
     )
+    cicatriz.periodo_start_at = cicatriz_queimadas_in.periodo_start_at
+    cicatriz.periodo_end_at = cicatriz_queimadas_in.periodo_end_at
 
     session.add(cicatriz)
 
