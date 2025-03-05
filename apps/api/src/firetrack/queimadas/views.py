@@ -1,8 +1,6 @@
 from typing import List
 
 from fastapi import APIRouter
-from geoalchemy2.shape import to_shape
-from shapely import bounds
 
 from firetrack.database.dependencies import AsyncSessionDep
 from firetrack.queimadas.schemas import (
@@ -26,7 +24,7 @@ async def list(session: AsyncSessionDep):
 
 @router.post(
     "/",
-    response_model=CicatrizQueimadasSchema,
+    # response_model=CicatrizQueimadasSchema,
 )
 async def create(
     session: AsyncSessionDep,
@@ -34,6 +32,4 @@ async def create(
 ):
     cicatriz_queimadas = await create_cicatriz_queimadas(session, cicatriz_queimadas_in)
 
-    print(bounds(to_shape(cicatriz_queimadas.bbox)).tolist())
-
-    return cicatriz_queimadas
+    # return cicatriz_queimadas

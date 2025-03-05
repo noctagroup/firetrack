@@ -10,17 +10,17 @@ from firetrack.queimadas.enums import ProcessingStates
 
 class CicatrizQueimadasSchema(BaseModel):
     id: int
-    bbox: list[float]
+    bbox: tuple[float, float, float, float]
     created_at: datetime
     updated_at: datetime
     status: ProcessingStates
 
-    @field_serializer("bbox", when_used="always")
-    def serialize_bbox(self, bbox: WKBElement) -> list[float]:
+    @field_serializer("bbox")
+    def serialize_bbox(self, bbox: WKBElement) -> tuple[float, float, float, float]:
         val = bounds(to_shape(bbox)).tolist()
 
         return val
 
 
 class CicatrizQueimadasCreateSchema(BaseModel):
-    bbox: list[float]
+    bbox: tuple[float, float, float, float]
