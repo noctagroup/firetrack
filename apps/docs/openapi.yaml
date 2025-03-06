@@ -14,30 +14,28 @@ tags:
   - name: cicatriz_queimadas
     description: Cria o processamento para a classificação de Cicatriz de Queimadas.
 paths:
-  /process:
+  /cicatriz_queimadas:
     post:
       tags:
         - cicatriz_queimadas
-      summary: Create a blank process.
-      description: Creates a blank process and starts it on the state machine.
-      operationId: createProcess
+      summary: Cria e inicializa um processamento vazio de Cicatriz de Queimadas.
       responses:
         "200":
-          description: Successful operation
+          description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateProcess"
+                $ref: "#/components/schemas/CreateCicatrizQueimadas"
         "500":
           description: Internal server error
 
-  /process/{processId}/aoi:
+  /cicatriz_queimadas/{process_id}/area_of_interest:
     patch:
       tags:
         - cicatriz_queimadas
       summary: Change a blank process AOI to the given bounding box.
       parameters:
-        - name: processId
+        - name: process_id
           in: path
           required: true
           schema:
@@ -82,13 +80,13 @@ paths:
         "500":
           description: Internal server error
 
-  /process/{processId}/period:
+  /cicatriz_queimadas/{process_id}/periodo:
     patch:
       tags:
         - cicatriz_queimadas
       summary: Change a blank process period to the one given.
       parameters:
-        - name: processId
+        - name: process_id
           in: path
           required: true
           schema:
@@ -125,13 +123,13 @@ paths:
         "500":
           description: Internal server error
 
-  /process/{processId}/confirm:
+  /cicatriz_queimadas/{process_id}/confirm:
     patch:
       tags:
         - cicatriz_queimadas
       summary: Confirm the given information and start the visual analysis phase.
       parameters:
-        - name: processId
+        - name: process_id
           in: path
           required: true
           schema:
@@ -154,16 +152,16 @@ paths:
 
 components:
   schemas:
-    CreateProcess:
+    CreateCicatrizQueimadas:
       type: object
       properties:
-        processId:
+        process_id:
           type: string
           format: uuid
           example: "140441511793744"
         status:
           type: string
-          description: The current status of the fire scar classification process.
+          description: Estado atual do processamento de classificação de cicatriz de queimadas.
           enum:
             - IDLE
             - ABORTED
@@ -172,7 +170,7 @@ components:
     AddProcessAoi:
       type: object
       properties:
-        processId:
+        process_id:
           type: string
           format: uuid
           example: "140441511793744"
@@ -187,7 +185,7 @@ components:
     AddProcessPeriod:
       type: object
       properties:
-        processId:
+        process_id:
           type: string
           format: uuid
           example: "140441511793744"
@@ -202,7 +200,7 @@ components:
     ConfirmProcess:
       type: object
       properties:
-        processId:
+        process_id:
           type: string
           format: uuid
           example: "140441511793744"
