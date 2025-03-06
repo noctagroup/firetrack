@@ -21,6 +21,6 @@ async def openapi_yaml():
     return FileResponse(FILE_PATH, media_type="application/x-yaml")
 
 
-@app.get("/docs", include_in_schema=False)
+@app.get("/", include_in_schema=False)
 async def swagger_ui():
-    return get_swagger_ui_html(openapi_url="/openapi", title="Firetracker")
+    return get_swagger_ui_html(openapi_url="/openapi.yaml", title="Firetracker")
