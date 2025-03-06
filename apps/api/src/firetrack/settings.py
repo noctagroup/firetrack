@@ -12,7 +12,23 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-from decouple import config
+from pydantic_settings import BaseSettings
+
+
+class Settings(BaseSettings):
+    # TODO: alterar no ambiente de produção a chave das variáveis de ambiente
+    DJANGO_POSTGIS_DB: str = "postgres"
+    DJANGO_POSTGIS_USER: str = "postgres"
+    DJANGO_POSTGIS_PASSWORD: str = "postgres"
+    DJANGO_POSTGIS_HOST: str = "localhost"
+    DJANGO_POSTGIS_PORT: int = 5432
+    DJANGO_DEBUG: bool = True
+    DJANGO_SECRET_KEY: str = "4=4lj5)^-+-oa+9dngm9ickrbg-$h^$p)lb)l@$1!u@5#2q6ok"
+    DJANGO_ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
+
+
+settings = Settings()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -22,12 +38,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ln$^_8--j539t)4$4ncnaje3)qk-^qd(d*fr788!(1pj38mds^"
+SECRET_KEY = settings.DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = settings.DJANGO_DEBUG
 
-ALLOWED_HOSTS = ["nocta-software-dsm.com"]
+ALLOWED_HOSTS = settings.DJANGO_ALLOWED_HOSTS
 
 
 # Application definition
@@ -75,20 +91,15 @@ WSGI_APPLICATION = "firetrack.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-POSTGRES_DB = config("POSTGRES_DB", default="postgres")
-POSTGRES_USER = config("POSTGRES_USER", default="postgres")
-POSTGRES_PASSWORD = config("POSTGRES_PASSWORD", default="postgres")
-POSTGRES_HOST = config("POSTGRES_HOST", default="localhost")
-POSTGRES_PORT = config("POSTGRES_PORT", default=5432)
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": POSTGRES_DB,
-        "USER": POSTGRES_USER,
-        "PASSWORD": POSTGRES_PASSWORD,
-        "HOST": POSTGRES_HOST,
-        "PORT": POSTGRES_PORT,
+        "NAME": settings.DJANGO_POSTGIS_DB,
+        "USER": settings.DJANGO_POSTGIS_USER,
+        "PASSWORD": settings.DJANGO_POSTGIS_PASSWORD,
+        "HOST": settings.DJANGO_POSTGIS_HOST,
+        "PORT": settings.DJANGO_POSTGIS_PORT,
     }
 }
 
