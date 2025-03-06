@@ -39,9 +39,8 @@ paths:
           in: path
           required: true
           schema:
-            type: string
-            format: uuid
-            example: "140441511793744"
+            type: number
+            example: 145438
       requestBody:
         description: The min_x, max_x, min_y and max_y.
         required: true
@@ -90,9 +89,8 @@ paths:
           in: path
           required: true
           schema:
-            type: string
-            format: uuid
-            example: "140441511793744"
+            type: number
+            example: 145438
       requestBody:
         description: The period in the isoformat.
         required: true
@@ -133,9 +131,8 @@ paths:
           in: path
           required: true
           schema:
-            type: string
-            format: uuid
-            example: "140441511793744"
+            type: number
+            example: 145438
       responses:
         "200":
           description: Successful operation
@@ -156,9 +153,8 @@ components:
       type: object
       properties:
         process_id:
-          type: string
-          format: uuid
-          example: "140441511793744"
+          type: number
+          example: 145438
         status:
           type: string
           description: Estado atual do processamento de classificação de cicatriz de queimadas.
@@ -171,9 +167,8 @@ components:
       type: object
       properties:
         process_id:
-          type: string
-          format: uuid
-          example: "140441511793744"
+          type: number
+          example: 145438
         status:
           type: string
           description: The current status of the fire scar classification process.
@@ -186,9 +181,8 @@ components:
       type: object
       properties:
         process_id:
-          type: string
-          format: uuid
-          example: "140441511793744"
+          type: number
+          example: 145438
         status:
           type: string
           description: The current status of the fire scar classification process.
@@ -201,9 +195,8 @@ components:
       type: object
       properties:
         process_id:
-          type: string
-          format: uuid
-          example: "140441511793744"
+          type: number
+          example: 145438
         status:
           type: string
           description: The current status of the fire scar classification process.
