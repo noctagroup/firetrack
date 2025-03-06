@@ -34,7 +34,7 @@ paths:
         "500":
           description: Internal server error
 
-  /process/addAoi/{processId}:
+  /process/{processId}/aoi:
     patch:
       tags:
         - process
@@ -85,7 +85,7 @@ paths:
         "500":
           description: Internal server error
 
-  /process/addPeriod/{processId}:
+  /process/{processId}/period:
     patch:
       tags:
         - process
@@ -127,7 +127,7 @@ paths:
           description: Process not found
         "500":
           description: Internal server error
-  /process/confirm/{processId}:
+  /process/{processId}/confirm:
     patch:
       tags:
         - process
