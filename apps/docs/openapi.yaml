@@ -11,28 +11,22 @@ servers:
   - url: http://localhost:8000
   - url: https://nocta-software-dsm.com/firetracker/api
 tags:
-  - name: cicatriz_queimadas
-    description: Cria o processamento para a classificação de Cicatriz de Queimadas.
+  - name: account
+    description: Módulo responsável pela autenticação e autorização de usuários.
+  - name: process
+    description: Módulo responsável pelo processamento para a classificação de Cicatriz de Queimadas.
+
 paths:
-  /cicatriz_queimadas:
+  /process:
     get:
       tags:
-        - cicatriz_queimadas
+        - process
       summary: Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.
-      responses:
-        "200":
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  # TODO: falta mais informações sobre o processamento
-                  $ref: "#/components/schemas/CreateCicatrizQueimadas"
+      # TODO: falta descrever os detalhes do endpoint, ele vai ser utilizado pra listar todos os processos de cicatriz de queimadas quando o usuário abrir a página inicial, esse endpoint será fundamental, é importante ser desenhado conforme os requisitos do frontend
 
     post:
       tags:
-        - cicatriz_queimadas
+        - process
       summary: Cria e inicializa um processamento vazio de Cicatriz de Queimadas.
       responses:
         "200":
@@ -42,10 +36,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/CreateCicatrizQueimadas"
 
-  /cicatriz_queimadas/{process_id}/area_of_interest:
+  /process/{process_id}:
+    get:
+      tags:
+        - process
+      summary: Retorna os detalhes do processamento de Cicatriz de Queimadas selecionado.
+      parameters:
+        - name: process_id
+          in: path
+          required: true
+          schema:
+            type: number
+            example: 145438
+      # TODO: falta detalhar a resposta desse endpoint, ele vai ser utilizado quando o usuário clica em um processamento já existente dentro da listagem e ele vai poder visualizar e interagir com os detalhes, trazendo as informações úteis pra ele
+
+  /process/{process_id}/area_of_interest:
     patch:
       tags:
-        - cicatriz_queimadas
+        - process
       summary: Muda a Área de Interesse (Area of Interest) do processamento selecionado.
       parameters:
         - name: process_id
@@ -79,11 +87,11 @@ paths:
         "404":
           description: Process not found
 
-  /cicatriz_queimadas/{process_id}/periodo:
+  /process/{process_id}/periodo:
     patch:
       tags:
-        - cicatriz_queimadas
-      summary: Change a blank process period to the one given.
+        - process
+      summary: Muda o período do processamento selecionado.
       parameters:
         - name: process_id
           in: path
@@ -119,11 +127,11 @@ paths:
         "404":
           description: Process not found
 
-  /cicatriz_queimadas/{process_id}/confirm:
+  /process/{process_id}/confirm:
     patch:
       tags:
-        - cicatriz_queimadas
-      summary: Confirm the given information and start the visual analysis phase.
+        - process
+      summary: Confirma e valida o processamento selecionado e prepara e encaminha para a análise visual.
       parameters:
         - name: process_id
           in: path
