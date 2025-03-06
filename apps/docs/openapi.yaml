@@ -15,6 +15,21 @@ tags:
     description: Cria o processamento para a classificação de Cicatriz de Queimadas.
 paths:
   /cicatriz_queimadas:
+    get:
+      tags:
+        - cicatriz_queimadas
+      summary: Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  # TODO: falta mais informações sobre o processamento
+                  $ref: "#/components/schemas/CreateCicatrizQueimadas"
+
     post:
       tags:
         - cicatriz_queimadas
@@ -26,14 +41,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateCicatrizQueimadas"
-        "500":
-          description: Internal server error
 
   /cicatriz_queimadas/{process_id}/area_of_interest:
     patch:
       tags:
         - cicatriz_queimadas
-      summary: Change a blank process AOI to the given bounding box.
+      summary: Muda a Área de Interesse (Area of Interest) do processamento selecionado.
       parameters:
         - name: process_id
           in: path
@@ -65,8 +78,6 @@ paths:
           description: Invalid input
         "404":
           description: Process not found
-        "500":
-          description: Internal server error
 
   /cicatriz_queimadas/{process_id}/periodo:
     patch:
@@ -107,8 +118,6 @@ paths:
           description: Invalid input
         "404":
           description: Process not found
-        "500":
-          description: Internal server error
 
   /cicatriz_queimadas/{process_id}/confirm:
     patch:
@@ -133,15 +142,13 @@ paths:
           description: Invalid input
         "404":
           description: Process not found
-        "500":
-          description: Internal server error
 
 components:
   schemas:
     CreateCicatrizQueimadas:
       type: object
       properties:
-        process_id:
+        id:
           type: number
           example: 145438
         status:
@@ -152,10 +159,11 @@ components:
             - ABORTED
             - INTERRUPTED
           example: STARTED
+
     AddProcessAoi:
       type: object
       properties:
-        process_id:
+        id:
           type: number
           example: 145438
         status:
@@ -166,10 +174,11 @@ components:
             - ABORTED
             - INTERRUPTED
           example: BBOX_SELECTED
+
     AddProcessPeriod:
       type: object
       properties:
-        process_id:
+        id:
           type: number
           example: 145438
         status:
@@ -180,10 +189,11 @@ components:
             - ABORTED
             - INTERRUPTED
           example: PERIOD_SELECTED
+
     ConfirmProcess:
       type: object
       properties:
-        process_id:
+        id:
           type: number
           example: 145438
         status:
@@ -194,13 +204,3 @@ components:
             - ABORTED
             - INTERRUPTED
           example: READY_FOR_VISUAL_ANALYSIS
-    ApiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
