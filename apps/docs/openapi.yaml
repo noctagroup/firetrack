@@ -47,24 +47,13 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                min_x:
-                  type: number
-                  format: float
-                  example: -123.123
-                max_x:
-                  type: number
-                  format: float
-                  example: 123.123
-                min_y:
-                  type: number
-                  format: float
-                  example: -45.123
-                max_y:
-                  type: number
-                  format: float
-                  example: 45.123
+              type: array
+              items:
+                type: number
+                format: float
+              minItems: 4
+              maxItems: 4
+              example: [-123.123, 123.123, -45.123, 45.123]
       responses:
         "200":
           description: Successful operation
