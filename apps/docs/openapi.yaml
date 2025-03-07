@@ -1,7 +1,7 @@
 openapi: "3.1.0"
 
 info:
-  title: Firetracker
+  title: Firetracker Backend
   contact:
     email: otavio.abreu96@gmail.com
   license:
@@ -15,7 +15,7 @@ servers:
 
 tags:
   - name: account
-    description: Módulo responsável pela autenticação e autorização de usuários.
+    description: Módulo responsável pela autenticação, autorização e gerenciamento de contas dos usuários.
   - name: fenomeno
     description: Módulo responsável pelo processamento de fenomenos de Queimadas.
 
