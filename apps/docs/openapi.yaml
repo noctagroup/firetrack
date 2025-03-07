@@ -1,4 +1,5 @@
 openapi: "3.1.0"
+
 info:
   title: Firetracker
   contact:
@@ -7,26 +8,156 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   version: 0.0.1
+
 servers:
   - url: http://localhost:8000
   - url: https://nocta-software-dsm.com/firetracker/api
+
 tags:
   - name: account
     description: Módulo responsável pela autenticação e autorização de usuários.
-  - name: process
-    description: Módulo responsável pelo processamento para a classificação de Cicatriz de Queimadas.
+  - name: fenomeno
+    description: Módulo responsável pelo processamento de fenomenos de Queimadas.
 
 paths:
-  /process:
+  /account/current:
     get:
       tags:
-        - process
-      summary: Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.
-      # TODO: falta descrever os detalhes do endpoint, ele vai ser utilizado pra listar todos os processos de cicatriz de queimadas quando o usuário abrir a página inicial, esse endpoint será fundamental, é importante ser desenhado conforme os requisitos do frontend
+        - account
+      summary: Consulta se o usuário atual está logado.
+      responses:
+        "200":
+          description: Sucesso. O usuário atual está logado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
+        "401":
+          description: Não autorizado. O usuário atual não está logado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_authenticated:
+                    type: boolean
+                    example: false
 
+  /account/login:
     post:
       tags:
-        - process
+        - account
+      summary: Realiza o login.
+      requestBody:
+        required: true
+        description: O email ou username (query) e a senha do usuário.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  examples:
+                    - "otavio.abreu92@gmail.com"
+                    - "otavio.abreu92"
+                password:
+                  type: string
+                  example: "test123test456"
+              required:
+                - query
+                - password
+      responses:
+        "200":
+          description: Sucesso. O usuário foi logado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
+  /account/register:
+    post:
+      tags:
+        - account
+      summary: Cadastra um novo usuário.
+      responses:
+        "201":
+          description: Sucesso. O usuário foi registrado e logado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  username:
+                    type: string
+                    example: "otavio.abreu92"
+                  email:
+                    type: string
+                    example: "otavio.abreu92@gmail.com"
+                  first_name:
+                    type: string
+                    example: "Otávio"
+                  last_name:
+                    type: string
+                    example: "Abreu"
+        "409":
+          description: Conflito. Existe outro usuário com esse nome de usuário ou email.
+        "400":
+          description: Requisição inválida. O corpo da requisição não está de acordo com o esperado.
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: "otavio.abreu92"
+                email:
+                  type: string
+                  example: "otavio.abreu92@gmail.com"
+                password:
+                  type: string
+                  example: "test123test456"
+                password_confirmation:
+                  type: string
+                  example: "test123test456"
+                first_name:
+                  type: string
+                  example: "Otávio"
+                last_name:
+                  type: string
+                  example: "Abreu"
+              required:
+                - username
+                - email
+                - password
+                - password_confirmation
+
+  /account/logout:
+    post:
+      tags:
+        - account
+      summary: Desloga o usuário logado.
+      responses:
+        "200":
+          description: Sucesso. O usuário foi deslogado.
+        "401":
+          description: Desautorizado. O usuário que tentou deslogar não estava logado.
+
+  /fenomeno/queimadas:
+    get:
+      tags:
+        - fenomeno
+      summary: Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.
+      # TODO: falta descrever os detalhes do endpoint, ele vai ser utilizado pra listar todos os processos de cicatriz de queimadas quando o usuário abrir a página inicial, esse endpoint será fundamental, é importante ser desenhado conforme os requisitos do frontend
+    post:
+      tags:
+        - fenomeno
       summary: Cria e inicializa um processamento vazio de Cicatriz de Queimadas.
       responses:
         "200":
@@ -34,15 +165,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateCicatrizQueimadas"
+                $ref: "#/components/schemas/CreateProcess"
 
-  /process/{process_id}:
+  /fenomeno/queimadas/{queimadas_id}:
     get:
       tags:
-        - process
+        - fenomeno
       summary: Retorna os detalhes do processamento de Cicatriz de Queimadas selecionado.
       parameters:
-        - name: process_id
+        - name: queimadas_id
           in: path
           required: true
           schema:
@@ -50,13 +181,13 @@ paths:
             example: 145438
       # TODO: falta detalhar a resposta desse endpoint, ele vai ser utilizado quando o usuário clica em um processamento já existente dentro da listagem e ele vai poder visualizar e interagir com os detalhes, trazendo as informações úteis pra ele
 
-  /process/{process_id}/area_of_interest:
+  /fenomeno/queimadas/{queimadas_id}/area_de_interesse:
     patch:
       tags:
-        - process
-      summary: Muda a Área de Interesse (Area of Interest) do processamento selecionado.
+        - fenomeno
+      summary: Muda a Área de Interesse (Bounding Box) do processamento selecionado.
       parameters:
-        - name: process_id
+        - name: queimadas_id
           in: path
           required: true
           schema:
@@ -87,13 +218,13 @@ paths:
         "404":
           description: Process not found
 
-  /process/{process_id}/periodo:
+  /fenomeno/queimadas/{queimadas_id}/period:
     patch:
       tags:
-        - process
+        - fenomeno
       summary: Muda o período do processamento selecionado.
       parameters:
-        - name: process_id
+        - name: queimadas_id
           in: path
           required: true
           schema:
@@ -127,13 +258,13 @@ paths:
         "404":
           description: Process not found
 
-  /process/{process_id}/confirm:
+  /fenomeno/queimadas/{queimadas_id}/confirm:
     patch:
       tags:
-        - process
-      summary: Confirma e valida o processamento selecionado e prepara e encaminha para a análise visual.
+        - fenomeno
+      summary: Confirma e valida o processamento selecionado. Prepara e encaminha o processamento para a análise visual.
       parameters:
-        - name: process_id
+        - name: queimadas_id
           in: path
           required: true
           schema:
@@ -151,9 +282,44 @@ paths:
         "404":
           description: Process not found
 
+  /fenomeno/queimadas/{queimadas_id}/analise_visual:
+    get:
+      summary: Retorna os thumbnails para análise visual do processamento selecionado em sua respectiva Área de Interesse e Período.
+      tags:
+        - fenomeno
+    post:
+      summary: Recebe os IDs dos thumbnails eleitos pela fase de análise visual do usuário.
+      tags:
+        - fenomeno
+
 components:
   schemas:
-    CreateCicatrizQueimadas:
+    AuthenticatedUser:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        username:
+          type: string
+          example: "otavio.abreu92"
+        email:
+          type: string
+          example: "otavio.abreu92@gmail.com"
+        full_name:
+          type: string
+          example: "Otávio Abreu"
+        first_name:
+          type: string
+          example: "Otávio"
+        last_name:
+          type: string
+          example: "Abreu"
+        is_authenticated:
+          type: boolean
+          example: true
+
+    CreateProcess:
       type: object
       properties:
         id:
