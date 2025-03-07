@@ -17,10 +17,10 @@ tags:
   - name: account
     description: Módulo responsável pela autenticação, autorização e gerenciamento de contas dos usuários.
   - name: fenomeno
-    description: Módulo responsável pelo processamento de fenomenos de Queimadas.
+    description: Módulo responsável pelo processamento de fenomenos, como o de Queimadas.
 
 paths:
-  /account/current:
+  /api/v1/account/current:
     get:
       tags:
         - account
@@ -43,7 +43,7 @@ paths:
                     type: boolean
                     example: false
 
-  /account/login:
+  /api/v1/account/login:
     post:
       tags:
         - account
@@ -74,7 +74,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthenticatedUser"
-  /account/register:
+  /api/v1/account/register:
     post:
       tags:
         - account
@@ -138,7 +138,7 @@ paths:
                 - password
                 - password_confirmation
 
-  /account/logout:
+  /api/v1/account/logout:
     post:
       tags:
         - account
@@ -149,7 +149,7 @@ paths:
         "401":
           description: Desautorizado. O usuário que tentou deslogar não estava logado.
 
-  /fenomeno/queimadas:
+  /api/v1/fenomeno/queimadas:
     get:
       tags:
         - fenomeno
@@ -167,7 +167,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/CreateProcess"
 
-  /fenomeno/queimadas/{queimadas_id}:
+  /api/v1/fenomeno/queimadas/{queimadas_id}:
     get:
       tags:
         - fenomeno
@@ -181,7 +181,7 @@ paths:
             example: 145438
       # TODO: falta detalhar a resposta desse endpoint, ele vai ser utilizado quando o usuário clica em um processamento já existente dentro da listagem e ele vai poder visualizar e interagir com os detalhes, trazendo as informações úteis pra ele
 
-  /fenomeno/queimadas/{queimadas_id}/area_de_interesse:
+  /api/v1/fenomeno/queimadas/{queimadas_id}/area_de_interesse:
     patch:
       tags:
         - fenomeno
@@ -218,7 +218,7 @@ paths:
         "404":
           description: Process not found
 
-  /fenomeno/queimadas/{queimadas_id}/period:
+  /api/v1/fenomeno/queimadas/{queimadas_id}/period:
     patch:
       tags:
         - fenomeno
@@ -258,7 +258,7 @@ paths:
         "404":
           description: Process not found
 
-  /fenomeno/queimadas/{queimadas_id}/confirm:
+  /api/v1/fenomeno/queimadas/{queimadas_id}/confirm:
     patch:
       tags:
         - fenomeno
@@ -282,7 +282,7 @@ paths:
         "404":
           description: Process not found
 
-  /fenomeno/queimadas/{queimadas_id}/analise_visual:
+  /api/v1/fenomeno/queimadas/{queimadas_id}/analise_visual:
     get:
       summary: Retorna os thumbnails para análise visual do processamento selecionado em sua respectiva Área de Interesse e Período.
       tags:
