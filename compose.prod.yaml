@@ -1,4 +1,11 @@
 services:
+  nginx:
+    image: nginx:stable-alpine-slim
+    ports:
+      - 80:80
+      - 443:443
+    restart: on-failure
+
   postgis:
     image: postgis/postgis:17-3.5
     ports:
@@ -15,12 +22,6 @@ services:
       timeout: 5s
       retries: 5
     restart: on-failure
-
-  nginx:
-    image: nginx:stable-alpine-slim
-    ports:
-      - 80:80
-      - 443:443
 
   django:
     build:
@@ -41,6 +42,7 @@ services:
       DJANGO_POSTGIS_PORT: 5432
       DJANGO_ALLOWED_HOSTS: nocta-software-dsm.com
       # TODO: customizar o DJANGO_SECRET_KEY, com algo tipo o ansible vault + playbook
+    restart: on-failure
 
   docs:
     build:
@@ -49,6 +51,7 @@ services:
     ports:
       - 8001:8001
     command: uvicorn main:app --host 0.0.0.0 --port 8001
+    restart: on-failure
 
 volumes:
   postgis:
