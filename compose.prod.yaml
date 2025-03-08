@@ -6,10 +6,13 @@ services:
       - 443:443
     volumes:
       - ./devops/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./devops/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - ./devops/nginx/conf.d:/etc/nginx/conf.d
       - ./devops/nginx/html:/usr/share/nginx/html
     restart: always
   # TODO: só permitir o acesso pelo nginx e bloquear o acesso direto a porta, dessa forma o banco não fica exposto pra internet
+
+  certbot:
+    image: certbot/certbot:v3.2.0
 
   postgis:
     image: postgis/postgis:17-3.5
