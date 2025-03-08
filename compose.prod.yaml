@@ -1,10 +1,11 @@
 services:
   nginx:
-    image: nginx:stable-alpine-slim
+    image: nginx:1.27-alpine-slim
     ports:
       - 80:80
       - 443:443
     restart: always
+  # TODO: só permitir o acesso pelo nginx e bloquear o acesso direto a porta, dessa forma o banco não fica exposto pra internet
 
   postgis:
     image: postgis/postgis:17-3.5
