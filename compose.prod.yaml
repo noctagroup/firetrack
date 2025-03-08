@@ -32,8 +32,8 @@ services:
     image: postgis/postgis:17-3.5
     container_name: firetrack_postgis
     hostname: firetrack_postgis
-    ports:
-      - 5432:5432
+    expose:
+      - 5432
     volumes:
       - postgis_data:/var/lib/postgresql/data:rw
     env_file: .env
@@ -56,8 +56,10 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      - postgis
-      - nginx
+      postgis:
+        condition: service_healthy
+      nginx:
+        condition: service_started
     volumes:
       - django_static:/app/static:rw
     env_file: .env
@@ -71,7 +73,8 @@ services:
     hostname: firetrack_docs
     command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
     depends_on:
-      - nginx
+      nginx:
+        condition: service_started
     expose:
       - 8001
     ports:
