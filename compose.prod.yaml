@@ -1,4 +1,40 @@
 services:
+  vite:
+    build:
+      context: ./apps/www
+      dockerfile: dockerfile
+    volumes:
+      - vite_build:/app/build/client:rw
+
+  django:
+    build:
+      context: ./apps/api
+      dockerfile: dockerfile
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
+    expose:
+      - 8000
+    depends_on:
+      postgis:
+        condition: service_healthy
+      nginx:
+        condition: service_started
+    volumes:
+      - django_static:/app/static:rw
+    env_file: .env
+    restart: on-failure
+
+  docs:
+    build:
+      context: ./apps/docs
+      dockerfile: dockerfile
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
+    expose:
+      - 8001
+    depends_on:
+      nginx:
+        condition: service_started
+    restart: on-failure
+
   nginx:
     image: nginx:1.27-alpine-slim
     ports:
@@ -38,43 +74,6 @@ services:
       timeout: 5s
       retries: 5
     restart: on-failure
-
-  django:
-    build:
-      context: ./apps/api
-      dockerfile: dockerfile
-    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
-    expose:
-      - 8000
-    depends_on:
-      postgis:
-        condition: service_healthy
-      nginx:
-        condition: service_started
-    volumes:
-      - django_static:/app/static:rw
-    env_file: .env
-    restart: on-failure
-
-  docs:
-    build:
-      context: ./apps/docs
-      dockerfile: dockerfile
-    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
-    depends_on:
-      nginx:
-        condition: service_started
-    expose:
-      - 8001
-    restart: on-failure
-
-  vite:
-    build:
-      context: ./apps/www
-      dockerfile: dockerfile
-    volumes:
-      - vite_build:/app/build/client:rw
-    command: npm run build
 
 volumes:
   postgis_data:
