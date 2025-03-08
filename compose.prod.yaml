@@ -4,7 +4,7 @@ services:
     ports:
       - 80:80
       - 443:443
-    restart: on-failure
+    restart: always
 
   postgis:
     image: postgis/postgis:17-3.5
