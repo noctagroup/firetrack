@@ -5,9 +5,12 @@ services:
       - 80:80
       - 443:443
     volumes:
+      # nginx config
       - ./devops/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./devops/nginx/conf.d:/etc/nginx/conf.d
       - ./devops/nginx/html:/usr/share/nginx/html
+      # certbot
+      - ./devops/certbot/www:/var/www/certbot
     restart: always
   # TODO: só permitir o acesso pelo nginx e bloquear o acesso direto a porta, dessa forma o banco não fica exposto pra internet
 
