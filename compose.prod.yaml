@@ -3,6 +3,7 @@ services:
     build:
       context: ./apps/www
       dockerfile: dockerfile
+    env_file: .env
     volumes:
       - vite_build:/app/build/client:rw
 
