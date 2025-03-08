@@ -50,7 +50,6 @@ services:
       dockerfile: dockerfile
     container_name: firetrack_django
     hostname: firetrack_django
-    # image: registry.digitalocean.com/firetrack:django
     command: gunicorn firetrack.wsgi --bind 0.0.0.0:8000
     expose:
       - 8000
@@ -64,9 +63,9 @@ services:
       DJANGO_POSTGIS_DB: postgres
       DJANGO_POSTGIS_USER: postgres
       DJANGO_POSTGIS_PASSWORD: postgres
-      DJANGO_POSTGIS_HOST: postgis
+      DJANGO_POSTGIS_HOST: firetrack_postgis
       DJANGO_POSTGIS_PORT: 5432
-      DJANGO_ALLOWED_HOSTS: '["nocta-software-dsm.com"]'
+      DJANGO_ALLOWED_HOSTS: '["api.firetrack.nocta-software-dsm.com"]'
       # TODO: customizar o DJANGO_SECRET_KEY, com algo tipo o ansible vault + playbook
     restart: on-failure
 
@@ -76,10 +75,11 @@ services:
       dockerfile: dockerfile
     container_name: firetrack_docs
     hostname: firetrack_docs
-    # image: registry.digitalocean.com/firetrack:docs
-    command: uvicorn main:app --host 127.0.0.1 --port 8001
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
     expose:
       - 8001
+    ports:
+      - 8001:8001
     restart: on-failure
 
 volumes:
