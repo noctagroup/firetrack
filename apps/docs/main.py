@@ -16,7 +16,7 @@ async def openapi_yaml():
     return FileResponse(OPENAPI_PATH, media_type="application/x-yaml")
 
 
-@app.get("/ui", include_in_schema=False)
+@app.get("/", include_in_schema=False)
 async def openapi_ui(user_agent: Annotated[str | None, Header()] = None):
     if user_agent and "Postman" in user_agent:
         return RedirectResponse("/openapi.yaml")
