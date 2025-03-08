@@ -16,24 +16,39 @@ services:
       retries: 5
     restart: on-failure
 
+  nginx:
+    image: nginx:stable-alpine-slim
+    ports:
+      - 80:80
+      - 443:443
+
   django:
     build:
       context: ./apps/api
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     ports:
-      - 8001:8001
+      - 8000:8000
+    command: gunicorn firetrack.wsgi --bind 0.0.0.0:8000
+    depends_on:
+      - postgis
+      - nginx
     environment:
+      DJANGO_DEBUG: false
       DJANGO_POSTGIS_DB: postgres
       DJANGO_POSTGIS_USER: postgres
       DJANGO_POSTGIS_PASSWORD: postgres
       DJANGO_POSTGIS_HOST: postgis
       DJANGO_POSTGIS_PORT: 5432
+      DJANGO_ALLOWED_HOSTS: nocta-software-dsm.com
+      # TODO: customizar o DJANGO_SECRET_KEY, com algo tipo o ansible vault + playbook
 
-  redis:
-    image: eqalpha/keydb
+  docs:
+    build:
+      context: ./apps/docs
+      dockerfile: dockerfile
     ports:
-      - 6379:6379
-    restart: on-failure
+      - 8001:8001
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
 
 volumes:
   postgis:
