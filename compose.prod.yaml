@@ -1,8 +1,6 @@
 services:
   nginx:
     image: nginx:1.27-alpine-slim
-    container_name: firetrack_nginx
-    hostname: firetrack_nginx
     ports:
       - 80:80
       - 443:443
@@ -16,8 +14,6 @@ services:
 
   certbot:
     image: certbot/certbot:v3.2.0
-    container_name: firetrack_certbot
-    hostname: firetrack_certbot
     volumes:
       - ./devops/certbot/www:/var/www/certbot:rw
       - ./devops/certbot/conf:/etc/letsencrypt:rw
@@ -30,8 +26,6 @@ services:
 
   postgis:
     image: postgis/postgis:17-3.5
-    container_name: firetrack_postgis
-    hostname: firetrack_postgis
     expose:
       - 5432
     volumes:
@@ -48,8 +42,6 @@ services:
     build:
       context: ./apps/api
       dockerfile: dockerfile
-    container_name: firetrack_django
-    hostname: firetrack_django
     command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
     expose:
       - 8000
@@ -67,8 +59,6 @@ services:
     build:
       context: ./apps/docs
       dockerfile: dockerfile
-    container_name: firetrack_docs
-    hostname: firetrack_docs
     command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
     depends_on:
       nginx:
