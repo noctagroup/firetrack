@@ -36,10 +36,7 @@ services:
       - 5432:5432
     volumes:
       - postgis_data:/var/lib/postgresql/data:rw
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+    env_file: .env
     healthcheck:
       test: ["CMD", "pg_isready", "-d", "postgres", "-U", "postgres"]
       interval: 10s
@@ -63,16 +60,7 @@ services:
       - nginx
     volumes:
       - django_static:/app/static:rw
-    environment:
-      DJANGO_DEBUG: false
-      DJANGO_POSTGIS_DB: postgres
-      DJANGO_POSTGIS_USER: postgres
-      DJANGO_POSTGIS_PASSWORD: postgres
-      DJANGO_POSTGIS_HOST: firetrack_postgis
-      DJANGO_POSTGIS_PORT: 5432
-      DJANGO_ALLOWED_HOSTS: '["api.firetrack.nocta-software-dsm.com"]'
-      DJANGO_CSRF_TRUSTED_ORIGINS: '["https://api.firetrack.nocta-software-dsm.com"]'
-      # TODO: customizar o DJANGO_SECRET_KEY, com algo tipo o ansible vault + playbook
+    env_file: .env
     restart: on-failure
 
   docs:
