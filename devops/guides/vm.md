@@ -15,6 +15,11 @@ docker compose up -d nginx
 
 docker compose run --rm --entrypoint certbot \
     certbot certonly --webroot -w /var/www/certbot \
+    -d app.firetrack.nocta-software-dsm.com \
+    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
+
+docker compose run --rm --entrypoint certbot \
+    certbot certonly --webroot -w /var/www/certbot \
     -d api.firetrack.nocta-software-dsm.com \
     --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
 
