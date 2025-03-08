@@ -6,6 +6,7 @@ services:
       - 443:443
     volumes:
       - django_static:/usr/share/nginx/static:ro
+      - vite_build:/usr/share/nginx/html:ro
       - ./devops/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./devops/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./devops/certbot/www:/var/www/certbot:ro
@@ -67,6 +68,15 @@ services:
       - 8001
     restart: on-failure
 
+  vite:
+    build:
+      context: ./apps/www
+      dockerfile: dockerfile
+    volumes:
+      - vite_build:/app/build/client:rw
+    command: npm run build
+
 volumes:
   postgis_data:
   django_static:
+  vite_build:
