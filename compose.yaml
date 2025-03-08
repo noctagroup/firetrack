@@ -1,5 +1,4 @@
 services:
-  # TODO: só permitir o acesso pelo nginx e bloquear o acesso direto a porta, dessa forma o banco não fica exposto pra internet
   nginx:
     image: nginx:1.27-alpine-slim
     ports:
@@ -16,6 +15,12 @@ services:
     volumes:
       - ./devops/certbot/www:/var/www/certbot:rw
       - ./devops/certbot/conf:/etc/letsencrypt:rw
+    # Renova o certificado a cada 12h
+    entrypoint: >
+      /bin/sh -c "trap exit TERM; while :; do
+      certbot renew --webroot -w /var/www/certbot;
+      sleep 12h & wait $${!};
+      done;"
 
   postgis:
     image: postgis/postgis:17-3.5
