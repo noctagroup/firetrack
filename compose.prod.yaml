@@ -44,8 +44,6 @@ services:
       retries: 5
     restart: on-failure
 
-  # pra fazer funcionar vamo precisar de um container registry privado dentro do digital ocean: https://cloud.digitalocean.com/registry
-  # ou entrar dentro da máquina e fazer um git clone, e um docker build, que é mais fácil.
   django:
     build:
       context: ./apps/api
@@ -53,9 +51,11 @@ services:
     container_name: firetrack_django
     hostname: firetrack_django
     # image: registry.digitalocean.com/firetrack:django
-    command: gunicorn firetrack.wsgi --bind 127.0.0.1:8000
+    command: gunicorn firetrack.wsgi --bind 0.0.0.0:8000
     expose:
       - 8000
+    ports:
+      - 8000:8000
     depends_on:
       - postgis
       - nginx
