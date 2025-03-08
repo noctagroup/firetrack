@@ -16,7 +16,7 @@ services:
     volumes:
       - ./devops/certbot/www:/var/www/certbot
       - ./devops/certbot/conf:/etc/letsencrypt
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done;'"
+    # entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot; sleep 12h & wait $${!}; done;'"
 
   postgis:
     image: postgis/postgis:17-3.5
