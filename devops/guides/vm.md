@@ -8,7 +8,7 @@
 
 4. rodar o nginx e o certbot
 
-pra subir o nginx precisa comentar todos os server { listen 443 ssl ... }, e rodar o resto dos comandos
+se por acaso você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/conf.d/default.conf`
 
 ```sh
 docker compose up -d nginx
