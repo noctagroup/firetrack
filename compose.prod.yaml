@@ -68,6 +68,7 @@ services:
       DJANGO_POSTGIS_HOST: firetrack_postgis
       DJANGO_POSTGIS_PORT: 5432
       DJANGO_ALLOWED_HOSTS: '["api.firetrack.nocta-software-dsm.com"]'
+      DJANGO_CSRF_TRUSTED_ORIGINS: '["api.firetrack.nocta-software-dsm.com"]'
       # TODO: customizar o DJANGO_SECRET_KEY, com algo tipo o ansible vault + playbook
     restart: on-failure
 

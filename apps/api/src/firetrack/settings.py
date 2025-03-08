@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     DJANGO_DEBUG: bool = True
     DJANGO_SECRET_KEY: str = "4=4lj5)^-+-oa+9dngm9ickrbg-$h^$p)lb)l@$1!u@5#2q6ok"
     DJANGO_ALLOWED_HOSTS: list[str] = ["localhost", "127.0.0.1", "0.0.0.0"]
+    DJANGO_CSRF_TRUSTED_ORIGINS: list[str] = []
 
 
 settings = Settings()
@@ -44,6 +45,8 @@ SECRET_KEY = settings.DJANGO_SECRET_KEY
 DEBUG = settings.DJANGO_DEBUG
 
 ALLOWED_HOSTS = settings.DJANGO_ALLOWED_HOSTS
+
+CSRF_TRUSTED_ORIGINS = settings.DJANGO_CSRF_TRUSTED_ORIGINS
 
 
 # Application definition
