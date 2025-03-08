@@ -7,6 +7,7 @@ services:
       - 80:80
       - 443:443
     volumes:
+      - django_static:/usr/share/nginx/static:ro
       - ./devops/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./devops/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./devops/certbot/www:/var/www/certbot:ro
@@ -34,7 +35,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - postgis_data:/var/lib/postgresql/data
+      - postgis_data:/var/lib/postgresql/data:rw
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -52,7 +53,7 @@ services:
       dockerfile: dockerfile
     container_name: firetrack_django
     hostname: firetrack_django
-    command: gunicorn firetrack.wsgi --bind 0.0.0.0:8000
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
     expose:
       - 8000
     ports:
@@ -60,6 +61,8 @@ services:
     depends_on:
       - postgis
       - nginx
+    volumes:
+      - django_static:/app/static:rw
     environment:
       DJANGO_DEBUG: false
       DJANGO_POSTGIS_DB: postgres
@@ -78,7 +81,9 @@ services:
       dockerfile: dockerfile
     container_name: firetrack_docs
     hostname: firetrack_docs
-    command: uvicorn main:app --host 0.0.0.0 --port 8001
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
+    depends_on:
+      - nginx
     expose:
       - 8001
     ports:
@@ -87,3 +92,4 @@ services:
 
 volumes:
   postgis_data:
+  django_static:
