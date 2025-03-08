@@ -11,7 +11,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - postgis:/var/lib/postgresql/data
+      - postgis_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -54,4 +54,4 @@ services:
     restart: on-failure
 
 volumes:
-  postgis:
+  postgis_data:
