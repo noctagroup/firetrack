@@ -146,3 +146,6 @@ dist
 # React Router
 .react-router/
 build/
+
+# Docker
+mnt/
