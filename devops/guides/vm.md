@@ -9,6 +9,7 @@
 4. rodar o certbot
 
 ```sh
+docker compose up -d nginx
 docker compose run --rm \
     certbot certonly --webroot -w /var/www/certbot \
     -d app.firetrack.nocta-software-dsm.com \
