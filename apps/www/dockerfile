@@ -4,9 +4,6 @@ WORKDIR /app
 
 ADD . .
 
-RUN --mount=type=secret,id=VITE_API_URL,env=VITE_API_URL \
-    --mount=type=secret,id=VITE_MAPBOX_ACCESS_TOKEN,env=VITE_MAPBOX_ACCESS_TOKEN \
-    env > .env
-
 RUN npm install
-RUN npm run build -- --logLevel warn
+RUN --mount=type=secret,type=file,id=dotenv,target=/app/.env \
+    npm run build -- --logLevel warn
