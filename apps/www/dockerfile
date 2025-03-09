@@ -5,5 +5,5 @@ WORKDIR /app
 ADD . .
 
 RUN npm install
-RUN --mount=type=secret,type=file,id=dotenv,target=/app/.env \
+RUN --mount=type=secret,id=dotenv,target=/app/.env \
     npm run build -- --logLevel warn
