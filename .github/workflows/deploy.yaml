@@ -7,6 +7,23 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - context: ./apps/www
+            tags: joaoprocopio/firetrack:www
+            secrets: |
+              VITE_API_URL=${{ secrets.VITE_API_URL }}
+              VITE_MAPBOX_ACCESS_TOKEN=${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+
+          - context: ./apps/api
+            tags: joaoprocopio/firetrack:api
+
+          - context: ./apps/docs
+            tags: joaoprocopio/firetrack:docs
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -28,7 +45,5 @@ jobs:
         with:
           push: true
           context: ${{ matrix.context }}
-          tags: joaoprocopio/firetrack:www
-          secrets: |
-            VITE_API_URL=${{ secrets.VITE_API_URL }}
-            VITE_MAPBOX_ACCESS_TOKEN=${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
+          tags: ${{ matrix.tags }}
+          secrets: ${{ matrix.secrets }}
