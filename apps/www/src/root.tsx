@@ -2,6 +2,7 @@ import { LoaderPinwheel } from "lucide-react"
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import tailwindUrl from "~/assets/styles/tailwind.css?url"
+import { env } from "~/env"
 
 import type { Route } from "./+types/root"
 
@@ -30,6 +31,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  console.log(env.API_URL)
   return <Outlet />
 }
 
