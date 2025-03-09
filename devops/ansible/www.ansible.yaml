@@ -1,6 +1,0 @@
----
-- name: WWW
-  hosts: prod
-  tasks:
-    - name: Echo Test
-      ansible.builtin.command: echo 'test' && echo 'abc'

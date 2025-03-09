@@ -1,4 +1,4 @@
-name: www
+name: deploy
 
 on:
   pull_request:
@@ -27,7 +27,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ./apps/www
+          context: ${{ matrix.context }}
           tags: joaoprocopio/firetrack:www
           secrets: |
             VITE_API_URL=${{ secrets.VITE_API_URL }}

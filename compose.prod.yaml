@@ -1,12 +1,6 @@
 services:
   vite:
-    build:
-      context: ./apps/www
-      dockerfile: dockerfile
-      args:
-        VITE_API_URL: $VITE_API_URL
-        VITE_MAPBOX_ACCESS_TOKEN: $VITE_MAPBOX_ACCESS_TOKEN
-    env_file: .env
+    build: joaoprocopio/firetrack:www
     volumes:
       # Toda vez que se roda um build, o diretório build/ dentro é deletado, isso gera um EBUSY quando lança um syscall rmdir, *SE* o diretório estiver mapeado a um volume.
       # Esse problema é resolvido montando um diretório fora do volume, assim o build/ pode ser deletado e evitar o consumo de disco excessivo já que todo build gera arquivos novos.
