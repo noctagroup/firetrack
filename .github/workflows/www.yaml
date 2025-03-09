@@ -13,6 +13,7 @@ jobs:
       - name: Login to DigitalOcean Container Registry
         uses: docker/login-action@v3
         with:
+          registry: registry.digitalocean.com
           username: ${{ secrets.DIGITAL_OCEAN_USERNAME }}
           password: ${{ secrets.DIGITAL_OCEAN_PASSWORD }}
 
