@@ -14,9 +14,7 @@ jobs:
         include:
           - docker_context: ./apps/www
             docker_image: joaoprocopio/firetrack:www
-            docker_secrets: |
-              VITE_API_URL='${{ secrets.VITE_API_URL }}'
-              VITE_MAPBOX_ACCESS_TOKEN='${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}'
+            docker_secrets_key: DOCKER_WWW_SECRETS
 
           - docker_context: ./apps/api
             docker_image: joaoprocopio/firetrack:api
@@ -46,4 +44,4 @@ jobs:
           push: true
           context: ${{ matrix.docker_context }}
           tags: ${{ matrix.docker_image }}
-          secrets: ${{ matrix.docker_secrets }}
+          secrets: ${{ secrets[matrix.docker_secrets_key] }}
