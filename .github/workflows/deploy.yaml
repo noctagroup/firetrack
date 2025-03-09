@@ -12,19 +12,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - context: ./apps/www
-            tags: joaoprocopio/firetrack:www
-            secrets: |
+          - docker_context: ./apps/www
+            docker_image: joaoprocopio/firetrack:www
+            docker_secrets: |
               VITE_API_URL=${{ secrets.VITE_API_URL }}
               VITE_MAPBOX_ACCESS_TOKEN=${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
 
-          - context: ./apps/api
-            tags: joaoprocopio/firetrack:api
-            secrets: ""
+          - docker_context: ./apps/api
+            docker_image: joaoprocopio/firetrack:api
+            docker_secrets: |
 
-          - context: ./apps/docs
-            tags: joaoprocopio/firetrack:docs
-            secrets: ""
+          - docker_context: ./apps/docs
+            docker_image: joaoprocopio/firetrack:docs
+            docker_secrets: |
 
     steps:
       - name: Checkout Code
@@ -46,6 +46,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          context: ${{ matrix.context }}
-          tags: ${{ matrix.tags }}
-          secrets: ${{ matrix.secrets }}
+          context: ${{ matrix.docker_context }}
+          tags: ${{ matrix.docker_image }}
+          secrets: ${{ matrix.docker_secrets }}
