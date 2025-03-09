@@ -5,4 +5,5 @@ import tailwindcss from "@tailwindcss/vite"
 
 export default defineConfig({
   plugins: [reactRouter(), tsconfigPaths(), tailwindcss()],
+  logLevel: "warn",
 })
