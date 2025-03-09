@@ -13,4 +13,4 @@ ENV VITE_MAPBOX_ACCESS_TOKEN=$VITE_MAPBOX_ACCESS_TOKEN
 RUN env | grep '^VITE_' > .env
 
 RUN npm install
-RUN npm run build
+RUN npm run build -- --logLevel warn
