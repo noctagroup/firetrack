@@ -4,13 +4,9 @@ WORKDIR /app
 
 ADD . .
 
-ARG VITE_API_URL
-ARG VITE_MAPBOX_ACCESS_TOKEN
-
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_MAPBOX_ACCESS_TOKEN=$VITE_MAPBOX_ACCESS_TOKEN
-
-RUN env | grep '^VITE_' > .env
+RUN --mount=type=secret,id=VITE_API_URL,env=VITE_API_URL \
+    --mount=type=secret,id=VITE_MAPBOX_ACCESS_TOKEN,env=VITE_MAPBOX_ACCESS_TOKEN \
+    env > .env
 
 RUN npm install
 RUN npm run build -- --logLevel warn
