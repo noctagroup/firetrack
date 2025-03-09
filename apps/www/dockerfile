@@ -4,5 +4,7 @@ WORKDIR /app
 
 ADD . .
 
+RUN env > .env
+
 RUN npm install
 RUN npm run build
