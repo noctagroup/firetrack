@@ -1,6 +1,6 @@
-# vm
+# deploy
 
-## rodar os serviços
+## rodar a máquina na digital ocean
 
 1. provisionar a máquina
 
@@ -8,9 +8,9 @@
 
 3. instalar o docker engine <https://docs.docker.com/engine/install/ubuntu/> e o postinstall também <https://docs.docker.com/engine/install/linux-postinstall/>
 
-4. rodar o nginx e o certbot
+4. subir o nginx
 
-se por acaso você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/conf.d/default.conf`
+> NOTA FUNDAMENTAL: se você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/conf.d/default.conf`
 
 ```sh
 export COMPOSE_BAKE=true
