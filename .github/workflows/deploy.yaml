@@ -20,9 +20,11 @@ jobs:
 
           - context: ./apps/api
             tags: joaoprocopio/firetrack:api
+            secrets: ""
 
           - context: ./apps/docs
             tags: joaoprocopio/firetrack:docs
+            secrets: ""
 
     steps:
       - name: Checkout Code
