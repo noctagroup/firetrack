@@ -2,8 +2,8 @@ FROM node:jod-slim
 
 WORKDIR /app
 
-ADD . .
+ADD package* ./
 
 RUN npm install
-RUN --mount=type=secret,id=dotenv,target=/app/.env \
-    npm run build -- --logLevel warn
+
+ADD . .
