@@ -5,7 +5,6 @@ on:
     branches:
       - dev
   workflow_dispatch:
-  pull_request: # TODO: FIXME: remover essa linha
 
 concurrency:
   group: ${{ github.workflow }}
@@ -62,9 +61,9 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USERNAME }}
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
-          # git checkout dev
           script: |
             cd ~/firetrack
+            git checkout dev
             git pull
             docker login --username '${{ secrets.DOCKER_USERNAME }}' --password '${{ secrets.DOCKER_PASSWORD }}'
-            docker compose --progress quiet --file compose.prod.yaml up --detach
+            docker compose --progress json --file compose.prod.yaml up --detach
