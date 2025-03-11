@@ -1,7 +1,7 @@
 name: deploy
 
 on:
-  pull_request:
+  pull_request: # todo, trocar por commit na dev
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,6 @@ jobs:
         include:
           - docker_context: ./apps/www
             docker_image: joaoprocopio/firetrack:www
-            docker_secrets: DOCKER_WWW_SECRETS
 
           - docker_context: ./apps/api
             docker_image: joaoprocopio/firetrack:api
@@ -38,13 +37,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Secrets to .env
-        run: echo '${{ secrets[matrix.docker_secrets] }}' > .env
-
       - name: Build and Push
         uses: docker/build-push-action@v6
         with:
           push: true
           context: ${{ matrix.docker_context }}
           tags: ${{ matrix.docker_image }}
-          secret-files: dotenv=.env

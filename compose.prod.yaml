@@ -1,7 +1,7 @@
 services:
   vite:
     image: joaoprocopio/firetrack:www
-    env_file: .env
+    pull_policy: always
     post_start:
       - command: sh -c "npm run build -- --logLevel warn"
     volumes:
@@ -10,12 +10,12 @@ services:
       - type: volume
         source: vite_build
         target: /app/mnt
+    env_file: .env
     restart: "no"
 
   django:
-    build:
-      context: ./apps/api
-      dockerfile: dockerfile
+    image: joaoprocopio/firetrack:api
+    pull_policy: always
     command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
     expose:
       - 8000
@@ -32,9 +32,8 @@ services:
     restart: always
 
   docs:
-    build:
-      context: ./apps/docs
-      dockerfile: dockerfile
+    image: joaoprocopio/firetrack:docs
+    pull_policy: always
     command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
     expose:
       - 8001
