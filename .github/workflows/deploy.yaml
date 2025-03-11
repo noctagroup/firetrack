@@ -1,8 +1,11 @@
 name: deploy
 
 on:
-  pull_request: # todo, trocar por commit na dev
+  push:
+    branches:
+      - dev
   workflow_dispatch:
+  pull_request: # TODO: FIXME: remover essa linha
 
 concurrency:
   group: ${{ github.workflow }}
@@ -53,5 +56,15 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy
-        run: echo "Deploying to production"
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          # git checkout dev
+          script: |
+            cd ~/firetrack
+            git pull
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker compose -f compose.prod.yaml up -d
