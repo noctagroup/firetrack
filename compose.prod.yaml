@@ -2,8 +2,8 @@ services:
   vite:
     image: joaoprocopio/firetrack:www
     pull_policy: always
-    command: env | grep '^VITE_' > .env && npm run build -- --logLevel error
-    cpu_percent: "75%"
+    command: sh -c 'env | grep '^VITE_' > .env && npm run build -- --logLevel error'
+    cpus: 0.5
     mem_limit: "512m"
     volumes:
       # Toda vez que se roda um build, o diretório build/ dentro é deletado, isso gera um EBUSY quando lança um syscall rmdir, *SE* o diretório estiver mapeado a um volume.
