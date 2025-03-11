@@ -1,3 +1,4 @@
+import { LoaderPinwheel } from "lucide-react"
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import tailwindUrl from "~/assets/styles/tailwind.css?url"
@@ -5,6 +6,7 @@ import tailwindUrl from "~/assets/styles/tailwind.css?url"
 import type { Route } from "./+types/root"
 
 export const meta: Route.MetaFunction = () => [
+  { title: "Firetrack" },
   { charSet: "utf-8" },
   { name: "viewport", content: "width=device-width, initial-scale=1" },
 ]
@@ -19,9 +21,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
         <ScrollRestoration />
         <Scripts />
+        {children}
       </body>
     </html>
   )
@@ -29,4 +31,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return <Outlet />
+}
+
+export function HydrateFallback() {
+  return (
+    <div className="h-full flex items-center flex-col gap-3 justify-center">
+      <LoaderPinwheel className="animate-spin size-36 ease-in-out" strokeWidth={1.5} />
+    </div>
+  )
 }

@@ -10,8 +10,8 @@ info:
   version: 0.0.1
 
 servers:
+  - url: https://api.firetrack.nocta-software-dsm.com
   - url: http://localhost:8000
-  - url: https://nocta-software-dsm.com/firetracker/api
 
 tags:
   - name: account

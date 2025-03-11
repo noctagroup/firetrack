@@ -20,6 +20,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 ENTRYPOINT []
 
-EXPOSE 8001
-
-CMD ["gunicorn", "firetrack.wsgi", "--bind", "0.0.0.0:8001"]
+CMD ["gunicorn", "firetrack.wsgi"]

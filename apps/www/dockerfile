@@ -1,0 +1,7 @@
+FROM node:jod-slim
+
+WORKDIR /app
+
+ADD . .
+
+RUN npm install

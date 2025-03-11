@@ -1,0 +1,110 @@
+services:
+  vite:
+    image: joaoprocopio/firetrack:www
+    pull_policy: always
+    command: sh -c 'env | grep '^VITE_' > .env && npm run build -- --logLevel error'
+    volumes:
+      # Toda vez que se roda um build, o diretório build/ dentro é deletado, isso gera um EBUSY quando lança um syscall rmdir, *SE* o diretório estiver mapeado a um volume.
+      # Esse problema é resolvido montando um diretório fora do volume, assim o build/ pode ser deletado e evitar o consumo de disco excessivo já que todo build gera arquivos novos.
+      - type: volume
+        source: vite_build
+        target: /app/mnt
+    env_file: .env
+    restart: "no"
+
+  django:
+    image: joaoprocopio/firetrack:api
+    pull_policy: always
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --no-input && gunicorn firetrack.wsgi --bind 0.0.0.0:8000"
+    expose:
+      - 8000
+    depends_on:
+      postgis:
+        condition: service_healthy
+      nginx:
+        condition: service_started
+    volumes:
+      - type: volume
+        source: django_static
+        target: /app/static
+    env_file: .env
+    restart: always
+
+  docs:
+    image: joaoprocopio/firetrack:docs
+    pull_policy: always
+    command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
+    expose:
+      - 8001
+    depends_on:
+      nginx:
+        condition: service_started
+    restart: always
+
+  nginx:
+    image: nginx:1.27-alpine-slim
+    ports:
+      - target: 80
+        published: 80
+      - target: 443
+        published: 443
+    volumes:
+      - type: volume
+        source: django_static
+        target: /usr/share/nginx/static
+        read_only: true
+      - type: volume
+        source: vite_build
+        target: /usr/share/nginx/html
+        read_only: true
+      - type: bind
+        source: ./devops/nginx
+        target: /etc/nginx/conf.d
+        read_only: true
+      - type: bind
+        source: ./devops/certbot/www
+        target: /var/www/certbot
+        read_only: true
+      - type: bind
+        source: ./devops/certbot/conf
+        target: /etc/letsencrypt
+        read_only: true
+    restart: always
+
+  certbot:
+    image: certbot/certbot:v3.2.0
+    volumes:
+      - type: bind
+        source: ./devops/certbot/www
+        target: /var/www/certbot
+      - type: bind
+        source: ./devops/certbot/conf
+        target: /etc/letsencrypt
+    # Renova o certificado a cada 12h
+    entrypoint: >
+      /bin/sh -c "trap exit TERM; while :; do
+      certbot renew --webroot -w /var/www/certbot;
+      sleep 12h & wait $${!};
+      done;"
+    restart: always
+
+  postgis:
+    image: postgis/postgis:17-3.5
+    expose:
+      - 5432
+    volumes:
+      - type: volume
+        source: postgis_data
+        target: /var/lib/postgresql/data
+    env_file: .env
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "postgres", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  postgis_data:
+  django_static:
+  vite_build:

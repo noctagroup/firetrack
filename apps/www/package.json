@@ -10,9 +10,9 @@
     "preinstall": "npx only-allow npm",
     "postinstall": "react-router typegen",
     "clean": "git clean -xdf node_modules build .react-router",
-    "typecheck": "react-router typegen && tsc -b",
     "dev": "react-router dev",
     "build": "react-router build",
+    "typecheck": "react-router typegen && tsc -b",
     "lint": "eslint ."
   },
   "dependencies": {
