@@ -11,7 +11,7 @@
     "postinstall": "react-router typegen",
     "clean": "git clean -xdf node_modules build .react-router",
     "dev": "react-router dev",
-    "build": "tsc -b && react-router build",
+    "build": "react-router build",
     "typecheck": "react-router typegen && tsc -b",
     "lint": "eslint ."
   },
