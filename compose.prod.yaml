@@ -3,6 +3,7 @@ services:
     image: joaoprocopio/firetrack:www
     pull_policy: always
     post_start:
+      - command: sh -c "env | grep '^VITE_' > .env"
       - command: sh -c "npm run build -- --logLevel warn"
     volumes:
       # Toda vez que se roda um build, o diretório build/ dentro é deletado, isso gera um EBUSY quando lança um syscall rmdir, *SE* o diretório estiver mapeado a um volume.
