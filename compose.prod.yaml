@@ -98,10 +98,15 @@ services:
         target: /var/lib/postgresql/data
     env_file: .env
     healthcheck:
-      test: ["CMD", "pg_isready", "-d", "postgres", "-U", "postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test:
+        [
+          "CMD",
+          "pg_isready",
+          "-d",
+          "${POSTGRES_DB:-postgres}",
+          "-U",
+          "${POSTGRES_USER:-postgres}",
+        ]
     restart: always
 
 volumes:

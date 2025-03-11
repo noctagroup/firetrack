@@ -47,8 +47,6 @@ npm run dev
 > NOTA FUNDAMENTAL: se você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/*.conf`
 
 ```sh
-export COMPOSE_BAKE=true
-
 docker compose --file compose.prod.yaml up --detach nginx
 
 docker compose --file compose.prod.yaml run --rm --entrypoint certbot \

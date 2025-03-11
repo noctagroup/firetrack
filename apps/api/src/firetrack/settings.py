@@ -16,7 +16,6 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    # TODO: alterar no ambiente de produção a chave das variáveis de ambiente
     DJANGO_POSTGIS_DB: str = "postgres"
     DJANGO_POSTGIS_USER: str = "postgres"
     DJANGO_POSTGIS_PASSWORD: str = "postgres"
