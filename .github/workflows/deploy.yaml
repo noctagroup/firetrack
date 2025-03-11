@@ -66,5 +66,5 @@ jobs:
           script: |
             cd ~/firetrack
             git pull
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker login -u '${{ secrets.DOCKER_USERNAME }}' -p '${{ secrets.DOCKER_PASSWORD }}'
             docker compose -f compose.prod.yaml up -d
