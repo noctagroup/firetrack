@@ -4,6 +4,10 @@ on:
   pull_request: # todo, trocar por commit na dev
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -43,3 +47,7 @@ jobs:
           push: true
           context: ${{ matrix.docker_context }}
           tags: ${{ matrix.docker_image }}
+
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: build
