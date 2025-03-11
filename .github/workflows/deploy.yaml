@@ -5,7 +5,7 @@ on:
     branches:
       - dev
   workflow_dispatch:
-  pull_request:
+  pull_request: # TODO: FIXME: REMOVER ESSE CARA
 
 concurrency:
   group: ${{ github.workflow }}
@@ -62,9 +62,10 @@ jobs:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USERNAME }}
           key: ${{ secrets.REMOTE_PRIVATE_KEY }}
+          # TODO: FIXME: VOLTAR PRA dev
           script: |
             cd ~/firetrack
-            git checkout dev
+            git checkout jp/devops
             git pull
             docker login --username '${{ secrets.DOCKER_USERNAME }}' --password '${{ secrets.DOCKER_PASSWORD }}'
             docker compose --progress json --file compose.prod.yaml up --detach
