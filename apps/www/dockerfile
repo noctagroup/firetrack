@@ -2,8 +2,6 @@ FROM node:jod-slim
 
 WORKDIR /app
 
-ADD package* ./
+ADD . .
 
 RUN npm install
-
-ADD . .
