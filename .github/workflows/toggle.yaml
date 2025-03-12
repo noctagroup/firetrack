@@ -3,17 +3,17 @@ name: toggle
 on:
   schedule:
     # https://crontab.guru/
-    - cron: 0 19 * * * # Todo dia 22h UTC -> 19h GMT -3 (São Paulo)
-    - cron: 0 02 * * * # Todo dia 02h UTC -> 23h GMT -3 (São Paulo)
+    - cron: "0 19 * * *" # Todo dia 22h UTC -> 19h GMT -3 (São Paulo)
+    - cron: "0 02 * * *" # Todo dia 02h UTC -> 23h GMT -3 (São Paulo)
   workflow_dispatch:
     inputs:
       toggle:
-        description: "Liga ou desliga a máquina virtual"
+        description: "Ligar ou desligar a máquina"
         required: true
         type: choice
         options:
-          - ligar
-          - desligar
+          - "on"
+          - "off"
 
 concurrency:
   group: ${{ github.workflow }}
@@ -27,7 +27,12 @@ jobs:
       - name: Install DOCTL
         uses: digitalocean/action-doctl@v2
         with:
-          token: ${{ secrets.CTL_ACCESS_TOKEN }}
+          token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
 
-      # ligar a máquina com if
-      # desligar a máquina com
+      - name: Turn on
+        if: github.event.inputs.toggle == 'on' || github.event.schedule == "0 19 * * *"
+        run: doctl compute droplet-action power-on ${{ secrets.DIGITAL_OCEAN_DROPLET_ID }}
+
+      - name: Turn off
+        if: github.event.inputs.toggle == 'off' || github.event.schedule == "0 02 * * *"
+        run: doctl compute droplet-action power-off ${{ secrets.DIGITAL_OCEAN_DROPLET_ID }}
