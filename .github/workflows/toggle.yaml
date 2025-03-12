@@ -30,9 +30,9 @@ jobs:
           token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
 
       - name: Turn on
-        if: github.event.inputs.toggle == 'on' || github.event.schedule == "0 19 * * *"
+        if: github.event.inputs.toggle == 'on' || github.event.schedule == '0 19 * * *'
         run: doctl compute droplet-action power-on ${{ secrets.DIGITAL_OCEAN_DROPLET_ID }}
 
       - name: Turn off
-        if: github.event.inputs.toggle == 'off' || github.event.schedule == "0 02 * * *"
+        if: github.event.inputs.toggle == 'off' || github.event.schedule == '0 02 * * *'
         run: doctl compute droplet-action power-off ${{ secrets.DIGITAL_OCEAN_DROPLET_ID }}
