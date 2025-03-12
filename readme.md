@@ -10,12 +10,13 @@ pré-requisitos:
 - Docker Engine: <https://docs.docker.com/engine/install/>
 
 ```sh
-docker compose up -d
+docker compose up -d postgis
 cd apps/api
 uv sync
 uv venv
 source .venv/bin/activate
-uv run uvicorn --reload firetrack.main:app
+uv run python manage.py migrate
+uv run python manage.py runserver
 ```
 
 ### web
