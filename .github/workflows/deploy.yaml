@@ -66,4 +66,5 @@ jobs:
             git checkout dev
             git pull
             docker login --username '${{ secrets.DOCKER_USERNAME }}' --password '${{ secrets.DOCKER_PASSWORD }}'
-            docker compose --progress json --file compose.prod.yaml up --detach
+            docker system prune --all
+            docker compose --progress plain --file compose.prod.yaml up --detach
