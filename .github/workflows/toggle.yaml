@@ -1,0 +1,33 @@
+name: toggle
+
+on:
+  schedule:
+    # https://crontab.guru/
+    - cron: 0 19 * * * # Todo dia 22h UTC -> 19h GMT -3 (São Paulo)
+    - cron: 0 02 * * * # Todo dia 02h UTC -> 23h GMT -3 (São Paulo)
+  workflow_dispatch:
+    inputs:
+      toggle:
+        description: "Liga ou desliga a máquina virtual"
+        required: true
+        type: choice
+        options:
+          - ligar
+          - desligar
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  toggle:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Install DOCTL
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.CTL_ACCESS_TOKEN }}
+
+      # ligar a máquina com if
+      # desligar a máquina com
