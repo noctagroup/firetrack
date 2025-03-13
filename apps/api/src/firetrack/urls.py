@@ -20,5 +20,6 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("account/", include("firetrack.account.urls")),
+    path("conta/", include("firetrack.conta.urls")),
+    path("fenomeno/", include("firetrack.fenomeno.urls")),
 ]

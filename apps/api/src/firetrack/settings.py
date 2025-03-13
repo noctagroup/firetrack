@@ -59,7 +59,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Firetrack Apps
-    "firetrack.account",
+    "firetrack.conta",
+    "firetrack.fenomeno",
     # Third-party Apps
     # "corsheaders",
 ]

@@ -14,16 +14,16 @@ servers:
   - url: http://localhost:8000
 
 tags:
-  - name: account
+  - name: conta
     description: Módulo responsável pela autenticação, autorização e gerenciamento de contas dos usuários.
   - name: fenomeno
     description: Módulo responsável pelo processamento de fenomenos, como o de Queimadas.
 
 paths:
-  /account/current:
+  /conta:
     get:
       tags:
-        - account
+        - conta
       summary: Consulta se o usuário atual está logado.
       responses:
         "200":
@@ -43,10 +43,10 @@ paths:
                     type: boolean
                     example: false
 
-  /account/login:
+  /conta/entrar:
     post:
       tags:
-        - account
+        - conta
       summary: Realiza o login.
       requestBody:
         required: true
@@ -74,10 +74,11 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthenticatedUser"
-  /account/register:
+
+  /conta/cadastrar:
     post:
       tags:
-        - account
+        - conta
       summary: Cadastra um novo usuário.
       responses:
         "201":
@@ -138,10 +139,10 @@ paths:
                 - password
                 - password_confirmation
 
-  /account/logout:
+  /conta/sair:
     post:
       tags:
-        - account
+        - conta
       summary: Desloga o usuário logado.
       responses:
         "200":
