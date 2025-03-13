@@ -1,7 +1,7 @@
 from django.urls import path
 
-from firetrack.conta import views
+from firetrack.fenomeno import views
 
 urlpatterns = [
-    path("", views.conta_index),
+    path("", views.fenomeno_index),
 ]
