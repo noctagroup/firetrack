@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+from corsheaders.defaults import default_headers, default_methods
 from pydantic_settings import BaseSettings
 
 
@@ -24,7 +25,8 @@ class Settings(BaseSettings):
     DJANGO_DEBUG: bool = True
     DJANGO_SECRET_KEY: str = "4=4lj5)^-+-oa+9dngm9ickrbg-$h^$p)lb)l@$1!u@5#2q6ok"
     DJANGO_ALLOWED_HOSTS: list[str] = [".localhost", "127.0.0.1", "[::1]"]
-    DJANGO_CSRF_TRUSTED_ORIGINS: list[str] = []
+    DJANGO_CSRF_TRUSTED_ORIGINS: list[str] = ["http://localhost:5173"]
+    DJANGO_CORS_ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
 
 
 settings = Settings()
@@ -45,8 +47,16 @@ DEBUG = settings.DJANGO_DEBUG
 
 ALLOWED_HOSTS = settings.DJANGO_ALLOWED_HOSTS
 
+
+# CSRF
 CSRF_TRUSTED_ORIGINS = settings.DJANGO_CSRF_TRUSTED_ORIGINS
 
+
+# CORS
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = list(default_headers)
+CORS_ALLOW_METHODS = list(default_methods)
+CORS_ALLOWED_ORIGINS = settings.DJANGO_CORS_ALLOWED_ORIGINS
 
 # Application definition
 
@@ -62,12 +72,13 @@ INSTALLED_APPS = [
     "firetrack.conta",
     "firetrack.fenomeno",
     # Third-party Apps
-    # "corsheaders",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
