@@ -1,5 +1,9 @@
 from django import forms
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import (
+    UserAttributeSimilarityValidator,
+    validate_password,
+)
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
 
@@ -29,12 +33,23 @@ class ContaCadastrarForm(forms.Form):
         max_length=150,
     )
     email = forms.EmailField()
-    password = forms.CharField(
-        min_length=1,
-        max_length=128,
-        validators=[validate_password],
-    )
+    password = forms.CharField()
     password_confirmation = forms.CharField()
+
+    def clean_password(self):
+        password = self.cleaned_data.get("password")
+
+        validate_password(
+            password,
+            User(
+                **{
+                    attribute: self.cleaned_data.get(attribute)
+                    for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
+                }
+            ),
+        )
+
+        return password
 
     def clean_password_confirmation(self):
         password = self.cleaned_data.get("password")
