@@ -4,7 +4,6 @@ from http import HTTPStatus
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
-from django.forms import ValidationError
 from django.http.response import HttpResponse, JsonResponse
 from django.middleware import csrf
 from django.views.decorators.http import require_GET, require_POST
@@ -31,21 +30,21 @@ def conta(request: WSGIRequest):
 @require_POST
 def entrar(request: WSGIRequest):
     try:
-        conta_payload = json.loads(request.body)
-        conta_form = forms.ContaEntrarForm(conta_payload)
+        payload = json.loads(request.body)
+        form = forms.ContaEntrarForm(payload)
 
-        if not conta_form.is_valid():
-            raise ValidationError(conta_form.errors)
+        if not form.is_valid():
+            return JsonResponse(dict(form.errors), status=HTTPStatus.BAD_REQUEST)
 
-        conta_query = conta_form.data.get("query")
-        conta_password = conta_form.data.get("password")
+        query = form.cleaned_data.get("query")
+        password = form.cleaned_data.get("password")
 
-        if "@" in conta_query:
-            user = services.get_conta(email=conta_query)
+        if "@" in query:
+            user = services.get_conta(email=query)
         else:
-            user = services.get_conta(username=conta_query)
+            user = services.get_conta(username=query)
 
-        if not user.check_password(conta_password):
+        if not user.check_password(password):
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
         auth.login(request, user)
@@ -53,9 +52,7 @@ def entrar(request: WSGIRequest):
         user = serializers.serialize_authenticated_user(user)
 
         return JsonResponse(user, status=HTTPStatus.OK)
-    except ValidationError as error:
-        return JsonResponse(dict(error), status=HTTPStatus.BAD_REQUEST)
-    except ValueError:
+    except (TypeError, ValueError):
         return HttpResponse(status=HTTPStatus.BAD_REQUEST)
     except ObjectDoesNotExist:
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
