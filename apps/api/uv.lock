@@ -56,7 +56,6 @@ dependencies = [
     { name = "django-cors-headers" },
     { name = "gunicorn" },
     { name = "psycopg", extra = ["binary"] },
-    { name = "pydantic" },
     { name = "pydantic-settings" },
 ]
 
@@ -71,7 +70,6 @@ requires-dist = [
     { name = "django-cors-headers", specifier = ">=4.7.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2.5" },
-    { name = "pydantic", specifier = ">=2.10.6" },
     { name = "pydantic-settings", specifier = ">=2.8.1" },
 ]
 

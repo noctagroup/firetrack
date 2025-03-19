@@ -1,14 +1,15 @@
+import json
 from http import HTTPStatus
 
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
+from django.forms import ValidationError
 from django.http.response import HttpResponse, JsonResponse
 from django.middleware import csrf
 from django.views.decorators.http import require_GET, require_POST
-from pydantic import ValidationError
 
-from firetrack.conta import schemas, serializers, services
+from firetrack.conta import forms, serializers, services
 
 
 @require_GET
@@ -30,14 +31,21 @@ def conta(request: WSGIRequest):
 @require_POST
 def entrar(request: WSGIRequest):
     try:
-        user_in = schemas.ContaEntrarIn.model_validate_json(request.body)
+        conta_payload = json.loads(request.body)
+        conta_form = forms.ContaEntrarForm(conta_payload)
 
-        if "@" in user_in.query:
-            user = services.get_conta(email=user_in.query)
+        if not conta_form.is_valid():
+            raise ValidationError(conta_form.errors)
+
+        conta_query = conta_form.data.get("query")
+        conta_password = conta_form.data.get("password")
+
+        if "@" in conta_query:
+            user = services.get_conta(email=conta_query)
         else:
-            user = services.get_conta(username=user_in.query)
+            user = services.get_conta(username=conta_query)
 
-        if not user.check_password(user_in.password):
+        if not user.check_password(conta_password):
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
         auth.login(request, user)
@@ -45,10 +53,12 @@ def entrar(request: WSGIRequest):
         user = serializers.serialize_authenticated_user(user)
 
         return JsonResponse(user, status=HTTPStatus.OK)
+    except ValidationError as error:
+        return JsonResponse(dict(error), status=HTTPStatus.BAD_REQUEST)
+    except ValueError:
+        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
     except ObjectDoesNotExist:
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
-    except ValidationError as exc:
-        return JsonResponse(exc.errors(), safe=False, status=HTTPStatus.BAD_REQUEST)
     except Exception:
         return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
