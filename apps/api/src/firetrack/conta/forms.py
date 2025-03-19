@@ -33,31 +33,26 @@ class ContaCadastrarForm(forms.Form):
         max_length=150,
     )
     email = forms.EmailField()
-    password = forms.CharField()
-    password_confirmation = forms.CharField()
+    password = forms.CharField(min_length=1)
+    password_confirmation = forms.CharField(min_length=1)
 
-    def clean_password(self):
-        password = self.cleaned_data.get("password")
+    def clean(self):
+        cleaned_data = super().clean()
+
+        password = cleaned_data.get("password")
+        password_confirmation = cleaned_data.get("password_confirmation")
 
         validate_password(
             password,
             User(
                 **{
-                    attribute: self.cleaned_data.get(attribute)
+                    attribute: cleaned_data.get(attribute)
                     for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
                 }
             ),
         )
 
-        return password
-
-    def clean_password_confirmation(self):
-        password = self.cleaned_data.get("password")
-        password_confirmation = self.cleaned_data.get("password_confirmation")
-
         if password != password_confirmation:
             raise forms.ValidationError(
                 "Password and password confirmation do not match."
             )
-
-        return password_confirmation
