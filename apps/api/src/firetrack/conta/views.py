@@ -56,28 +56,38 @@ def entrar(request: WSGIRequest):
         return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
-# @require_POST
-# def register_user(request: WSGIRequest):
-#     if request.user.is_authenticated:
-#         return JsonResponse({}, status=HTTPStatus.FORBIDDEN)
+@require_POST
+def cadastrar(request: WSGIRequest):
+    if request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
-#     try:
-#         user = UserForm.parse_raw(request.body)
-#         user = user.dict()
-#         user = create_user(
-#             username=user.get("username"),
-#             password=user.get("password"),
-#             email=user.get("email"),
-#             first_name=user.get("first_name"),
-#             last_name=user.get("last_name"),
-#         )
+    try:
+        form = forms.ContaCadastrarForm(json.loads(request.body))
 
-#         login(request, user)
+        if not form.is_valid():
+            return JsonResponse(dict(form.errors), status=HTTPStatus.BAD_REQUEST)
 
-#         return JsonResponse(serialize_authenticated_user(user))
+        first_name = form.cleaned_data.get("first_name")
+        last_name = form.cleaned_data.get("last_name")
+        username = form.cleaned_data.get("username")
+        email = form.cleaned_data.get("email")
+        password = form.cleaned_data.get("password")
 
-#     except BaseException:
-#         return JsonResponse({}, status=HTTPStatus.BAD_REQUEST)
+        user = services.create_conta(
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            email=email,
+            password=password,
+        )
+
+        auth.login(request, user)
+
+        user = serializers.serialize_authenticated_user(user)
+
+        return JsonResponse(user, status=HTTPStatus.OK)
+    except Exception:
+        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
 
 
 @require_POST

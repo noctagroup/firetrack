@@ -6,4 +6,5 @@ urlpatterns = [
     path("", views.conta),
     path("entrar/", views.entrar),
     path("sair/", views.sair),
+    path("cadastrar/", views.cadastrar),
 ]
