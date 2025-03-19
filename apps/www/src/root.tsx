@@ -1,7 +1,9 @@
+import { QueryClientProvider } from "@tanstack/react-query"
 import { LoaderPinwheel } from "lucide-react"
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import tailwindUrl from "~/assets/styles/tailwind.css?url"
+import { queryClient } from "~/lib/query"
 
 import type { Route } from "./+types/root"
 
@@ -12,6 +14,8 @@ export const meta: Route.MetaFunction = () => [
 ]
 
 export const links: Route.LinksFunction = () => [{ href: tailwindUrl, rel: "stylesheet" }]
+
+export const clientLoader = async () => {}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -30,7 +34,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+    </QueryClientProvider>
+  )
 }
 
 export function HydrateFallback() {
