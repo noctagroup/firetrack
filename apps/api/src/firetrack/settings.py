@@ -13,24 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 
 from corsheaders.defaults import default_headers, default_methods
-from pydantic_settings import BaseSettings
-
-
-class Settings(BaseSettings):
-    DJANGO_POSTGIS_DB: str = "postgres"
-    DJANGO_POSTGIS_USER: str = "postgres"
-    DJANGO_POSTGIS_PASSWORD: str = "postgres"
-    DJANGO_POSTGIS_HOST: str = "localhost"
-    DJANGO_POSTGIS_PORT: int = 5432
-    DJANGO_DEBUG: bool = True
-    DJANGO_SECRET_KEY: str = "4=4lj5)^-+-oa+9dngm9ickrbg-$h^$p)lb)l@$1!u@5#2q6ok"
-    DJANGO_ALLOWED_HOSTS: list[str] = [".localhost", "127.0.0.1", "[::1]"]
-    DJANGO_CSRF_TRUSTED_ORIGINS: list[str] = ["http://localhost:5173"]
-    DJANGO_CORS_ALLOWED_ORIGINS: list[str] = ["http://localhost:5173"]
-
-
-settings = Settings()
-
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -40,23 +23,32 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = settings.DJANGO_SECRET_KEY
+SECRET_KEY = config(
+    "DJANGO_SECRET_KEY",
+    default="4=4lj5)^-+-oa+9dngm9ickrbg-$h^$p)lb)l@$1!u@5#2q6ok",
+    cast=str,
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = settings.DJANGO_DEBUG
+DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = settings.DJANGO_ALLOWED_HOSTS
+ALLOWED_HOSTS = config(
+    "DJANGO_ALLOWED_HOSTS", default=".localhost, 127.0.0.1, [::1]", cast=Csv()
+)
 
 
 # CSRF
-CSRF_TRUSTED_ORIGINS = settings.DJANGO_CSRF_TRUSTED_ORIGINS
-
+CSRF_TRUSTED_ORIGINS = config(
+    "DJANGO_CSRF_TRUSTED_ORIGINS", default="http://localhost:5173", cast=Csv()
+)
 
 # CORS
+CORS_ALLOWED_ORIGINS = config(
+    "DJANGO_CORS_ALLOWED_ORIGINS", default="http://localhost:5173", cast=Csv()
+)
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = list(default_headers)
 CORS_ALLOW_METHODS = list(default_methods)
-CORS_ALLOWED_ORIGINS = settings.DJANGO_CORS_ALLOWED_ORIGINS
 
 # Application definition
 
@@ -117,11 +109,11 @@ WSGI_APPLICATION = "firetrack.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": settings.DJANGO_POSTGIS_DB,
-        "USER": settings.DJANGO_POSTGIS_USER,
-        "PASSWORD": settings.DJANGO_POSTGIS_PASSWORD,
-        "HOST": settings.DJANGO_POSTGIS_HOST,
-        "PORT": settings.DJANGO_POSTGIS_PORT,
+        "NAME": config("DJANGO_POSTGIS_DB", default="postgres", cast=str),
+        "USER": config("DJANGO_POSTGIS_USER", default="postgres", cast=str),
+        "PASSWORD": config("DJANGO_POSTGIS_PASSWORD", default="postgres", cast=str),
+        "HOST": config("DJANGO_POSTGIS_HOST", default="localhost", cast=str),
+        "PORT": config("DJANGO_POSTGIS_PORT", default="5432", cast=str),
     }
 }
 
