@@ -75,7 +75,10 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
+# PYINSTRUMENT_PROFILE_DIR = BASE_DIR / "profiling"
+
 MIDDLEWARE = [
+    # "pyinstrument.middleware.ProfilerMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",

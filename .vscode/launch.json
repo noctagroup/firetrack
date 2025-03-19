@@ -6,6 +6,7 @@
       "request": "launch",
       "args": ["runserver"],
       "django": true,
+      "justMyCode": true,
       "autoStartBrowser": false,
       "cwd": "${workspaceFolder}/apps/api/",
       "program": "manage.py"
