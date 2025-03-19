@@ -5,7 +5,6 @@ from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.http.response import HttpResponse, JsonResponse
-from django.middleware import csrf
 from django.views.decorators.http import require_GET, require_POST
 
 from firetrack.conta import forms, serializers, services
@@ -13,8 +12,6 @@ from firetrack.conta import forms, serializers, services
 
 @require_GET
 def conta(request: WSGIRequest):
-    csrf.get_token(request)
-
     if not request.user.is_authenticated:
         return JsonResponse(
             serializers.serialize_anonymous_user(request.user),
@@ -30,8 +27,7 @@ def conta(request: WSGIRequest):
 @require_POST
 def entrar(request: WSGIRequest):
     try:
-        payload = json.loads(request.body)
-        form = forms.ContaEntrarForm(payload)
+        form = forms.ContaEntrarForm(json.loads(request.body))
 
         if not form.is_valid():
             return JsonResponse(dict(form.errors), status=HTTPStatus.BAD_REQUEST)
@@ -61,7 +57,6 @@ def entrar(request: WSGIRequest):
 
 
 # @require_POST
-# @csrf_exempt
 # def register_user(request: WSGIRequest):
 #     if request.user.is_authenticated:
 #         return JsonResponse({}, status=HTTPStatus.FORBIDDEN)
