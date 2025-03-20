@@ -3,7 +3,7 @@ import { Fragment } from "react/jsx-runtime"
 import type { UIMatch } from "react-router"
 import { Link, Outlet, useMatches } from "react-router"
 
-import { SIDEBAR_ID } from "~fenomeno/constants"
+import { SIDEBAR_ID } from "~home/constants"
 import { useLocalStorage } from "~shared/hooks/use-local-storage"
 import {
   Breadcrumb,
@@ -26,7 +26,7 @@ import {
   SidebarRail,
 } from "~shared/lib/shadcn/ui/sidebar"
 
-export default function Fenomeno() {
+export default function Home() {
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
 
   const [sidebar, setSidebar] = useLocalStorage("sidebar", true)
