@@ -1,9 +1,12 @@
-import { httpClient } from "./clients/http"
+import type { TContaSchema } from "~/schemas/conta"
+import { ContaSchema, parse } from "~/schemas/conta"
+import { httpClient } from "~/services/clients/http"
 
-async function getConta() {
+async function getConta(): Promise<TContaSchema> {
   const response = await httpClient.get("/conta/")
+  const conta = parse(ContaSchema, response.data)
 
-  return response.data
+  return conta
 }
 
 export const ContaServices = {

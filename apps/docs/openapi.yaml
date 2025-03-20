@@ -34,14 +34,6 @@ paths:
                 $ref: "#/components/schemas/AuthenticatedUser"
         "401":
           description: Não autorizado. O usuário atual não está logado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  is_authenticated:
-                    type: boolean
-                    example: false
 
   /conta/entrar:
     post:

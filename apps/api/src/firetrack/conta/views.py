@@ -13,10 +13,7 @@ from firetrack.conta import forms, serializers, services
 @require_GET
 def conta(request: WSGIRequest):
     if not request.user.is_authenticated:
-        return JsonResponse(
-            serializers.serialize_anonymous_user(request.user),
-            status=HTTPStatus.UNAUTHORIZED,
-        )
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
     return JsonResponse(
         serializers.serialize_authenticated_user(request.user),

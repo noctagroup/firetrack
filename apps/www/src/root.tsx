@@ -4,18 +4,34 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import tailwindUrl from "~/assets/styles/tailwind.css?url"
 import { queryClient } from "~/lib/query"
+import { contaOptions } from "~/queries/conta"
 
 import type { Route } from "./+types/root"
 
-export const meta: Route.MetaFunction = () => [
-  { title: "Firetrack" },
-  { charSet: "utf-8" },
-  { name: "viewport", content: "width=device-width, initial-scale=1" },
-]
+export function meta() {
+  return [
+    { title: "Firetrack" },
+    { charSet: "utf-8" },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+  ] satisfies Route.MetaDescriptors
+}
 
-export const links: Route.LinksFunction = () => [{ href: tailwindUrl, rel: "stylesheet" }]
+export function links() {
+  return [
+    {
+      href: tailwindUrl,
+      rel: "stylesheet",
+    },
+  ] satisfies Route.LinkDescriptors
+}
 
-export const clientLoader = async () => {}
+export async function clientLoader() {
+  await queryClient.prefetchQuery(contaOptions.minhaConta())
+}
+
+export default function App() {
+  return <Outlet />
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -27,17 +43,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ScrollRestoration />
         <Scripts />
-        {children}
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
       </body>
     </html>
-  )
-}
-
-export default function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Outlet />
-    </QueryClientProvider>
   )
 }
 
