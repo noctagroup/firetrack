@@ -1,6 +1,8 @@
-import { Suspense } from "react"
+import * as React from "react"
+import type { MapRef } from "react-map-gl/mapbox"
 
 import { Mapbox } from "~fenomeno/components/mapbox"
+import { RESIZABLE_HANDLE_ID } from "~fenomeno/constants"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -8,15 +10,25 @@ import {
 } from "~shared/lib/shadcn/ui/resizable"
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 
-import { RESIZABLE_HANDLE_ID } from "./constants"
-import { useResizableMapRef } from "./hooks"
-
 export const handle = {
   breadcrumb: "Cicatrizes de Queimadas",
 }
 
 export default function FenomenoIndex() {
-  const mapRef = useResizableMapRef()
+  const mapRef = React.useRef<MapRef>(null)
+
+  React.useEffect(() => {
+    const handleEl = document.getElementById(RESIZABLE_HANDLE_ID)!
+    const observer = new MutationObserver(() => {
+      if (!mapRef.current?.resize) return undefined
+
+      mapRef.current.resize()
+    })
+
+    observer.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
+
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <ResizablePanelGroup direction="horizontal">
@@ -29,9 +41,9 @@ export default function FenomenoIndex() {
       <ResizableHandle id={RESIZABLE_HANDLE_ID} withHandle />
 
       <ResizablePanel>
-        <Suspense fallback={<Skeleton className="h-full" />}>
+        <React.Suspense fallback={<Skeleton className="h-full" />}>
           <Mapbox ref={mapRef} />
-        </Suspense>
+        </React.Suspense>
       </ResizablePanel>
     </ResizablePanelGroup>
   )

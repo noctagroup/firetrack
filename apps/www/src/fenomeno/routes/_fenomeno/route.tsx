@@ -3,6 +3,7 @@ import { Fragment } from "react/jsx-runtime"
 import type { UIMatch } from "react-router"
 import { Link, Outlet, useMatches } from "react-router"
 
+import { RESIZABLE_SIDEBAR_ID } from "~fenomeno/constants"
 import { useLocalStorage } from "~shared/hooks/use-local-storage"
 import {
   Breadcrumb,
@@ -32,7 +33,7 @@ export default function Fenomeno() {
 
   return (
     <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
-      <Sidebar collapsible="icon">
+      <Sidebar id={RESIZABLE_SIDEBAR_ID} collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
             <SidebarMenuItem>
