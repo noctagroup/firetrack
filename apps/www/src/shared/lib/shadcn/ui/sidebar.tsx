@@ -1,23 +1,27 @@
 import { Slot } from "@radix-ui/react-slot"
-import type { VariantProps } from "class-variance-authority"
-import { cva } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 import * as React from "react"
 
-import { Button } from "~/components/ui/button"
-import { Input } from "~/components/ui/input"
-import { Separator } from "~/components/ui/separator"
+import { useIsMobile } from "~shared/lib/shadcn/hooks/use-mobile"
+import { Button } from "~shared/lib/shadcn/ui/button"
+import { Input } from "~shared/lib/shadcn/ui/input"
+import { Separator } from "~shared/lib/shadcn/ui/separator"
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "~/components/ui/sheet"
-import { Skeleton } from "~/components/ui/skeleton"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip"
-import { cn } from "~/lib/utils"
-import { useIsMobile } from "~shared/hooks/use-mobile"
+} from "~shared/lib/shadcn/ui/sheet"
+import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "~shared/lib/shadcn/ui/tooltip"
+import { cn } from "~shared/lib/shadcn/utils"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -26,7 +30,7 @@ const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-type SidebarContext = {
+type SidebarContextProps = {
   state: "expanded" | "collapsed"
   open: boolean
   setOpen: (open: boolean) => void
@@ -36,7 +40,7 @@ type SidebarContext = {
   toggleSidebar: () => void
 }
 
-const SidebarContext = React.createContext<SidebarContext | null>(null)
+const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
 function useSidebar() {
   const context = React.useContext(SidebarContext)
@@ -104,7 +108,7 @@ function SidebarProvider({
   // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? "expanded" : "collapsed"
 
-  const contextValue = React.useMemo<SidebarContext>(
+  const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
       state,
       open,
@@ -203,6 +207,7 @@ function Sidebar({
       data-slot="sidebar">
       {/* This is what handles the sidebar gap on desktop */}
       <div
+        data-slot="sidebar-gap"
         className={cn(
           "relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear",
           "group-data-[collapsible=offcanvas]:w-0",
@@ -213,6 +218,7 @@ function Sidebar({
         )}
       />
       <div
+        data-slot="sidebar-container"
         className={cn(
           "fixed inset-y-0 z-10 hidden h-svh w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex",
           side === "left"
@@ -227,6 +233,7 @@ function Sidebar({
         {...props}>
         <div
           data-sidebar="sidebar"
+          data-slot="sidebar-inner"
           className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm">
           {children}
         </div>
@@ -244,7 +251,7 @@ function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<t
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("size-7", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()

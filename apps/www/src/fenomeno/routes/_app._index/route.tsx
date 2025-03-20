@@ -1,8 +1,12 @@
 import { Suspense } from "react"
 
-import { Mapbox } from "~/components/mapbox"
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable"
-import { Skeleton } from "~/components/ui/skeleton"
+import { Mapbox } from "~fenomeno/components/mapbox"
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "~shared/lib/shadcn/ui/resizable"
+import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 
 import { RESIZABLE_HANDLE_ID } from "./constants"
 import { useResizableMapRef } from "./hooks"

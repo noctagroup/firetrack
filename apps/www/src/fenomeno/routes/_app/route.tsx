@@ -10,7 +10,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb"
+} from "~shared/lib/shadcn/ui/breadcrumb"
 import {
   Sidebar,
   SidebarContent,
@@ -21,7 +21,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-} from "~/components/ui/sidebar"
+} from "~shared/lib/shadcn/ui/sidebar"
 
 export default function App() {
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
