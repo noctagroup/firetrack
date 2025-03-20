@@ -19,28 +19,28 @@ export default function FenomenoIndex() {
 
   React.useEffect(() => {
     const handleEl = document.getElementById(RESIZABLE_HANDLE_ID)!
-    const mutationObserver = new MutationObserver(() => {
+    const observer = new MutationObserver(() => {
       if (!mapRef.current?.resize) return undefined
 
-      mapRef.current.resize()
+      setTimeout(() => mapRef.current!.resize(), 0)
     })
 
-    mutationObserver.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
+    observer.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
 
-    return () => mutationObserver.disconnect()
+    return () => observer.disconnect()
   }, [])
 
   React.useEffect(() => {
     const sidebarEl = document.getElementById(RESIZABLE_SIDEBAR_ID)!
-    const resizeObserver = new ResizeObserver(() => {
+    const observer = new ResizeObserver(() => {
       if (!mapRef.current?.resize) return undefined
 
-      mapRef.current.resize()
+      setTimeout(() => mapRef.current!.resize(), 0)
     })
 
-    resizeObserver.observe(sidebarEl)
+    observer.observe(sidebarEl)
 
-    return () => resizeObserver.disconnect()
+    return () => observer.disconnect()
   }, [])
 
   return (
