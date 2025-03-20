@@ -96,5 +96,5 @@ export default function Fenomeno() {
 }
 
 export const handle = {
-  breadcrumb: "Início",
+  breadcrumb: "Fenômenos",
 }

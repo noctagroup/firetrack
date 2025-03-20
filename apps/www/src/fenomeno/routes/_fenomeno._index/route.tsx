@@ -12,7 +12,7 @@ import {
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 
 export const handle = {
-  breadcrumb: "Cicatrizes de Queimadas",
+  breadcrumb: "Queimadas",
 }
 
 export default function FenomenoIndex() {
