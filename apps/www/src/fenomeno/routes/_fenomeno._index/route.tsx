@@ -15,7 +15,7 @@ export const handle = {
   breadcrumb: "Cicatrizes de Queimadas",
 }
 
-export default function HomeIndex() {
+export default function FenomenoIndex() {
   const debouncedMapResize = useDebounced(() => window.dispatchEvent(new Event("resize")))
 
   useResizeObserver(MAP_PANEL_ID, debouncedMapResize)

@@ -26,7 +26,7 @@ import {
   SidebarRail,
 } from "~shared/lib/shadcn/ui/sidebar"
 
-export default function Home() {
+export default function Fenomeno() {
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
 
   const [sidebar, setSidebar] = useLocalStorage("sidebar", true)
