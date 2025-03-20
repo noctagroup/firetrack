@@ -10,5 +10,3 @@ export const ContaSchema = v.object({
 })
 
 export type TContaSchema = v.InferInput<typeof ContaSchema>
-
-export const parse = v.parse

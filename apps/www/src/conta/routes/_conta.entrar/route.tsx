@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-import { contaOptions } from "~/queries/conta"
+import { contaOptions } from "~conta/queries"
 
 export default function ContaIndex() {
   const minhaConta = useQuery(contaOptions.minhaConta())

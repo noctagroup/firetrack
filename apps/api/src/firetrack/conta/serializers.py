@@ -1,10 +1,4 @@
-from django.contrib.auth.models import AnonymousUser, User
-
-
-def serialize_anonymous_user(user: AnonymousUser) -> dict:
-    return {
-        "is_authenticated": user.is_authenticated,
-    }
+from django.contrib.auth.models import User
 
 
 def serialize_authenticated_user(user: User) -> dict:

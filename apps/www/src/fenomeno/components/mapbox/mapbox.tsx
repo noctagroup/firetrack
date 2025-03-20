@@ -4,9 +4,9 @@ import mapboxGl from "mapbox-gl"
 import type { ComponentProps } from "react"
 import Mapbox from "react-map-gl/mapbox"
 
-import { env } from "~/env"
+import { env } from "~shared/env"
 
-export function DO_NOT_USE_INTERNAL_MAPBOX({ ...props }: ComponentProps<typeof Mapbox>) {
+export function __DO_NOT_USE_INTERNAL_MAPBOX__({ ...props }: ComponentProps<typeof Mapbox>) {
   return (
     <Mapbox
       {...props}

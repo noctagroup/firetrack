@@ -2,9 +2,9 @@ import { QueryClientProvider } from "@tanstack/react-query"
 import { LoaderPinwheel } from "lucide-react"
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
-import tailwindUrl from "~/assets/styles/tailwind.css?url"
-import { queryClient } from "~/lib/query"
-import { contaOptions } from "~/queries/conta"
+import { contaOptions } from "~conta/queries"
+import { queryClient } from "~shared/lib/query"
+import tailwindUrl from "~shared/styles/tailwind.css?url"
 
 import type { Route } from "./+types/root"
 
