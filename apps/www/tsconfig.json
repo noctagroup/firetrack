@@ -12,7 +12,7 @@
     "paths": {
       "~shared/*": ["./src/shared/*"],
       "~conta/*": ["./src/conta/*"],
-      "~home/*": ["./src/home/*"]
+      "~fenomeno/*": ["./src/fenomeno/*"]
     },
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,

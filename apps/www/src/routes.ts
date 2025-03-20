@@ -3,10 +3,10 @@ import { flatRoutes } from "@react-router/fs-routes"
 
 const routes = (await Promise.all([
   flatRoutes({
-    rootDirectory: "./home/routes",
+    rootDirectory: "./conta/routes",
   }),
   flatRoutes({
-    rootDirectory: "./conta/routes",
+    rootDirectory: "./fenomeno/routes",
   }),
 ])) satisfies RouteConfigEntry[][]
 

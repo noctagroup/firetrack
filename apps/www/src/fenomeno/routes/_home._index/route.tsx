@@ -1,7 +1,7 @@
 import * as React from "react"
 
-import { Mapbox } from "~home/components/mapbox"
-import { MAP_PANEL_ID, SIDEBAR_ID } from "~home/constants"
+import { Mapbox } from "~fenomeno/components/mapbox"
+import { MAP_PANEL_ID, SIDEBAR_ID } from "~fenomeno/constants"
 import { useDebounced } from "~shared/hooks/use-debounced"
 import { useResizeObserver } from "~shared/hooks/use-resize-observer"
 import {
@@ -16,7 +16,7 @@ export const handle = {
 }
 
 export default function HomeIndex() {
-  const debouncedMapResize = useDebounced(() => window.dispatchEvent(new Event("resize")), 0)
+  const debouncedMapResize = useDebounced(() => window.dispatchEvent(new Event("resize")))
 
   useResizeObserver(MAP_PANEL_ID, debouncedMapResize)
   useResizeObserver(SIDEBAR_ID, debouncedMapResize)
