@@ -3,6 +3,7 @@ import { Fragment } from "react/jsx-runtime"
 import type { UIMatch } from "react-router"
 import { Link, Outlet, useMatches } from "react-router"
 
+import { useLocalStorage } from "~shared/hooks/use-local-storage"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,13 +22,16 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
+  SidebarRail,
 } from "~shared/lib/shadcn/ui/sidebar"
 
 export default function Fenomeno() {
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
 
+  const [sidebar, setSidebar] = useLocalStorage("sidebar", true)
+
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
       <Sidebar collapsible="icon">
         <SidebarHeader>
           <SidebarMenu>
@@ -46,6 +50,8 @@ export default function Fenomeno() {
         <SidebarContent />
 
         <SidebarFooter />
+
+        <SidebarRail />
       </Sidebar>
 
       <SidebarInset>
