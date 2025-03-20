@@ -1,6 +1,6 @@
 import { ContaServices } from "~conta/services"
-import type { Keyring, OptionsKeyring } from "~shared/lib/query"
-import { queryOptions } from "~shared/lib/query"
+import type { Keyring, OptionsKeyring } from "~shared/lib/query/types"
+import { queryOptions } from "~shared/lib/query/utils"
 
 export const contaKeys = {
   all: () => ["conta"],

@@ -3,7 +3,7 @@ import { LoaderPinwheel } from "lucide-react"
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
-import { queryClient } from "~shared/lib/query"
+import { queryClient } from "~shared/lib/query/client"
 import { Toaster } from "~shared/lib/shadcn/ui/sonner"
 import tailwindUrl from "~shared/styles/tailwind.css?url"
 
