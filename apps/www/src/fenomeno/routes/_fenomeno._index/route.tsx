@@ -19,11 +19,7 @@ export default function FenomenoIndex() {
 
   React.useEffect(() => {
     const mapEl = document.getElementById(MAP_PANEL_ID)!
-    const observer = new ResizeObserver(() => {
-      if (!mapRef.current?.resize) return undefined
-
-      requestAnimationFrame(() => mapRef.current!.resize())
-    })
+    const observer = new ResizeObserver(() => mapRef.current!.resize())
 
     observer.observe(mapEl)
 
@@ -32,11 +28,7 @@ export default function FenomenoIndex() {
 
   React.useEffect(() => {
     const sidebarEl = document.getElementById(SIDEBAR_ID)!
-    const observer = new ResizeObserver(() => {
-      if (!mapRef.current?.resize) return undefined
-
-      requestAnimationFrame(() => mapRef.current!.resize())
-    })
+    const observer = new ResizeObserver(() => mapRef.current!.resize())
 
     observer.observe(sidebarEl)
 
