@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query"
 import { LoaderPinwheel } from "lucide-react"
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
+import { Links, Meta, Outlet, redirect, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
 import { queryClient } from "~shared/lib/query/client"
@@ -26,8 +26,25 @@ export function links() {
   ] satisfies Route.LinkDescriptors
 }
 
-export async function clientLoader() {
-  await queryClient.prefetchQuery(contaOptions.minhaConta())
+export async function clientLoader(args: Route.ClientLoaderArgs) {
+  const url = new URL(args.request.url)
+
+  try {
+    const minhaConta = await queryClient.ensureQueryData(contaOptions.minhaConta())
+
+    if (
+      minhaConta.is_authenticated &&
+      (url.pathname === "/" || url.pathname.startsWith("/conta"))
+    ) {
+      return redirect("/fenomeno")
+    }
+  } catch {
+    if (!url.pathname.startsWith("/conta")) {
+      return redirect("/conta")
+    }
+  }
+
+  return null
 }
 
 export default function App() {
