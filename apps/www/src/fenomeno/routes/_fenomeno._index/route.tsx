@@ -3,6 +3,7 @@ import type { MapRef } from "react-map-gl/mapbox"
 
 import { Mapbox } from "~fenomeno/components/mapbox"
 import { MAP_PANEL_ID, SIDEBAR_ID } from "~fenomeno/constants"
+import { useDebounced } from "~shared/hooks/use-debounced"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -17,23 +18,29 @@ export const handle = {
 export default function FenomenoIndex() {
   const mapRef = React.useRef<MapRef>(null)
 
+  const debouncedMapResize = useDebounced(() => {
+    if (!mapRef.current) return undefined
+
+    mapRef.current.resize()
+  }, 0)
+
   React.useEffect(() => {
     const mapEl = document.getElementById(MAP_PANEL_ID)!
-    const observer = new ResizeObserver(() => mapRef.current!.resize())
+    const observer = new ResizeObserver(debouncedMapResize)
 
     observer.observe(mapEl)
 
     return () => observer.disconnect()
-  }, [])
+  }, [debouncedMapResize])
 
   React.useEffect(() => {
     const sidebarEl = document.getElementById(SIDEBAR_ID)!
-    const observer = new ResizeObserver(() => mapRef.current!.resize())
+    const observer = new ResizeObserver(debouncedMapResize)
 
     observer.observe(sidebarEl)
 
     return () => observer.disconnect()
-  }, [])
+  }, [debouncedMapResize])
 
   return (
     <ResizablePanelGroup direction="horizontal">
