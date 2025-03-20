@@ -16,9 +16,7 @@ export const handle = {
 }
 
 export default function FenomenoIndex() {
-  const debouncedMapResize = useDebounced(() => {
-    window.dispatchEvent(new Event("resize"))
-  })
+  const debouncedMapResize = useDebounced(() => window.dispatchEvent(new Event("resize")), 0)
 
   useResizeObserver(MAP_PANEL_ID, debouncedMapResize)
   useResizeObserver(SIDEBAR_ID, debouncedMapResize)
