@@ -4,6 +4,7 @@ import { Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
 import { queryClient } from "~shared/lib/query"
+import { Toaster } from "~shared/lib/shadcn/ui/sonner"
 import tailwindUrl from "~shared/styles/tailwind.css?url"
 
 import type { Route } from "./+types/root"
@@ -43,7 +44,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ScrollRestoration />
         <Scripts />
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          {children}
+          <Toaster />
+        </QueryClientProvider>
       </body>
     </html>
   )
