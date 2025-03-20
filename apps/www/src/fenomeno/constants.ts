@@ -1,2 +1,2 @@
-export const RESIZABLE_HANDLE_ID = "resizable-handle"
-export const RESIZABLE_SIDEBAR_ID = "resizable-sidebar"
+export const MAP_PANEL_ID = "resizable-map-panel"
+export const SIDEBAR_ID = "resizable-sidebar"
