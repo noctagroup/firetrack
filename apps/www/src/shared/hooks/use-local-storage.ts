@@ -1,38 +1,24 @@
 import * as React from "react"
 
-function dispatchStorageEvent(key, newValue) {
-  window.dispatchEvent(new StorageEvent("storage", { key, newValue }))
-}
+export function useLocalStorage<T>(
+  key: string,
+  initialValue: T
+): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const store = React.useSyncExternalStore(
+    (onStoreChange) => {
+      window.addEventListener("storage", onStoreChange)
+      return () => window.removeEventListener("storage", onStoreChange)
+    },
+    () => getLocalStorageItem(key)
+  )
 
-const getLocalStorageItem = (key) => {
-  return window.localStorage.getItem(key)
-}
-
-const removeLocalStorageItem = (key) => {
-  window.localStorage.removeItem(key)
-  dispatchStorageEvent(key, null)
-}
-
-const setLocalStorageItem = (key, value) => {
-  const stringifiedValue = JSON.stringify(value)
-  window.localStorage.setItem(key, stringifiedValue)
-  dispatchStorageEvent(key, stringifiedValue)
-}
-
-const useLocalStorageSubscribe = (callback) => {
-  window.addEventListener("storage", callback)
-  return () => window.removeEventListener("storage", callback)
-}
-
-export function useLocalStorage(key, initialValue) {
-  const getSnapshot = () => getLocalStorageItem(key)
-
-  const store = React.useSyncExternalStore(useLocalStorageSubscribe, getSnapshot)
-
-  const setState = React.useCallback(
-    (v) => {
+  const setState = React.useCallback<React.Dispatch<React.SetStateAction<T>>>(
+    (_nextState) => {
       try {
-        const nextState = typeof v === "function" ? v(JSON.parse(store)) : v
+        const nextState =
+          typeof _nextState === "function"
+            ? (_nextState as (value: T) => T)(JSON.parse(store!))
+            : _nextState
 
         if (nextState === undefined || nextState === null) {
           removeLocalStorageItem(key)
@@ -53,4 +39,23 @@ export function useLocalStorage(key, initialValue) {
   }, [key, initialValue])
 
   return [store ? JSON.parse(store) : initialValue, setState]
+}
+
+function dispatchStorageEvent(key: string, newValue?: string | null) {
+  window.dispatchEvent(new StorageEvent("storage", { key, newValue }))
+}
+
+function getLocalStorageItem(key: string) {
+  return window.localStorage.getItem(key)
+}
+
+function removeLocalStorageItem(key: string) {
+  window.localStorage.removeItem(key)
+  dispatchStorageEvent(key, null)
+}
+
+function setLocalStorageItem<T>(key: string, value: T) {
+  const stringifiedValue = JSON.stringify(value)
+  window.localStorage.setItem(key, stringifiedValue)
+  dispatchStorageEvent(key, stringifiedValue)
 }
