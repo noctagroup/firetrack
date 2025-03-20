@@ -20,9 +20,9 @@ export default function FenomenoIndex() {
   const mapRef = React.useRef<MapRef>(null)
 
   const debouncedMapResize = useDebounced(() => {
-    if (!mapRef.current) return undefined
-
-    mapRef.current.resize()
+    if (mapRef.current) {
+      mapRef.current.resize()
+    }
   })
 
   useResizeObserver(MAP_PANEL_ID, debouncedMapResize)

@@ -1,11 +1,14 @@
 import * as React from "react"
 
-export function useResizeObserver(id: string, callback: ResizeObserverCallback): void {
+export function useResizeObserver(
+  elementId: string,
+  observerCallback: ResizeObserverCallback
+): void {
   React.useEffect(() => {
-    const element = document.getElementById(id)!
-    const observer = new ResizeObserver(callback)
+    const element = document.getElementById(elementId)!
+    const observer = new ResizeObserver(observerCallback)
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [callback, id])
+  }, [observerCallback, elementId])
 }
