@@ -15,7 +15,7 @@ export const handle = {
   breadcrumb: "Cicatrizes de Queimadas",
 }
 
-export default function AppIndex() {
+export default function FenomenoIndex() {
   const mapRef = useResizableMapRef()
 
   return (

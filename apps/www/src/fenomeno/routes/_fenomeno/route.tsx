@@ -23,7 +23,7 @@ import {
   SidebarProvider,
 } from "~shared/lib/shadcn/ui/sidebar"
 
-export default function App() {
+export default function Fenomeno() {
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
 
   return (
