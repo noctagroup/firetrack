@@ -2,7 +2,7 @@ import * as React from "react"
 import type { MapRef } from "react-map-gl/mapbox"
 
 import { Mapbox } from "~fenomeno/components/mapbox"
-import { RESIZABLE_HANDLE_ID } from "~fenomeno/constants"
+import { RESIZABLE_HANDLE_ID, RESIZABLE_SIDEBAR_ID } from "~fenomeno/constants"
 import {
   ResizableHandle,
   ResizablePanel,
@@ -19,15 +19,28 @@ export default function FenomenoIndex() {
 
   React.useEffect(() => {
     const handleEl = document.getElementById(RESIZABLE_HANDLE_ID)!
-    const observer = new MutationObserver(() => {
+    const mutationObserver = new MutationObserver(() => {
       if (!mapRef.current?.resize) return undefined
 
       mapRef.current.resize()
     })
 
-    observer.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
+    mutationObserver.observe(handleEl, { attributeFilter: ["aria-valuenow"] })
 
-    return () => observer.disconnect()
+    return () => mutationObserver.disconnect()
+  }, [])
+
+  React.useEffect(() => {
+    const sidebarEl = document.getElementById(RESIZABLE_SIDEBAR_ID)!
+    const resizeObserver = new ResizeObserver(() => {
+      if (!mapRef.current?.resize) return undefined
+
+      mapRef.current.resize()
+    })
+
+    resizeObserver.observe(sidebarEl)
+
+    return () => resizeObserver.disconnect()
   }, [])
 
   return (
