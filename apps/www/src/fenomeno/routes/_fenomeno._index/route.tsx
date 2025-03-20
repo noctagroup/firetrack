@@ -22,13 +22,12 @@ export default function FenomenoIndex() {
     if (!mapRef.current) return undefined
 
     mapRef.current.resize()
-  }, 0)
+  })
 
   React.useEffect(() => {
-    const mapEl = document.getElementById(MAP_PANEL_ID)!
+    const mapPanelEl = document.getElementById(MAP_PANEL_ID)!
     const observer = new ResizeObserver(debouncedMapResize)
-
-    observer.observe(mapEl)
+    observer.observe(mapPanelEl)
 
     return () => observer.disconnect()
   }, [debouncedMapResize])
@@ -36,7 +35,6 @@ export default function FenomenoIndex() {
   React.useEffect(() => {
     const sidebarEl = document.getElementById(SIDEBAR_ID)!
     const observer = new ResizeObserver(debouncedMapResize)
-
     observer.observe(sidebarEl)
 
     return () => observer.disconnect()

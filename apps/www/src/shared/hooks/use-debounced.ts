@@ -4,29 +4,28 @@ export const useDebounced = <Fn extends (...args: Parameters<Fn>) => void>(
   fn: Fn,
   wait = 0
 ): ((...args: Parameters<Fn>) => void) => {
-  const rafId = React.useRef(0)
+  const timeoutId = React.useRef<number | null>(null)
 
-  const render = React.useCallback(
+  const debouncedFn = React.useCallback(
     (...args: Parameters<Fn>) => {
-      cancelAnimationFrame(rafId.current)
-
-      const timeStart = performance.now()
-
-      const renderFrame = (timeNow: number) => {
-        if (timeNow - timeStart < wait) {
-          rafId.current = requestAnimationFrame(renderFrame)
-          return
-        }
-
-        fn(...args)
+      if (timeoutId.current != null) {
+        window.clearTimeout(timeoutId.current)
       }
 
-      rafId.current = requestAnimationFrame(renderFrame)
+      timeoutId.current = window.setTimeout(() => {
+        fn(...args)
+      }, wait)
     },
     [fn, wait]
   )
 
-  React.useEffect(() => () => cancelAnimationFrame(rafId.current), [])
+  React.useEffect(() => {
+    return () => {
+      if (timeoutId.current != null) {
+        window.clearTimeout(timeoutId.current)
+      }
+    }
+  }, [])
 
-  return render
+  return debouncedFn
 }
