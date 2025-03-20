@@ -1,5 +1,4 @@
 import * as React from "react"
-import type { MapRef } from "react-map-gl/mapbox"
 
 import { Mapbox } from "~fenomeno/components/mapbox"
 import { MAP_PANEL_ID, SIDEBAR_ID } from "~fenomeno/constants"
@@ -17,12 +16,8 @@ export const handle = {
 }
 
 export default function FenomenoIndex() {
-  const mapRef = React.useRef<MapRef>(null)
-
   const debouncedMapResize = useDebounced(() => {
-    if (mapRef.current) {
-      mapRef.current.resize()
-    }
+    window.dispatchEvent(new Event("resize"))
   })
 
   useResizeObserver(MAP_PANEL_ID, debouncedMapResize)
@@ -40,7 +35,7 @@ export default function FenomenoIndex() {
 
       <ResizablePanel id={MAP_PANEL_ID}>
         <React.Suspense fallback={<Skeleton className="h-full" />}>
-          <Mapbox ref={mapRef} />
+          <Mapbox />
         </React.Suspense>
       </ResizablePanel>
     </ResizablePanelGroup>
