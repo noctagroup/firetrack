@@ -12,9 +12,7 @@ async function getConta(): Promise<TContaSchema> {
 }
 
 async function sair(): Promise<void> {
-  const response = await httpClient.post("/conta/sair/")
-
-  return response.data
+  await httpClient.post("/conta/sair/")
 }
 
 export const ContaServices = {
