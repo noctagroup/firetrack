@@ -1,96 +1,14 @@
-import { FireExtinguisher } from "lucide-react"
-import { Fragment } from "react/jsx-runtime"
-import type { UIMatch } from "react-router"
-import { Link, Outlet, useMatches } from "react-router"
-
-import { SIDEBAR_ID } from "~fenomeno/constants"
+import { FenomenoInset, FenomenoSidebar } from "~fenomeno/routes/_fenomeno/components"
 import { useLocalStorage } from "~shared/hooks/use-local-storage"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "~shared/lib/shadcn/ui/breadcrumb"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarRail,
-} from "~shared/lib/shadcn/ui/sidebar"
+import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 
 export default function Fenomeno() {
-  const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
-
-  const [sidebar, setSidebar] = useLocalStorage("sidebar", true)
+  const [sidebarOpen, setSidebarOpen] = useLocalStorage("sidebar-open", true)
 
   return (
-    <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
-      <Sidebar id={SIDEBAR_ID} collapsible="icon">
-        <SidebarHeader>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild size="lg">
-                <Link to="/">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                    <FireExtinguisher className="size-5" />
-                  </div>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarHeader>
-
-        <SidebarContent />
-
-        <SidebarFooter />
-
-        <SidebarRail />
-      </Sidebar>
-
-      <SidebarInset>
-        <header className="h-14 px-4 border-b flex gap-2 items-center shrink-0">
-          <Breadcrumb>
-            <BreadcrumbList>
-              {matches.map((match, matchIndex) => {
-                if (!match.handle?.breadcrumb) {
-                  return undefined
-                }
-
-                const breadcrumb = match.handle.breadcrumb
-                const lastMatchIndex = matches.length - 1
-
-                return (
-                  <Fragment key={matchIndex}>
-                    {matchIndex > 1 && <BreadcrumbSeparator className="hidden md:block" />}
-
-                    <BreadcrumbItem>
-                      {matchIndex === lastMatchIndex ? (
-                        <BreadcrumbPage>{breadcrumb}</BreadcrumbPage>
-                      ) : (
-                        <BreadcrumbLink asChild className="hidden md:block">
-                          <Link to={match.pathname}>{breadcrumb}</Link>
-                        </BreadcrumbLink>
-                      )}
-                    </BreadcrumbItem>
-                  </Fragment>
-                )
-              })}
-            </BreadcrumbList>
-          </Breadcrumb>
-        </header>
-
-        <div className="grow-1 shrink-0 basis-auto">
-          <Outlet />
-        </div>
-      </SidebarInset>
+    <SidebarProvider defaultOpen={sidebarOpen} open={sidebarOpen} onOpenChange={setSidebarOpen}>
+      <FenomenoSidebar />
+      <FenomenoInset />
     </SidebarProvider>
   )
 }
