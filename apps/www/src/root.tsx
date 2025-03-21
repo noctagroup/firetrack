@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query"
-import { LoaderPinwheel } from "lucide-react"
+import { Waves } from "lucide-react"
 import { Links, Meta, Outlet, replace, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
@@ -69,8 +69,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export function HydrateFallback() {
   return (
-    <div className="h-full flex items-center flex-col gap-3 justify-center">
-      <LoaderPinwheel className="animate-spin size-36 ease-in-out" strokeWidth={1.5} />
+    <div className="flex h-full flex-col items-center justify-center gap-3">
+      <Waves className="size-36 animate-bounce ease-out" />
     </div>
   )
 }

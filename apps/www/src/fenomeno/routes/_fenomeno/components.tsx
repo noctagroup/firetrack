@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query"
-import { PanelLeft, Waves } from "lucide-react"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
 import { Fragment } from "react/jsx-runtime"
-import { Link, Outlet, type UIMatch, useMatches } from "react-router"
+import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
 
-import { contaOptions } from "~conta/queries"
+import { contaMutations, contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
 import { initials } from "~fenomeno/routes/_fenomeno/utils"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
@@ -16,7 +16,15 @@ import {
   BreadcrumbSeparator,
 } from "~shared/lib/shadcn/ui/breadcrumb"
 import { Button } from "~shared/lib/shadcn/ui/button"
-import { DropdownMenu, DropdownMenuTrigger } from "~shared/lib/shadcn/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~shared/lib/shadcn/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -34,13 +42,25 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/t
 import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
+  const navigate = useNavigate()
+
   const minhaConta = useQuery(contaOptions.minhaConta())
+  const sair = useMutation({
+    ...contaMutations.sair(),
+    onSuccess: () => {
+      navigate(0)
+    },
+  })
+
+  const handleSair = () => {
+    sair.mutate()
+  }
 
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
       <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
         <Link to="/">
-          <Waves className="bg-muted aspect-square size-8" />
+          <Waves className="bg-muted size-8" />
         </Link>
 
         <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
@@ -56,10 +76,8 @@ export function FenomenoSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
-                  <Avatar className="aspect-square size-8 rounded">
-                    <AvatarFallback className="rounded font-semibold">
-                      {initials(minhaConta.data!)}
-                    </AvatarFallback>
+                  <Avatar className="size-8">
+                    <AvatarFallback>{initials(minhaConta.data!)}</AvatarFallback>
                   </Avatar>
 
                   <div className="grid flex-1 text-left text-sm leading-tight">
@@ -69,8 +87,37 @@ export function FenomenoSidebar() {
 
                     <span className="truncate text-xs">{minhaConta.data!.email}</span>
                   </div>
+
+                  <ChevronsUpDown className="size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
+
+              <DropdownMenuContent side="top" align="start" className="min-w-60">
+                <DropdownMenuLabel className="p-0">
+                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                    <Avatar className="size-8">
+                      <AvatarFallback>{initials(minhaConta.data!)}</AvatarFallback>
+                    </Avatar>
+
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        {minhaConta.data!.full_name || minhaConta.data!.username}
+                      </span>
+                      <span className="truncate text-xs">{minhaConta.data!.email}</span>
+                    </div>
+                  </div>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={handleSair}>
+                    <LogOut />
+
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -84,35 +131,33 @@ export function FenomenoSidebar() {
 function FenomenoSidebarToggle({
   hideOn,
   ...props
-}: React.ComponentProps<typeof Button> & { hideOn: SidebarContextProps["state"] }) {
+}: React.HTMLAttributes<HTMLDivElement> & { hideOn: SidebarContextProps["state"] }) {
   const sidebar = useSidebar()
 
-  const baseHideOnClass = "opacity-100 transition-opacity duration-1000"
-  const hideOnClass =
-    hideOn === "collapsed"
-      ? "group-data-[state=collapsed]:hidden group-data-[state=collapsed]:opacity-0"
-      : "group-data-[state=expanded]:hidden group-data-[state=expanded]:opacity-0"
-
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          {...props}
-          onClick={sidebar.toggleSidebar}
-          className={cn("size-8", baseHideOnClass, hideOnClass, props.className)}
-          size="icon"
-          variant="ghost">
-          <PanelLeft className="size-5" />
-        </Button>
-      </TooltipTrigger>
+    <div
+      {...props}
+      className={cn(
+        "visible opacity-100 transition-all duration-75",
+        {
+          "invisible opacity-0":
+            (hideOn === "collapsed" && sidebar.state === "collapsed") ||
+            (hideOn === "expanded" && sidebar.state === "expanded"),
+        },
+        props.className
+      )}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button onClick={sidebar.toggleSidebar} className="size-8" size="icon" variant="ghost">
+            <PanelLeft className="size-5" />
+          </Button>
+        </TooltipTrigger>
 
-      <TooltipContent
-        className={cn(baseHideOnClass, hideOnClass, "transition-none duration-0")}
-        side="right"
-        align="center">
-        Alternar painel lateral
-      </TooltipContent>
-    </Tooltip>
+        <TooltipContent side="right" align="center">
+          Alternar painel lateral
+        </TooltipContent>
+      </Tooltip>
+    </div>
   )
 }
 

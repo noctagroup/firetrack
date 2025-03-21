@@ -11,6 +11,13 @@ async function getConta(): Promise<TContaSchema> {
   return conta
 }
 
+async function sair(): Promise<void> {
+  const response = await httpClient.post("/conta/sair/")
+
+  return response.data
+}
+
 export const ContaServices = {
   getConta,
+  sair,
 }
