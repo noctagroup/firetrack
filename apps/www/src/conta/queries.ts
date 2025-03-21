@@ -1,6 +1,6 @@
 import { ContaServices } from "~conta/services"
-import type { Keyring, MutationsKeyring, OptionsKeyring } from "~shared/lib/query/types"
-import { mutationOptions, queryOptions } from "~shared/lib/query/utils"
+import type { Keyring, OptionsKeyring } from "~shared/lib/query/types"
+import { queryOptions } from "~shared/lib/query/utils"
 
 export const contaKeys = {
   all: () => ["conta"],
@@ -14,10 +14,3 @@ export const contaOptions = {
       queryFn: ContaServices.getConta,
     }),
 } as const satisfies OptionsKeyring
-
-export const contaMutations = {
-  sair: () =>
-    mutationOptions({
-      mutationFn: ContaServices.sair,
-    }),
-} as const satisfies MutationsKeyring

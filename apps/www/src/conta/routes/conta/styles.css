@@ -3,16 +3,47 @@
   z-index: -1;
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, var(--chart-1), var(--chart-2));
-  opacity: 0.12;
+  /* linear-gradient(217deg, var(--chart-3), oklch(from var(--chart-1) l c h / 0.4)), */
+  /* linear-gradient(127deg, var(--chart-1), oklch(from var(--chart-5) l c h / 0.32)); */
+  background-position: center;
+  background-image: radial-gradient(
+    ellipse at 50%,
+    oklch(from var(--chart-1) l c h / 0.9),
+    oklch(from var(--chart-3) l c h / 0.9)
+  );
+  /* animation-name: gradient; */
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-timing-function: var(--ease-in-out);
 }
 
-.conta-gradient-backdrop::before {
+/* .conta-gradient-backdrop::before {
   z-index: -1;
   content: "";
   position: absolute;
   inset: 0;
   opacity: 0.26;
-  background: linear-gradient(to right, var(--chart-3), var(--chart-4));
+  background-size: 200% 200%;
+  background: linear-gradient(to right, var(--chart-1), var(--chart-3));
   mask: linear-gradient(var(--background), transparent);
+  transition-timing-function: var(--ease-in-out);
+  animation: gradient 8s ease infinite;
+} */
+
+@keyframes gradient {
+  0% {
+    background-size: 100% 100%;
+  }
+  25% {
+    background-size: 120% 120%;
+  }
+  50% {
+    background-size: 150% 150%;
+  }
+  75% {
+    background-size: 140% 140%;
+  }
+  100% {
+    background-size: 100% 100%;
+  }
 }

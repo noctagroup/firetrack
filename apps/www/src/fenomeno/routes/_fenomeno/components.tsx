@@ -1,9 +1,9 @@
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
 import { Fragment } from "react/jsx-runtime"
-import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
+import { Form, Link, Outlet, type UIMatch, useMatches } from "react-router"
 
-import { contaMutations, contaOptions } from "~conta/queries"
+import { contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
 import { initials } from "~fenomeno/routes/_fenomeno/utils"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
@@ -42,19 +42,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/t
 import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
-  const navigate = useNavigate()
-
   const minhaConta = useQuery(contaOptions.minhaConta())
-  const sair = useMutation({
-    ...contaMutations.sair(),
-    onSuccess: () => {
-      navigate(0)
-    },
-  })
-
-  const handleSair = () => {
-    sair.mutate()
-  }
 
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
@@ -111,11 +99,15 @@ export function FenomenoSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={handleSair}>
-                    <LogOut />
+                  <Form action="/conta/sair/">
+                    <DropdownMenuItem asChild>
+                      <button className="w-full" type="submit">
+                        <LogOut />
 
-                    <span>Sair</span>
-                  </DropdownMenuItem>
+                        <span>Sair</span>
+                      </button>
+                    </DropdownMenuItem>
+                  </Form>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
