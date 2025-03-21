@@ -15,6 +15,7 @@ import { Button } from "~shared/lib/shadcn/ui/button"
 import {
   Sidebar,
   SidebarContent,
+  type SidebarContextProps,
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
@@ -22,22 +23,23 @@ import {
   useSidebar,
 } from "~shared/lib/shadcn/ui/sidebar"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
+import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
-      <SidebarHeader className="h-12 flex flex-row">
-        <Link to="/" className="w-8">
-          <Flame className="h-full w-full" />
+      <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
+        <Link to="/">
+          <Flame className="size-6" />
         </Link>
 
-        <FenomenoSidebarToggle className="group-data-[state=collapsed]:hidden" />
+        <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
       </SidebarHeader>
 
       <SidebarContent />
 
       <SidebarFooter>
-        <FenomenoSidebarToggle className="group-data-[state=expanded]:hidden" />
+        <FenomenoSidebarToggle hideOn="expanded" />
       </SidebarFooter>
 
       <SidebarRail />
@@ -45,18 +47,35 @@ export function FenomenoSidebar() {
   )
 }
 
-function FenomenoSidebarToggle(props: React.ComponentProps<typeof Button>) {
+function FenomenoSidebarToggle({
+  hideOn,
+  ...props
+}: React.ComponentProps<typeof Button> & { hideOn: SidebarContextProps["state"] }) {
   const sidebar = useSidebar()
+
+  const baseHideOnClass = "opacity-100 transition-opacity duration-1000"
+  const hideOnClass =
+    hideOn === "collapsed"
+      ? "group-data-[state=collapsed]:hidden group-data-[state=collapsed]:opacity-0"
+      : "group-data-[state=expanded]:hidden group-data-[state=expanded]:opacity-0"
 
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size="icon" variant="ghost" onClick={sidebar.toggleSidebar} {...props}>
+        <Button
+          {...props}
+          onClick={sidebar.toggleSidebar}
+          className={cn(baseHideOnClass, hideOnClass, props.className)}
+          size="icon"
+          variant="ghost">
           <PanelLeft className="size-4" />
         </Button>
       </TooltipTrigger>
 
-      <TooltipContent side="right" align="center">
+      <TooltipContent
+        className={cn(baseHideOnClass, hideOnClass, "transition-none duration-0")}
+        side="right"
+        align="center">
         Alternar painel lateral
       </TooltipContent>
     </Tooltip>
@@ -68,7 +87,7 @@ export function FenomenoInset() {
 
   return (
     <SidebarInset>
-      <header className="h-12 px-4 border-b flex gap-2 items-center shrink-0">
+      <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
         <Breadcrumb>
           <BreadcrumbList>
             {matches.map((match, matchIndex) => {
@@ -99,7 +118,7 @@ export function FenomenoInset() {
         </Breadcrumb>
       </header>
 
-      <div className="grow-1 shrink-0 basis-auto">
+      <div className="shrink-0 grow-1 basis-auto">
         <Outlet />
       </div>
     </SidebarInset>
