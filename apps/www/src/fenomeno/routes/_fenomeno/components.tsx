@@ -65,10 +65,10 @@ function FenomenoSidebarToggle({
         <Button
           {...props}
           onClick={sidebar.toggleSidebar}
-          className={cn(baseHideOnClass, hideOnClass, props.className)}
+          className={cn("size-8", baseHideOnClass, hideOnClass, props.className)}
           size="icon"
           variant="ghost">
-          <PanelLeft className="size-4" />
+          <PanelLeft className="size-5" />
         </Button>
       </TooltipTrigger>
 
