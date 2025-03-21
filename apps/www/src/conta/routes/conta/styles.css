@@ -1,0 +1,18 @@
+/* https://stackoverflow.com/questions/17505110/how-can-i-make-a-gradient-flow-in-multiple-directions */
+.conta-gradient-backdrop {
+  z-index: -1;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--chart-1), var(--chart-2));
+  opacity: 0.12;
+}
+
+.conta-gradient-backdrop::before {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.26;
+  background: linear-gradient(to right, var(--chart-3), var(--chart-4));
+  mask: linear-gradient(var(--background), transparent);
+}
