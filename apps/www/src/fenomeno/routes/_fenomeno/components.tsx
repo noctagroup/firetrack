@@ -1,8 +1,12 @@
+import { useQuery } from "@tanstack/react-query"
 import { PanelLeft, Waves } from "lucide-react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches } from "react-router"
 
+import { contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
+import { initials } from "~fenomeno/routes/_fenomeno/utils"
+import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,6 +16,7 @@ import {
   BreadcrumbSeparator,
 } from "~shared/lib/shadcn/ui/breadcrumb"
 import { Button } from "~shared/lib/shadcn/ui/button"
+import { DropdownMenu, DropdownMenuTrigger } from "~shared/lib/shadcn/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +24,9 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarRail,
   useSidebar,
 } from "~shared/lib/shadcn/ui/sidebar"
@@ -26,11 +34,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/t
 import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
+  const minhaConta = useQuery(contaOptions.minhaConta())
+
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
       <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
         <Link to="/">
-          <Waves className="size-8" />
+          <Waves className="bg-muted aspect-square size-8" />
         </Link>
 
         <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
@@ -40,6 +50,30 @@ export function FenomenoSidebar() {
 
       <SidebarFooter>
         <FenomenoSidebarToggle hideOn="expanded" />
+
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <SidebarMenuButton size="lg">
+                  <Avatar className="aspect-square size-8 rounded">
+                    <AvatarFallback className="rounded font-semibold">
+                      {initials(minhaConta.data!)}
+                    </AvatarFallback>
+                  </Avatar>
+
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">
+                      {minhaConta.data!.full_name || minhaConta.data!.username}
+                    </span>
+
+                    <span className="truncate text-xs">{minhaConta.data!.email}</span>
+                  </div>
+                </SidebarMenuButton>
+              </DropdownMenuTrigger>
+            </DropdownMenu>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarFooter>
 
       <SidebarRail />
