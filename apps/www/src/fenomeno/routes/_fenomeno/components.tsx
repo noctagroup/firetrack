@@ -1,4 +1,4 @@
-import { Flame, PanelLeft } from "lucide-react"
+import { PanelLeft, Waves } from "lucide-react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches } from "react-router"
 
@@ -30,7 +30,7 @@ export function FenomenoSidebar() {
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
       <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
         <Link to="/">
-          <Flame className="size-6" />
+          <Waves className="size-8" />
         </Link>
 
         <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
