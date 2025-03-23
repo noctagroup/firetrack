@@ -9,21 +9,34 @@ import tailwindUrl from "~shared/styles/tailwind.css?url"
 
 import type { Route } from "./+types/root"
 
+export function links() {
+  return [
+    {
+      rel: "stylesheet",
+      href: tailwindUrl,
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.googleapis.com",
+    },
+    {
+      rel: "preconnect",
+      href: "https://fonts.gstatic.com",
+      crossOrigin: "anonymous",
+    },
+    {
+      href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+      rel: "stylesheet",
+    },
+  ] satisfies Route.LinkDescriptors
+}
+
 export function meta() {
   return [
     { title: "Firetrack" },
     { charSet: "utf-8" },
     { name: "viewport", content: "width=device-width, initial-scale=1" },
   ] satisfies Route.MetaDescriptors
-}
-
-export function links() {
-  return [
-    {
-      href: tailwindUrl,
-      rel: "stylesheet",
-    },
-  ] satisfies Route.LinkDescriptors
 }
 
 export async function clientLoader(args: Route.ClientLoaderArgs) {
