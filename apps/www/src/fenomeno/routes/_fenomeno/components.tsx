@@ -99,7 +99,7 @@ export function FenomenoSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                  <Form action="/conta/sair/">
+                  <Form action="/conta/sair/" method="post">
                     <DropdownMenuItem asChild>
                       <button className="w-full" type="submit">
                         <LogOut />
