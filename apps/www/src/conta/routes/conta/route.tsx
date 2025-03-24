@@ -17,7 +17,7 @@ export default function Conta() {
     <div className="relative h-full">
       <div className="conta-gradient-backdrop" />
 
-      <div className="pt-[7%]">
+      <div className="pt-[8%]">
         <Outlet />
       </div>
     </div>

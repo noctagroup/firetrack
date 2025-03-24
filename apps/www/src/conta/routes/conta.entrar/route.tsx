@@ -24,7 +24,9 @@ import {
 import { Input } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaEntrar() {
-  const form = useForm<TEntrarForm>({ resolver: valibotResolver(EntrarForm) })
+  const form = useForm<TEntrarForm>({
+    resolver: valibotResolver(EntrarForm),
+  })
 
   const handleSubmit = (values: TEntrarForm) => {
     console.log(values)
@@ -75,7 +77,8 @@ export default function ContaEntrar() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={form.formState.isSubmitting || !form.formState.isValid}>
+                  // disabled={form.formState.isSubmitting || !form.formState.isValid}
+                >
                   {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
                   <span>Entrar</span>
                 </Button>
