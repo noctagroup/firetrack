@@ -1,5 +1,6 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useMutation } from "@tanstack/react-query"
+import { isAxiosError } from "axios"
 import { LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
@@ -29,11 +30,33 @@ export default function ContaEntrar() {
   const navigate = useNavigate()
   const form = useForm<TEntrarForm>({
     resolver: valibotResolver(EntrarForm),
+    defaultValues: {
+      query: "",
+      password: "",
+    },
   })
   const entrarMutation = useMutation({
     ...contaMutations.entrar(),
-    onError: () => form.setError("root", { message: "Não foi possível entrar" }),
-    onSuccess: () => navigate("/"),
+    onSuccess: () => {
+      navigate("/")
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        switch (error.status) {
+          case 404:
+            form.setFocus("query")
+            form.setError("query", { message: "Usuário não encontrado" })
+            break
+          case 401:
+            form.setFocus("password")
+            form.setError("password", { message: "Senha incorreta" })
+            break
+        }
+      } else {
+        form.setFocus("query")
+        form.setError("query", { message: "Não foi possível entrar" })
+      }
+    },
   })
 
   const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
@@ -80,10 +103,7 @@ export default function ContaEntrar() {
               />
 
               <div className="space-y-2">
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={form.formState.isSubmitting || !form.formState.isValid}>
+                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
                   <span>Entrar</span>
                 </Button>
