@@ -63,7 +63,7 @@ export default function App() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br" className="dark">
+    <html lang="pt-br">
       <head>
         <Meta />
         <Links />
