@@ -1,10 +1,12 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
+import { useMutation } from "@tanstack/react-query"
 import { LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 import type { TEntrarForm } from "~conta/forms"
 import { EntrarForm } from "~conta/forms"
+import { contaMutations } from "~conta/queries"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import {
   Card,
@@ -24,13 +26,17 @@ import {
 import { Input } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaEntrar() {
+  const navigate = useNavigate()
   const form = useForm<TEntrarForm>({
     resolver: valibotResolver(EntrarForm),
   })
+  const entrarMutation = useMutation({
+    ...contaMutations.entrar(),
+    onError: () => form.setError("root", { message: "Não foi possível entrar" }),
+    onSuccess: () => navigate("/"),
+  })
 
-  const handleSubmit = (values: TEntrarForm) => {
-    console.log(values)
-  }
+  const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
 
   return (
     <div className="mx-auto max-w-sm p-4 text-center">
@@ -77,8 +83,7 @@ export default function ContaEntrar() {
                 <Button
                   type="submit"
                   className="w-full"
-                  // disabled={form.formState.isSubmitting || !form.formState.isValid}
-                >
+                  disabled={form.formState.isSubmitting || !form.formState.isValid}>
                   {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
                   <span>Entrar</span>
                 </Button>

@@ -1,10 +1,11 @@
 import { parse } from "valibot"
 
+import type { TEntrarForm } from "~conta/forms"
 import type { TContaSchema } from "~conta/schemas"
 import { ContaSchema } from "~conta/schemas"
 import { httpClient } from "~shared/clients/http"
 
-async function getConta(): Promise<TContaSchema> {
+async function conta(): Promise<TContaSchema> {
   const response = await httpClient.get("/conta/")
   const conta = parse(ContaSchema, response.data)
 
@@ -15,7 +16,7 @@ async function sair(): Promise<void> {
   await httpClient.post("/conta/sair/")
 }
 
-async function entrar(payload: { query: string; password: string }): Promise<TContaSchema> {
+async function entrar(payload: TEntrarForm): Promise<TContaSchema> {
   const response = await httpClient.post("/conta/entrar/", payload)
   const conta = parse(ContaSchema, response.data)
 
@@ -23,7 +24,7 @@ async function entrar(payload: { query: string; password: string }): Promise<TCo
 }
 
 export const ContaServices = {
-  getConta,
+  conta,
   sair,
   entrar,
 }

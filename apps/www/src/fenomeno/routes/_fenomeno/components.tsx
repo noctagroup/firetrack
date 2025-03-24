@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
 import { Fragment } from "react/jsx-runtime"
-import { Form, Link, Outlet, type UIMatch, useMatches } from "react-router"
+import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
 
-import { contaOptions } from "~conta/queries"
+import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
 import { initials } from "~fenomeno/routes/_fenomeno/utils"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
@@ -42,7 +42,21 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/t
 import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
-  const minhaConta = useQuery(contaOptions.minhaConta())
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+
+  const contaQuery = useQuery(contaOptions.conta())
+  const sairMutation = useMutation({
+    ...contaMutations.sair(),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: contaKeys.conta() })
+      navigate("/")
+    },
+  })
+
+  const handleSair = () => {
+    sairMutation.mutate()
+  }
 
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
@@ -65,15 +79,15 @@ export function FenomenoSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar className="size-8">
-                    <AvatarFallback>{initials(minhaConta.data!)}</AvatarFallback>
+                    <AvatarFallback>{contaQuery.data && initials(contaQuery.data!)}</AvatarFallback>
                   </Avatar>
 
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {minhaConta.data!.full_name || minhaConta.data!.username}
+                      {contaQuery.data?.full_name || contaQuery.data?.username}
                     </span>
 
-                    <span className="truncate text-xs">{minhaConta.data!.email}</span>
+                    <span className="truncate text-xs">{contaQuery.data?.email}</span>
                   </div>
 
                   <ChevronsUpDown className="size-4" />
@@ -84,14 +98,17 @@ export function FenomenoSidebar() {
                 <DropdownMenuLabel className="p-0">
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="size-8">
-                      <AvatarFallback>{initials(minhaConta.data!)}</AvatarFallback>
+                      <AvatarFallback>
+                        {contaQuery.data && initials(contaQuery.data!)}
+                      </AvatarFallback>
                     </Avatar>
 
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {minhaConta.data!.full_name || minhaConta.data!.username}
+                        {contaQuery.data?.full_name || contaQuery.data?.username}
                       </span>
-                      <span className="truncate text-xs">{minhaConta.data!.email}</span>
+
+                      <span className="truncate text-xs">{contaQuery.data?.email}</span>
                     </div>
                   </div>
                 </DropdownMenuLabel>
@@ -99,15 +116,10 @@ export function FenomenoSidebar() {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
-                  <Form action="/conta/sair/" method="post">
-                    <DropdownMenuItem asChild>
-                      <button className="w-full" type="submit">
-                        <LogOut />
-
-                        <span>Sair</span>
-                      </button>
-                    </DropdownMenuItem>
-                  </Form>
+                  <DropdownMenuItem onClick={handleSair}>
+                    <LogOut />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>

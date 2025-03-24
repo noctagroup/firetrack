@@ -1,16 +1,34 @@
 import { ContaServices } from "~conta/services"
-import type { Keyring, OptionsKeyring } from "~shared/lib/query/types"
-import { queryOptions } from "~shared/lib/query/utils"
+import type { Keyring, MutationsKeyring, OptionsKeyring } from "~shared/lib/query/types"
+import { mutationOptions, queryOptions } from "~shared/lib/query/utils"
 
 export const contaKeys = {
   all: () => ["conta"],
-  minhaConta: () => [...contaKeys.all(), "minha-conta"],
+  conta: () => [...contaKeys.all(), "logada"],
 } as const satisfies Keyring
 
 export const contaOptions = {
-  minhaConta: () =>
+  conta: () =>
     queryOptions({
-      queryKey: contaKeys.minhaConta(),
-      queryFn: ContaServices.getConta,
+      queryKey: contaKeys.conta(),
+      queryFn: ContaServices.conta,
     }),
 } as const satisfies OptionsKeyring
+
+export const contaMutationKeys = {
+  sair: () => [...contaKeys.all(), "sair"],
+  entrar: () => [...contaKeys.all(), "entrar"],
+} as const satisfies Keyring
+
+export const contaMutations = {
+  sair: () =>
+    mutationOptions({
+      mutationKey: contaMutationKeys.sair(),
+      mutationFn: ContaServices.sair,
+    }),
+  entrar: () =>
+    mutationOptions({
+      mutationKey: contaMutationKeys.entrar(),
+      mutationFn: ContaServices.entrar,
+    }),
+} as const satisfies MutationsKeyring

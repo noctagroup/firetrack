@@ -3,4 +3,6 @@ type Keyring = Record<string, (...args: any) => any>
 
 type OptionsKeyring = Record<string, (...args: any) => any>
 
-export type { Keyring, OptionsKeyring }
+type MutationsKeyring = Record<string, (...args: any) => any>
+
+export type { Keyring, MutationsKeyring, OptionsKeyring }
