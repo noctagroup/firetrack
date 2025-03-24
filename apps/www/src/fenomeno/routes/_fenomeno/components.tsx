@@ -110,7 +110,7 @@ export function FenomenoSidebar() {
 function FenomenoSidebarContaInfo() {
   const contaQuery = useQuery(contaOptions.conta())
 
-  if (!contaQuery.data) {
+  if (contaQuery.isLoading || !contaQuery.data) {
     return (
       <div className="flex h-full w-full gap-2">
         <Skeleton className="aspect-square size-8 rounded" />
