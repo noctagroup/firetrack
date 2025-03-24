@@ -73,7 +73,7 @@ export default function ContaEntrar() {
 
         <CardContent>
           <Form {...form}>
-            <form className="space-y-8" onSubmit={form.handleSubmit(handleSubmit)}>
+            <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
               <FormField
                 control={form.control}
                 name="query"
@@ -102,15 +102,18 @@ export default function ContaEntrar() {
                 )}
               />
 
-              <div className="space-y-2">
+              <div className="space-y-4">
                 <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
                   {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
                   <span>Entrar</span>
                 </Button>
 
-                <Button className="mx-auto block max-w-4/5 text-center" variant="ghost" asChild>
-                  <Link to="../cadastrar">Criar uma conta</Link>
-                </Button>
+                <div className="text-center text-sm">
+                  <span>Não tem uma conta? </span>
+                  <Link to="../cadastrar" className="underline underline-offset-4">
+                    Cadastre-se
+                  </Link>
+                </div>
               </div>
             </form>
           </Form>
