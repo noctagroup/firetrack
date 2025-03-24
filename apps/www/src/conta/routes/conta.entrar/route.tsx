@@ -64,63 +64,61 @@ export default function ContaEntrar() {
   const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
 
   return (
-    <div className="mx-auto max-w-sm p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold">Seja bem-vindo</CardTitle>
-          <CardDescription className="text-muted-foreground text-md text-balance">
-            Para prosseguir, entre ou cadastre-se
-          </CardDescription>
-        </CardHeader>
+    <Card className="w-sm max-w-sm">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold">Seja bem-vindo</CardTitle>
+        <CardDescription className="text-muted-foreground text-md text-balance">
+          Para prosseguir, entre ou cadastre-se
+        </CardDescription>
+      </CardHeader>
 
-        <CardContent>
-          <Form {...form}>
-            <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
-              <FormField
-                control={form.control}
-                name="query"
-                render={(props) => (
-                  <FormItem>
-                    <FormLabel>Email ou nome de usuário</FormLabel>
-                    <FormControl>
-                      <Input {...props.field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+      <CardContent>
+        <Form {...form}>
+          <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
+            <FormField
+              control={form.control}
+              name="query"
+              render={(props) => (
+                <FormItem>
+                  <FormLabel>Email ou nome de usuário</FormLabel>
+                  <FormControl>
+                    <Input {...props.field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={(props) => (
-                  <FormItem>
-                    <FormLabel>Senha</FormLabel>
-                    <FormControl>
-                      <Input type="password" {...props.field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="password"
+              render={(props) => (
+                <FormItem>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <Input {...props.field} type="password" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="space-y-4">
-                <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
-                  <span>Entrar</span>
-                </Button>
+            <div className="space-y-4">
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
+                <span>Entrar</span>
+              </Button>
 
-                <div className="text-center text-sm">
-                  <span>Não tem uma conta? </span>
-                  <Link to="../cadastrar" className="underline underline-offset-4">
-                    Cadastre-se
-                  </Link>
-                </div>
+              <div className="text-center text-sm">
+                <span>Não tem uma conta? </span>
+                <Link to="../cadastrar" className="underline underline-offset-4">
+                  Cadastrar
+                </Link>
               </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }

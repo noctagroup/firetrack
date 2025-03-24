@@ -18,6 +18,7 @@ export const contaOptions = {
 export const contaMutationKeys = {
   sair: () => [...contaKeys.all(), "sair"],
   entrar: () => [...contaKeys.all(), "entrar"],
+  cadastrar: () => [...contaKeys.all(), "cadastrar"],
 } as const satisfies Keyring
 
 export const contaMutations = {
@@ -30,5 +31,10 @@ export const contaMutations = {
     mutationOptions({
       mutationKey: contaMutationKeys.entrar(),
       mutationFn: ContaServices.entrar,
+    }),
+  cadastrar: () =>
+    mutationOptions({
+      mutationKey: contaMutationKeys.cadastrar(),
+      mutationFn: ContaServices.cadastrar,
     }),
 } as const satisfies MutationsKeyring

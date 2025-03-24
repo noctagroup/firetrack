@@ -14,12 +14,10 @@ export function links() {
 
 export default function Conta() {
   return (
-    <div className="relative h-full">
+    <div className="relative flex min-h-full items-center justify-center px-4 py-6">
       <div className="conta-gradient-backdrop" />
 
-      <div className="pt-[8%]">
-        <Outlet />
-      </div>
+      <Outlet />
     </div>
   )
 }
