@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
-import type React from "react"
+import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
 
@@ -39,6 +39,7 @@ import {
   SidebarRail,
   useSidebar,
 } from "~shared/lib/shadcn/ui/sidebar"
+import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
 import { cn } from "~shared/lib/shadcn/utils"
 
@@ -76,14 +77,14 @@ export function FenomenoSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton className="justify-between" size="lg">
-                  <FenomenoSidebarContaInfo className="p-0" />
+                <SidebarMenuButton size="lg">
+                  <FenomenoSidebarContaInfo />
                   <ChevronsUpDown className="size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent side="top" align="start" className="min-w-60">
-                <DropdownMenuLabel className="p-0">
+                <DropdownMenuLabel className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <FenomenoSidebarContaInfo />
                 </DropdownMenuLabel>
 
@@ -106,23 +107,33 @@ export function FenomenoSidebar() {
   )
 }
 
-function FenomenoSidebarContaInfo(props: React.HTMLAttributes<HTMLDivElement>) {
+function FenomenoSidebarContaInfo() {
   const contaQuery = useQuery(contaOptions.conta())
 
+  if (!contaQuery.data) {
+    return (
+      <div className="flex h-full w-full gap-2">
+        <Skeleton className="aspect-square size-8 rounded" />
+
+        <Skeleton className="flex-1 rounded" />
+      </div>
+    )
+  }
+
   return (
-    <div className={cn("flex items-center gap-2 px-1 py-1.5 text-left text-sm", props.className)}>
+    <React.Fragment>
       <Avatar className="size-8">
-        <AvatarFallback>{contaQuery.data && initials(contaQuery.data!)}</AvatarFallback>
+        <AvatarFallback>{initials(contaQuery.data)}</AvatarFallback>
       </Avatar>
 
       <div className="grid flex-1 text-left text-sm leading-tight">
         <span className="truncate font-semibold">
-          {contaQuery.data?.full_name || contaQuery.data?.username}
+          {contaQuery.data.full_name || contaQuery.data.username}
         </span>
 
-        <span className="truncate text-xs">{contaQuery.data?.email}</span>
+        <span className="truncate text-xs">{contaQuery.data.email}</span>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 

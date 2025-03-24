@@ -62,7 +62,7 @@ export default function ContaEntrar() {
   const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
 
   return (
-    <div className="mx-auto max-w-sm p-4 text-center">
+    <div className="mx-auto max-w-sm p-4">
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Seja bem-vindo</CardTitle>
@@ -108,7 +108,7 @@ export default function ContaEntrar() {
                   <span>Entrar</span>
                 </Button>
 
-                <Button className="mx-auto block max-w-4/5" variant="ghost" asChild>
+                <Button className="mx-auto block max-w-4/5 text-center" variant="ghost" asChild>
                   <Link to="../cadastrar">Criar uma conta</Link>
                 </Button>
               </div>
