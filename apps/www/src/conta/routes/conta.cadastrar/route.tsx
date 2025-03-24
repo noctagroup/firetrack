@@ -1,10 +1,11 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
-import { Link } from "react-router"
+import { Link, useNavigate } from "react-router"
 
 import { CadastrarForm, type TCadastrarForm } from "~conta/forms"
-import { contaMutations } from "~conta/queries"
+import { contaKeys, contaMutations } from "~conta/queries"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import {
   Card,
@@ -24,6 +25,8 @@ import {
 import { Input } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaCadastrar() {
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const form = useForm<TCadastrarForm>({
     resolver: valibotResolver(CadastrarForm),
     defaultValues: {
@@ -37,6 +40,11 @@ export default function ContaCadastrar() {
   })
   const cadastrarMutation = useMutation({
     ...contaMutations.cadastrar(),
+    onSuccess: (data) => {
+      queryClient.setQueryData(contaKeys.conta(), data)
+      navigate("/")
+    },
+    // TODO: melhorar as mensagens de erro
   })
 
   const handleSubmit = async (values: TCadastrarForm) => await cadastrarMutation.mutateAsync(values)
@@ -118,7 +126,7 @@ export default function ContaCadastrar() {
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
-                    <Input {...props.field} />
+                    <Input {...props.field} type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -132,7 +140,7 @@ export default function ContaCadastrar() {
                 <FormItem>
                   <FormLabel>Confirme sua senha</FormLabel>
                   <FormControl>
-                    <Input {...props.field} />
+                    <Input {...props.field} type="password" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +148,10 @@ export default function ContaCadastrar() {
             />
 
             <div className="space-y-4">
-              <Button className="w-full">Cadastrar</Button>
+              <Button className="w-full" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
+                <span>Cadastrar</span>
+              </Button>
 
               <div className="text-center text-sm">
                 <span>Já tem uma conta? </span>

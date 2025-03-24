@@ -1,7 +1,5 @@
 import * as v from "valibot"
 
-import { isObject } from "~shared/utils"
-
 export const EntrarForm = v.object({
   query: v.pipe(
     v.string("Insira um email ou nome de usuário"),
@@ -32,20 +30,21 @@ export const CadastrarForm = v.pipe(
       v.trim(),
       v.email("Insira um email válido")
     ),
-    password: v.pipe(v.string("Insira uma senha"), v.nonEmpty("Insira uma senha"), v.trim()),
+    password: v.pipe(v.string("Insira sua senha"), v.nonEmpty("Insira sua senha"), v.trim()),
     password_confirmation: v.pipe(
       v.string("Confirme sua senha"),
       v.nonEmpty("Confirme sua senha"),
       v.trim()
     ),
   }),
-  v.custom((values) => {
-    if (isObject(values) && "password" in values && "password_confirmation" in values) {
-      return values.password === values.password_confirmation
-    }
-
-    return false
-  }, "As senhas não coincidem")
+  v.forward(
+    v.partialCheck(
+      [["password"], ["password_confirmation"]],
+      (input) => input.password === input.password_confirmation,
+      "As senhas não coincidem"
+    ),
+    ["password_confirmation"]
+  )
 )
 
 export type TCadastrarForm = v.InferInput<typeof CadastrarForm>
