@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
+import type React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
 
@@ -44,8 +45,6 @@ import { cn } from "~shared/lib/shadcn/utils"
 export function FenomenoSidebar() {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-
-  const contaQuery = useQuery(contaOptions.conta())
   const sairMutation = useMutation({
     ...contaMutations.sair(),
     onSuccess: () => {
@@ -77,40 +76,15 @@ export function FenomenoSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
-                  <Avatar className="size-8">
-                    <AvatarFallback>{contaQuery.data && initials(contaQuery.data!)}</AvatarFallback>
-                  </Avatar>
-
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {contaQuery.data?.full_name || contaQuery.data?.username}
-                    </span>
-
-                    <span className="truncate text-xs">{contaQuery.data?.email}</span>
-                  </div>
-
+                <SidebarMenuButton className="justify-between" size="lg">
+                  <FenomenoSidebarContaInfo className="p-0" />
                   <ChevronsUpDown className="size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent side="top" align="start" className="min-w-60">
                 <DropdownMenuLabel className="p-0">
-                  <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                    <Avatar className="size-8">
-                      <AvatarFallback>
-                        {contaQuery.data && initials(contaQuery.data!)}
-                      </AvatarFallback>
-                    </Avatar>
-
-                    <div className="grid flex-1 text-left text-sm leading-tight">
-                      <span className="truncate font-semibold">
-                        {contaQuery.data?.full_name || contaQuery.data?.username}
-                      </span>
-
-                      <span className="truncate text-xs">{contaQuery.data?.email}</span>
-                    </div>
-                  </div>
+                  <FenomenoSidebarContaInfo />
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
@@ -129,6 +103,26 @@ export function FenomenoSidebar() {
 
       <SidebarRail />
     </Sidebar>
+  )
+}
+
+function FenomenoSidebarContaInfo(props: React.HTMLAttributes<HTMLDivElement>) {
+  const contaQuery = useQuery(contaOptions.conta())
+
+  return (
+    <div className={cn("flex items-center gap-2 px-1 py-1.5 text-left text-sm", props.className)}>
+      <Avatar className="size-8">
+        <AvatarFallback>{contaQuery.data && initials(contaQuery.data!)}</AvatarFallback>
+      </Avatar>
+
+      <div className="grid flex-1 text-left text-sm leading-tight">
+        <span className="truncate font-semibold">
+          {contaQuery.data?.full_name || contaQuery.data?.username}
+        </span>
+
+        <span className="truncate text-xs">{contaQuery.data?.email}</span>
+      </div>
+    </div>
   )
 }
 

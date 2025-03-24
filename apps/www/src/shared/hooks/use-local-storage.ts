@@ -10,19 +10,15 @@ export function useLocalStorage<T>(
 
   const setState = React.useCallback<React.Dispatch<React.SetStateAction<T>>>(
     (_nextState) => {
-      try {
-        const nextState =
-          typeof _nextState === "function"
-            ? (_nextState as (value: T) => T)(JSON.parse(store!))
-            : _nextState
+      const nextState =
+        typeof _nextState === "function"
+          ? (_nextState as (value: T) => T)(JSON.parse(store!))
+          : _nextState
 
-        if (nextState === undefined || nextState === null) {
-          removeLocalStorageItem(key)
-        } else {
-          setLocalStorageItem(key, nextState)
-        }
-      } catch (e) {
-        console.warn(e)
+      if (nextState === undefined || nextState === null) {
+        removeLocalStorageItem(key)
+      } else {
+        setLocalStorageItem(key, nextState)
       }
     },
     [key, store]
