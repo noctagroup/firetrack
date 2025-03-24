@@ -1,5 +1,5 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAxiosError } from "axios"
 import { LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router"
 
 import type { TEntrarForm } from "~conta/forms"
 import { EntrarForm } from "~conta/forms"
-import { contaMutations } from "~conta/queries"
+import { contaKeys, contaMutations } from "~conta/queries"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import {
   Card,
@@ -28,6 +28,7 @@ import { Input } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaEntrar() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const form = useForm<TEntrarForm>({
     resolver: valibotResolver(EntrarForm),
     defaultValues: {
@@ -37,7 +38,8 @@ export default function ContaEntrar() {
   })
   const entrarMutation = useMutation({
     ...contaMutations.entrar(),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.setQueryData(contaKeys.conta(), data)
       navigate("/")
     },
     onError: (error) => {
