@@ -89,7 +89,7 @@ export default function ContaCadastrar() {
               )}
             />
 
-            <div className="grid grid-cols-1 gap-x-6 gap-y-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 items-start gap-x-6 gap-y-6 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="first_name"
