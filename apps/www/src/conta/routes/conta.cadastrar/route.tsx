@@ -66,6 +66,7 @@ export default function ContaCadastrar() {
               name="username"
               render={(props) => (
                 <FormItem>
+                  {/* TODO: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */}
                   <FormLabel>Nome de usuário</FormLabel>
                   <FormControl>
                     <Input {...props.field} />
@@ -80,6 +81,7 @@ export default function ContaCadastrar() {
               name="email"
               render={(props) => (
                 <FormItem>
+                  {/* TODO: validação de email */}
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input {...props.field} />
@@ -124,6 +126,7 @@ export default function ContaCadastrar() {
               name="password"
               render={(props) => (
                 <FormItem>
+                  {/* TODO: validação de senha */}
                   <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input {...props.field} type="password" />

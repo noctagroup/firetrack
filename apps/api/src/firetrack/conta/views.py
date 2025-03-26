@@ -1,4 +1,3 @@
-import json
 from http import HTTPStatus
 
 from django.contrib import auth
@@ -6,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_POST
+from pydantic import ValidationError
 
 from firetrack.conta import forms, serializers, services
 
@@ -13,31 +13,27 @@ from firetrack.conta import forms, serializers, services
 @require_GET
 def conta(request: WSGIRequest):
     if not request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+        return HttpResponse(status=HTTPStatus.CONFLICT)
 
-    return JsonResponse(
-        serializers.serialize_authenticated_user(request.user),
-        status=HTTPStatus.OK,
-    )
+    user = serializers.serialize_authenticated_user(request.user)
+
+    return JsonResponse(user, status=HTTPStatus.OK)
 
 
 @require_POST
 def entrar(request: WSGIRequest):
+    if request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.CONFLICT)
+
     try:
-        form = forms.ContaEntrarForm(json.loads(request.body))
+        form = forms.EntrarForm.model_validate_json(request.body)
 
-        if not form.is_valid():
-            return JsonResponse(dict(form.errors), status=HTTPStatus.BAD_REQUEST)
-
-        query = form.cleaned_data.get("query")
-        password = form.cleaned_data.get("password")
-
-        if "@" in query:
-            user = services.get_conta(email=query)
+        if "@" in form.query:
+            user = services.get_conta(email=form.query)
         else:
-            user = services.get_conta(username=query)
+            user = services.get_conta(username=form.query)
 
-        if not user.check_password(password):
+        if not user.check_password(form.password):
             return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
         auth.login(request, user)
@@ -45,8 +41,12 @@ def entrar(request: WSGIRequest):
         user = serializers.serialize_authenticated_user(user)
 
         return JsonResponse(user, status=HTTPStatus.OK)
-    except (TypeError, ValueError):
-        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
+    except ValidationError as exc:
+        return HttpResponse(
+            exc.json(),
+            status=HTTPStatus.BAD_REQUEST,
+            content_type="application/json",
+        )
     except ObjectDoesNotExist:
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
     except Exception:
@@ -56,26 +56,17 @@ def entrar(request: WSGIRequest):
 @require_POST
 def cadastrar(request: WSGIRequest):
     if request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.FORBIDDEN)
+        return HttpResponse(status=HTTPStatus.CONFLICT)
 
     try:
-        form = forms.ContaCadastrarForm(json.loads(request.body))
-
-        if not form.is_valid():
-            return JsonResponse(dict(form.errors), status=HTTPStatus.BAD_REQUEST)
-
-        first_name = form.cleaned_data.get("first_name")
-        last_name = form.cleaned_data.get("last_name")
-        username = form.cleaned_data.get("username")
-        email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password")
+        form = forms.CadastrarForm.model_validate_json(request.body)
 
         user = services.create_conta(
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            email=email,
-            password=password,
+            first_name=form.first_name,
+            last_name=form.last_name,
+            username=form.username,
+            email=form.email,
+            password=form.password,
         )
 
         auth.login(request, user)
@@ -83,8 +74,14 @@ def cadastrar(request: WSGIRequest):
         user = serializers.serialize_authenticated_user(user)
 
         return JsonResponse(user, status=HTTPStatus.OK)
+    except ValidationError as exc:
+        return HttpResponse(
+            exc.json(),
+            status=HTTPStatus.BAD_REQUEST,
+            content_type="application/json",
+        )
     except Exception:
-        return HttpResponse(status=HTTPStatus.BAD_REQUEST)
+        return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
 @require_POST
