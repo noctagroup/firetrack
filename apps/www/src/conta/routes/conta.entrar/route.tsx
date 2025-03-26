@@ -1,6 +1,6 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { isAxiosError } from "axios"
+import { HttpStatusCode, isAxiosError } from "axios"
 import { LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from "react-router"
@@ -45,13 +45,17 @@ export default function ContaEntrar() {
     onError: (error) => {
       if (isAxiosError(error)) {
         switch (error.status) {
-          case 404:
+          case HttpStatusCode.NotFound:
             form.setFocus("query")
             form.setError("query", { message: "Usuário não encontrado" })
             break
-          case 401:
+          case HttpStatusCode.Unauthorized:
             form.setFocus("password")
             form.setError("password", { message: "Senha incorreta" })
+            break
+          default:
+            form.setFocus("query")
+            form.setError("query", { message: "Usuário ou senha inválidos" })
             break
         }
       } else {
