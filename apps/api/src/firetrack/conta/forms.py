@@ -1,36 +1,46 @@
 from typing import Annotated, Optional, Self
 
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import (
-    UserAttributeSimilarityValidator as DjangoUserAttributeSimilarityValidator,
+    UserAttributeSimilarityValidator,
+    get_default_password_validators,
 )
-from django.contrib.auth.password_validation import (
-    validate_password as django_validate_password,
-)
-from django.core.exceptions import ValidationError as DjangoValidationError
-from django.core.validators import validate_email as django_validate_email
+from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from pydantic import AfterValidator, BaseModel, Field, model_validator
 
 
 def validate_username(username: str) -> None:
+    username_validator = UnicodeUsernameValidator()
+
     try:
-        AbstractUser.username_validator(username)
-    except DjangoValidationError as exc:
-        raise ValueError(exc.messages)
+        username_validator(username)
+    except ValidationError as error:
+        raise ValueError(error.messages)
 
 
 def validate_email(email: str) -> None:
+    email_validator = EmailValidator()
+
     try:
-        django_validate_email(email)
-    except DjangoValidationError as exc:
-        raise ValueError(exc.messages)
+        email_validator(email)
+    except ValidationError as error:
+        raise ValueError(error.messages)
 
 
 def validate_password(password: str, user: Optional[User] = None) -> None:
-    try:
-        django_validate_password(password, user)
-    except DjangoValidationError as exc:
-        raise ValueError(exc.messages)
+    messages = []
+    validators = get_default_password_validators()
+
+    for validator in validators:
+        try:
+            validator.validate(password, user)
+        except ValidationError as error:
+            messages.extend(error.messages)
+
+    if messages:
+        raise ValueError(messages)
 
 
 class EntrarForm(BaseModel):
@@ -57,7 +67,7 @@ class CadastrarForm(BaseModel):
         user_model = User(
             **{
                 attribute: user_dict.get(attribute)
-                for attribute in DjangoUserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
+                for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
             }
         )
 

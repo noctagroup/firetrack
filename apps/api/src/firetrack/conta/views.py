@@ -60,7 +60,6 @@ def cadastrar(request: WSGIRequest):
 
     try:
         form = forms.CadastrarForm.model_validate_json(request.body)
-
         user = services.create_conta(
             first_name=form.first_name,
             last_name=form.last_name,
@@ -80,15 +79,15 @@ def cadastrar(request: WSGIRequest):
             status=HTTPStatus.BAD_REQUEST,
             content_type="application/json",
         )
-    except Exception as exc:
+    except Exception:
         return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
 @require_POST
 def sair(request: WSGIRequest):
-    if request.user.is_authenticated:
-        auth.logout(request)
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
-        return HttpResponse(status=HTTPStatus.OK)
+    auth.logout(request)
 
-    return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+    return HttpResponse(status=HTTPStatus.OK)
