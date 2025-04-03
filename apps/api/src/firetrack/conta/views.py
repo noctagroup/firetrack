@@ -80,7 +80,7 @@ def cadastrar(request: WSGIRequest):
             status=HTTPStatus.BAD_REQUEST,
             content_type="application/json",
         )
-    except Exception:
+    except Exception as exc:
         return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
