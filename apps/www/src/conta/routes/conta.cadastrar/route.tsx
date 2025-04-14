@@ -44,30 +44,60 @@ export default function ContaCadastrar() {
       queryClient.setQueryData(contaKeys.conta(), data)
       navigate("/")
     },
-    // TODO: melhorar as mensagens de erro
+    onError: (error) => {
+      console.log(error)
+      // TODO: melhorar as mensagens de erro
+    },
   })
 
   const handleSubmit = async (values: TCadastrarForm) => await cadastrarMutation.mutateAsync(values)
 
   return (
-    <Card className="w-md max-w-md">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">Crie sua conta</CardTitle>
-        <CardDescription className="text-muted-foreground text-md text-balance">
-          Crie sua conta para começar a utilizar
-        </CardDescription>
-      </CardHeader>
+    <Form {...form}>
+      <form className="mt-12 space-y-6 md:mt-16" onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="space-y-1.5">
+          <CardTitle className="text-2xl font-bold">Crie sua conta</CardTitle>
+          <CardDescription className="text-muted-foreground text-md text-balance">
+            Crie sua conta para começar a utilizar
+          </CardDescription>
+        </div>
 
-      <CardContent>
-        <Form {...form}>
-          <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="space-y-6">
+          <FormField
+            control={form.control}
+            name="username"
+            render={(props) => (
+              <FormItem>
+                <FormLabel>Nome de usuário</FormLabel>
+                <FormControl>
+                  <Input {...props.field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="email"
+            render={(props) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input {...props.field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-1 items-start gap-x-6 gap-y-6 md:grid-cols-2">
             <FormField
               control={form.control}
-              name="username"
+              name="first_name"
               render={(props) => (
                 <FormItem>
-                  {/* TODO: Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only. */}
-                  <FormLabel>Nome de usuário</FormLabel>
+                  <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input {...props.field} />
                   </FormControl>
@@ -78,11 +108,10 @@ export default function ContaCadastrar() {
 
             <FormField
               control={form.control}
-              name="email"
+              name="last_name"
               render={(props) => (
                 <FormItem>
-                  {/* TODO: validação de email */}
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Sobrenome</FormLabel>
                   <FormControl>
                     <Input {...props.field} />
                   </FormControl>
@@ -90,82 +119,51 @@ export default function ContaCadastrar() {
                 </FormItem>
               )}
             />
+          </div>
 
-            <div className="grid grid-cols-1 items-start gap-x-6 gap-y-6 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="first_name"
-                render={(props) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input {...props.field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="password"
+            render={(props) => (
+              <FormItem>
+                <FormLabel>Senha</FormLabel>
+                <FormControl>
+                  <Input {...props.field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="last_name"
-                render={(props) => (
-                  <FormItem>
-                    <FormLabel>Sobrenome</FormLabel>
-                    <FormControl>
-                      <Input {...props.field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="password_confirmation"
+            render={(props) => (
+              <FormItem>
+                <FormLabel>Confirme sua senha</FormLabel>
+                <FormControl>
+                  <Input {...props.field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="space-y-4">
+            <Button className="w-full" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
+              <span>Cadastrar</span>
+            </Button>
+
+            <div className="text-center text-sm">
+              <span>Já tem uma conta? </span>
+              <Link to="../entrar" className="underline underline-offset-4">
+                Entrar
+              </Link>
             </div>
-
-            <FormField
-              control={form.control}
-              name="password"
-              render={(props) => (
-                <FormItem>
-                  {/* TODO: validação de senha */}
-                  <FormLabel>Senha</FormLabel>
-                  <FormControl>
-                    <Input {...props.field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="password_confirmation"
-              render={(props) => (
-                <FormItem>
-                  <FormLabel>Confirme sua senha</FormLabel>
-                  <FormControl>
-                    <Input {...props.field} type="password" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="space-y-4">
-              <Button className="w-full" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
-                <span>Cadastrar</span>
-              </Button>
-
-              <div className="text-center text-sm">
-                <span>Já tem uma conta? </span>
-                <Link to="../entrar" className="underline underline-offset-4">
-                  Entrar
-                </Link>
-              </div>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+          </div>
+        </div>
+      </form>
+    </Form>
   )
 }

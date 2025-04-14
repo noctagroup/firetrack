@@ -1,4 +1,4 @@
-from typing import Annotated, Optional, Self
+from typing import Annotated, Any, Optional, Self
 
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import (
@@ -6,41 +6,67 @@ from django.contrib.auth.password_validation import (
     get_default_password_validators,
 )
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.validators import EmailValidator
-from pydantic import AfterValidator, BaseModel, Field, model_validator
+from pydantic import (
+    BaseModel,
+    BeforeValidator,
+    Field,
+    ModelWrapValidatorHandler,
+    ValidationError,
+    model_validator,
+)
+from pydantic import ValidationError as PydanticValidationError
+from pydantic_core import InitErrorDetails, PydanticCustomError
 
 
-def validate_username(username: str) -> None:
+def validate_username(username: str) -> str:
     username_validator = UnicodeUsernameValidator()
 
     try:
         username_validator(username)
-    except ValidationError as error:
-        raise ValueError(error.messages)
+    except DjangoValidationError as error:
+        raise PydanticCustomError(f"username_{error.code}", error.messages[0])
+
+    return username
 
 
-def validate_email(email: str) -> None:
+def validate_email(email: str) -> str:
     email_validator = EmailValidator()
 
     try:
         email_validator(email)
-    except ValidationError as error:
-        raise ValueError(error.messages)
+    except DjangoValidationError as error:
+        raise PydanticCustomError(f"email_{error.code}", error.messages[0])
+
+    return email
 
 
-def validate_password(password: str, user: Optional[User] = None) -> None:
-    messages = []
+def validate_password(
+    password: str,
+    user: Optional[User] = None,
+    *,
+    field="password",
+) -> str:
     validators = get_default_password_validators()
+    errors: list[InitErrorDetails] = []
 
     for validator in validators:
         try:
             validator.validate(password, user)
-        except ValidationError as error:
-            messages.extend(error.messages)
+        except DjangoValidationError as error:
+            errors.append(
+                InitErrorDetails(
+                    type=PydanticCustomError(error.code, error.messages[0]),
+                    input=password,
+                    loc=(field,),
+                )
+            )
 
-    if messages:
-        raise ValueError(messages)
+    if errors:
+        raise ValueError(errors)
+
+    return password
 
 
 class EntrarForm(BaseModel):
@@ -50,30 +76,61 @@ class EntrarForm(BaseModel):
 
 class CadastrarForm(BaseModel):
     username: Annotated[
-        str, Field(min_length=1, max_length=150), AfterValidator(validate_username)
+        str, Field(min_length=1, max_length=150), BeforeValidator(validate_username)
     ]
     # O comprimento máximo de um email é de 254 caracteres, de acordo com RFC 3696 e RFC 5321.
     email: Annotated[
-        str, Field(min_length=1, max_length=254), AfterValidator(validate_email)
+        str, Field(min_length=1, max_length=254), BeforeValidator(validate_email)
     ]
     password: Annotated[str, Field(min_length=1, max_length=128)]
     password_confirmation: Annotated[str, Field(min_length=1, max_length=128)]
     first_name: Annotated[str, Field(min_length=1, max_length=150)]
     last_name: Annotated[str, Field(min_length=1, max_length=150)]
 
-    @model_validator(mode="after")
-    def validate_password_similarity(self) -> Self:
-        user_dict = dict(self)
-        user_model = User(
-            **{
-                attribute: user_dict.get(attribute)
-                for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
-            }
-        )
+    @model_validator(mode="wrap")
+    @classmethod
+    def validate_password_similarity(
+        cls, data: Any, handler: ModelWrapValidatorHandler[Self]
+    ) -> Self:
+        errors: list[InitErrorDetails] = []
 
-        validate_password(self.password, user_model)
+        try:
+            user_validated = handler(data)
+        except PydanticValidationError as error:
+            errors.extend(error.errors())
 
-        return self
+        if not (isinstance(data, dict) or isinstance(data, cls)):
+            raise ValidationError.from_exception_data(
+                title=cls.__class__.__name__,
+                line_errors=errors,
+            )
+
+        def userdata_attribute(attribute: str) -> Optional[str]:
+            return (
+                data.get(attribute, None)
+                if isinstance(data, dict)
+                else getattr(data, attribute, None)
+            )
+
+        try:
+            user_model = User(
+                **{
+                    attribute: userdata_attribute(attribute)
+                    for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
+                }
+            )
+
+            validate_password(userdata_attribute("password"), user_model)
+        except ValueError as error:
+            errors.extend(error.args[0])
+
+        if errors:
+            raise ValidationError.from_exception_data(
+                title=cls.__class__.__name__,
+                line_errors=errors,
+            )
+
+        return user_validated
 
     @model_validator(mode="after")
     def check_passwords(self) -> Self:

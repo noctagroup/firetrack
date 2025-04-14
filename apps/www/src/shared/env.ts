@@ -3,6 +3,6 @@ export const env = {
     return import.meta.env.VITE_MAPBOX_ACCESS_TOKEN
   },
   get API_URL() {
-    return import.meta.env.VITE_API_URL
+    return import.meta.env.VITE_API_URL || "http://localhost:8000"
   },
 } as const

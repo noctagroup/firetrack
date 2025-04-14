@@ -49,8 +49,6 @@ def entrar(request: WSGIRequest):
         )
     except ObjectDoesNotExist:
         return HttpResponse(status=HTTPStatus.NOT_FOUND)
-    except Exception:
-        return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
 @require_POST
@@ -79,8 +77,6 @@ def cadastrar(request: WSGIRequest):
             status=HTTPStatus.BAD_REQUEST,
             content_type="application/json",
         )
-    except Exception:
-        return HttpResponse(status=HTTPStatus.FORBIDDEN)
 
 
 @require_POST
