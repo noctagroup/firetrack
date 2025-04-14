@@ -7,13 +7,7 @@ import { Link, useNavigate } from "react-router"
 import { CadastrarForm, type TCadastrarForm } from "~conta/forms"
 import { contaKeys, contaMutations } from "~conta/queries"
 import { Button } from "~shared/lib/shadcn/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~shared/lib/shadcn/ui/card"
+import { CardDescription, CardTitle } from "~shared/lib/shadcn/ui/card"
 import {
   Form,
   FormControl,
@@ -54,7 +48,7 @@ export default function ContaCadastrar() {
 
   return (
     <Form {...form}>
-      <form className="mt-12 space-y-6 md:mt-16" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-1.5">
           <CardTitle className="text-2xl font-bold">Crie sua conta</CardTitle>
           <CardDescription className="text-muted-foreground text-md text-balance">

@@ -65,7 +65,7 @@ export default function ContaEntrar() {
 
   return (
     <Form {...form}>
-      <form className="mt-12 space-y-6 md:mt-16" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="space-y-1.5">
           <CardTitle className="text-2xl font-bold">Seja bem-vindo</CardTitle>
 
