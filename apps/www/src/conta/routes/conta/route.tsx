@@ -18,10 +18,9 @@ export default function Conta() {
       </div>
 
       <div className="relative hidden lg:block">
-        {/* TODO: colocar uma imagem bonita aqui */}
         <img
-          src="https://ui.shadcn.com/placeholder.svg"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          src="https://images.unsplash.com/photo-1574980362852-67795d06a31b"
+          className="absolute inset-0 h-full w-full object-cover object-center dark:brightness-[0.2] dark:grayscale"
         />
       </div>
     </div>

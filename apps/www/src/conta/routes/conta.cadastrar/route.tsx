@@ -1,7 +1,8 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { type QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { isAxiosError } from "axios"
-import { LoaderCircle } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle } from "lucide-react"
+import { useState } from "react"
 import { useForm, type UseFormReturn } from "react-hook-form"
 import { Link, type NavigateFunction, useNavigate } from "react-router"
 import { safeParse } from "valibot"
@@ -18,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~shared/lib/shadcn/ui/form"
-import { Input, InputProvider } from "~shared/lib/shadcn/ui/input"
+import { Input, InputAdornment, InputProvider } from "~shared/lib/shadcn/ui/input"
 import { DetailedErrorListSchema } from "~shared/schemas"
 
 export default function ContaCadastrar() {
@@ -40,7 +41,9 @@ export default function ContaCadastrar() {
     onSuccess: (data) => handleFormSuccess(data, queryClient, navigate),
     onError: (error) => handleFormError(error, form),
   })
+  const [passwordHidden, setPasswordHidden] = useState<boolean>(true)
 
+  const togglePasswordHidden = () => setPasswordHidden((value) => !value)
   const handleSubmit = async (values: TCadastrarForm) => await cadastrarMutation.mutateAsync(values)
 
   return (
@@ -128,7 +131,17 @@ export default function ContaCadastrar() {
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <InputProvider>
-                    <Input {...props.field} type="password" />
+                    <Input {...props.field} type={passwordHidden ? "password" : "text"} />
+                    <InputAdornment asChild>
+                      <Button
+                        className="size-6 rounded-full"
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                        onClick={togglePasswordHidden}>
+                        {passwordHidden ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </InputAdornment>
                   </InputProvider>
                 </FormControl>
                 <FormMessage />
