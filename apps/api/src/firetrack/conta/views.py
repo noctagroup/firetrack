@@ -8,6 +8,7 @@ from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
 
 from firetrack.conta import forms, serializers, services
+from firetrack.conta.utils import is_email
 
 
 @require_GET
@@ -28,7 +29,7 @@ def entrar(request: WSGIRequest):
     try:
         form = forms.EntrarForm.model_validate_json(request.body)
 
-        if "@" in form.query:
+        if is_email(form.query):
             user = services.get_conta(email=form.query)
         else:
             user = services.get_conta(username=form.query)

@@ -82,8 +82,8 @@ export default function ContaEntrar() {
                       <Button
                         className="size-6 rounded-full"
                         size="icon"
-                        variant="ghost"
                         type="button"
+                        variant="ghost"
                         onClick={togglePasswordHidden}>
                         {passwordHidden ? <EyeOff /> : <Eye />}
                       </Button>
@@ -141,7 +141,6 @@ function handleFormError(error: Error, form: UseFormReturn<TEntrarForm>) {
       form.setError("password", { message: "Senha incorreta" })
       break
     default:
-      form.setFocus("query")
       form.setError("query", { message: "Usuário ou senha inválidos" })
       break
   }

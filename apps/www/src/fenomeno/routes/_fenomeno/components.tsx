@@ -77,14 +77,14 @@ export function FenomenoSidebar() {
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
+                <SidebarMenuButton size="lg" className="gap-3">
                   <FenomenoSidebarContaInfo />
                   <ChevronsUpDown className="size-4" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent side="top" align="start" className="min-w-60">
-                <DropdownMenuLabel className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                <DropdownMenuLabel className="flex items-center gap-3 px-1 py-1.5 text-left text-sm">
                   <FenomenoSidebarContaInfo />
                 </DropdownMenuLabel>
 
@@ -112,7 +112,7 @@ function FenomenoSidebarContaInfo() {
 
   if (contaQuery.isLoading || !contaQuery.data) {
     return (
-      <div className="flex h-full w-full gap-2">
+      <div className="flex h-full w-full gap-3">
         <Skeleton className="aspect-square size-8 rounded" />
 
         <Skeleton className="flex-1 rounded" />
