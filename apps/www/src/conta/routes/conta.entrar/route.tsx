@@ -1,7 +1,8 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { type QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { HttpStatusCode, isAxiosError } from "axios"
-import { LoaderCircle } from "lucide-react"
+import { Eye, EyeOff, LoaderCircle } from "lucide-react"
+import { useState } from "react"
 import { useForm, type UseFormReturn } from "react-hook-form"
 import { Link, type NavigateFunction, useNavigate } from "react-router"
 
@@ -18,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~shared/lib/shadcn/ui/form"
-import { Input, InputProvider } from "~shared/lib/shadcn/ui/input"
+import { Input, InputAdornment, InputProvider } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaEntrar() {
   const navigate = useNavigate()
@@ -36,6 +37,9 @@ export default function ContaEntrar() {
     onError: (error) => handleFormError(error, form),
   })
 
+  const [passwordHidden, setPasswordHidden] = useState<boolean>(true)
+
+  const togglePasswordHidden = () => setPasswordHidden((value) => !value)
   const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
 
   return (
@@ -73,7 +77,17 @@ export default function ContaEntrar() {
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <InputProvider>
-                    <Input {...props.field} type="password" />
+                    <Input {...props.field} type={passwordHidden ? "password" : "text"} />
+                    <InputAdornment asChild>
+                      <Button
+                        className="size-6 rounded-full"
+                        size="icon"
+                        variant="ghost"
+                        type="button"
+                        onClick={togglePasswordHidden}>
+                        {passwordHidden ? <EyeOff /> : <Eye />}
+                      </Button>
+                    </InputAdornment>
                   </InputProvider>
                 </FormControl>
                 <FormMessage />
