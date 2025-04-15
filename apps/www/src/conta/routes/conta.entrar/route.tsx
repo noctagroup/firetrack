@@ -1,15 +1,15 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { type QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
 import { HttpStatusCode, isAxiosError } from "axios"
 import { LoaderCircle } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router"
+import { useForm, type UseFormReturn } from "react-hook-form"
+import { Link, type NavigateFunction, useNavigate } from "react-router"
 
 import type { TEntrarForm } from "~conta/forms"
 import { EntrarForm } from "~conta/forms"
 import { contaKeys, contaMutations } from "~conta/queries"
+import type { TContaSchema } from "~conta/schemas"
 import { Button } from "~shared/lib/shadcn/ui/button"
-import { CardDescription, CardTitle } from "~shared/lib/shadcn/ui/card"
 import {
   Form,
   FormControl,
@@ -32,46 +32,20 @@ export default function ContaEntrar() {
   })
   const entrarMutation = useMutation({
     ...contaMutations.entrar(),
-    onSuccess: (data) => {
-      queryClient.setQueryData(contaKeys.conta(), data)
-      navigate("/")
-    },
-    onError: (error) => {
-      if (!isAxiosError(error)) {
-        form.setFocus("query")
-        form.setError("query", { message: "Não foi possível entrar" })
-
-        return undefined
-      }
-
-      switch (error.status) {
-        case HttpStatusCode.NotFound:
-          form.setFocus("query")
-          form.setError("query", { message: "Usuário não encontrado" })
-          break
-        case HttpStatusCode.Unauthorized:
-          form.setFocus("password")
-          form.setError("password", { message: "Senha incorreta" })
-          break
-        default:
-          form.setFocus("query")
-          form.setError("query", { message: "Usuário ou senha inválidos" })
-          break
-      }
-    },
+    onSuccess: (data) => handleFormSuccess(data, queryClient, navigate),
+    onError: (error) => handleFormError(error, form),
   })
 
   const handleSubmit = async (values: TEntrarForm) => await entrarMutation.mutateAsync(values)
 
   return (
     <Form {...form}>
-      <form className="space-y-6" onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="space-y-1.5">
-          <CardTitle className="text-2xl font-bold">Seja bem-vindo</CardTitle>
-
-          <CardDescription className="text-muted-foreground text-md text-balance">
+      <form className="space-y-10" onSubmit={form.handleSubmit(handleSubmit)}>
+        <div className="space-y-2">
+          <h1 className="text-2xl leading-none font-semibold">Seja bem-vindo</h1>
+          <h2 className="text-muted-foreground text-md text-balance">
             Para prosseguir, entre ou cadastre-se
-          </CardDescription>
+          </h2>
         </div>
 
         <div className="space-y-6">
@@ -102,22 +76,55 @@ export default function ContaEntrar() {
               </FormItem>
             )}
           />
+        </div>
 
-          <div className="space-y-4">
-            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
-              <span>Entrar</span>
-            </Button>
+        <div className="space-y-4">
+          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting && <LoaderCircle className="animate-spin" />}
+            <span>Entrar</span>
+          </Button>
 
-            <div className="text-center text-sm">
-              <span>Não tem uma conta? </span>
-              <Link to="../cadastrar" className="underline underline-offset-4">
-                Cadastrar
-              </Link>
-            </div>
+          <div className="text-center text-sm">
+            <span>Não tem uma conta? </span>
+            <Link to="../cadastrar" className="underline underline-offset-4">
+              Cadastrar
+            </Link>
           </div>
         </div>
       </form>
     </Form>
   )
+}
+
+function handleFormSuccess(
+  data: TContaSchema,
+  queryClient: QueryClient,
+  navigate: NavigateFunction
+) {
+  queryClient.setQueryData(contaKeys.conta(), data)
+  navigate("/")
+}
+
+function handleFormError(error: Error, form: UseFormReturn<TEntrarForm>) {
+  if (!isAxiosError(error)) {
+    form.setFocus("query")
+    form.setError("query", { message: "Ocorreu um erro desconhecido ao entrar" })
+
+    return undefined
+  }
+
+  switch (error.status) {
+    case HttpStatusCode.NotFound:
+      form.setFocus("query")
+      form.setError("query", { message: "Usuário não encontrado" })
+      break
+    case HttpStatusCode.Unauthorized:
+      form.setFocus("password")
+      form.setError("password", { message: "Senha incorreta" })
+      break
+    default:
+      form.setFocus("query")
+      form.setError("query", { message: "Usuário ou senha inválidos" })
+      break
+  }
 }

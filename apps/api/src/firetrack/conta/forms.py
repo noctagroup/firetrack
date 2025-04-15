@@ -14,6 +14,8 @@ from pydantic import (
     Field,
     ModelWrapValidatorHandler,
     ValidationError,
+    ValidationInfo,
+    field_validator,
     model_validator,
 )
 from pydantic import ValidationError as PydanticValidationError
@@ -26,7 +28,7 @@ def validate_username(username: str) -> str:
     try:
         username_validator(username)
     except DjangoValidationError as error:
-        raise PydanticCustomError(f"username_{error.code}", error.messages[0])
+        raise ValueError(error.messages[0])
 
     return username
 
@@ -37,7 +39,7 @@ def validate_email(email: str) -> str:
     try:
         email_validator(email)
     except DjangoValidationError as error:
-        raise PydanticCustomError(f"email_{error.code}", error.messages[0])
+        raise ValueError(error.messages[0])
 
     return email
 
@@ -75,6 +77,8 @@ class EntrarForm(BaseModel):
 
 
 class CadastrarForm(BaseModel):
+    first_name: Annotated[str, Field(min_length=1, max_length=150)]
+    last_name: Annotated[str, Field(min_length=1, max_length=150)]
     username: Annotated[
         str, Field(min_length=1, max_length=150), BeforeValidator(validate_username)
     ]
@@ -84,8 +88,14 @@ class CadastrarForm(BaseModel):
     ]
     password: Annotated[str, Field(min_length=1, max_length=128)]
     password_confirmation: Annotated[str, Field(min_length=1, max_length=128)]
-    first_name: Annotated[str, Field(min_length=1, max_length=150)]
-    last_name: Annotated[str, Field(min_length=1, max_length=150)]
+
+    @field_validator("password_confirmation", mode="after")
+    @classmethod
+    def check_passwords_match(cls, value: str, info: ValidationInfo) -> Self:
+        if value != info.data.get("password"):
+            raise ValueError("Password confirmation does not match password.")
+
+        return value
 
     @model_validator(mode="wrap")
     @classmethod
@@ -105,7 +115,7 @@ class CadastrarForm(BaseModel):
                 line_errors=errors,
             )
 
-        def userdata_attribute(attribute: str) -> Optional[str]:
+        def getuserattr(attribute: str) -> Optional[str]:
             return (
                 data.get(attribute, None)
                 if isinstance(data, dict)
@@ -115,12 +125,12 @@ class CadastrarForm(BaseModel):
         try:
             user_model = User(
                 **{
-                    attribute: userdata_attribute(attribute)
+                    attribute: getuserattr(attribute)
                     for attribute in UserAttributeSimilarityValidator.DEFAULT_USER_ATTRIBUTES
                 }
             )
 
-            validate_password(userdata_attribute("password"), user_model)
+            validate_password(getuserattr("password"), user_model)
         except ValueError as error:
             errors.extend(error.args[0])
 
@@ -131,10 +141,3 @@ class CadastrarForm(BaseModel):
             )
 
         return user_validated
-
-    @model_validator(mode="after")
-    def check_passwords(self) -> Self:
-        if self.password != self.password_confirmation:
-            raise ValueError("Password confirmation does not match password.")
-
-        return self
