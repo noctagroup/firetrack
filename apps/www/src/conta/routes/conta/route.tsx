@@ -1,5 +1,14 @@
+import { blurhashToCssGradientString } from "@unpic/placeholder"
+import { Image } from "@unpic/react"
 import { Waves } from "lucide-react"
 import { Link, Outlet } from "react-router"
+
+const cropUrl = "https://images.unsplash.com/photo-1574980362852-67795d06a31b"
+
+const cropBlurhash =
+  "|QGSY-o~kVowWFs:s:oLWC*0%2s;oxj[a#WCj@juIxxZjboeoea#WCWUfk%3xsa}RmbFocWEs.j@%1f+afazj?fjbHWCj[kDfkoJodWXazj[WVa#xaWBaxodj[azazj?jaWroKWCWVj?j?j[ayazkCWBoLoLaha_WVjakB"
+
+const cropBlurhashPlaceholder = blurhashToCssGradientString(cropBlurhash)
 
 export default function Conta() {
   return (
@@ -18,9 +27,11 @@ export default function Conta() {
       </div>
 
       <div className="relative hidden lg:block">
-        <img
-          src="https://images.unsplash.com/photo-1574980362852-67795d06a31b"
-          className="absolute inset-0 h-full w-full object-cover object-center dark:brightness-[0.2] dark:grayscale"
+        <Image
+          src={cropUrl}
+          background={cropBlurhashPlaceholder}
+          layout="fullWidth"
+          className="absolute inset-0 h-full w-full dark:brightness-75 dark:grayscale"
         />
       </div>
     </div>
