@@ -6,7 +6,7 @@ export default function Conta() {
     <div className="grid min-h-svh lg:grid-cols-2">
       <div>
         <div className="bg-background/60 sticky inset-x-0 top-0 flex items-center justify-center px-6 py-4 backdrop-blur-lg md:justify-start md:px-10">
-          <Link to="." className="flex items-center gap-1.5 font-medium">
+          <Link to="." className="flex items-center gap-1.5 font-semibold">
             <Waves className="size-5" />
             <span>Firetrack</span>
           </Link>

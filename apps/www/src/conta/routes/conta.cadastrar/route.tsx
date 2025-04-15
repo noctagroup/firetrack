@@ -46,7 +46,7 @@ export default function ContaCadastrar() {
   return (
     <Form {...form}>
       <form className="space-y-10" onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="space-y-2">
+        <div className="space-y-2 text-center md:text-left">
           <h1 className="text-2xl leading-none font-semibold">Crie sua conta</h1>
           <h2 className="text-muted-foreground text-md text-balance">
             Crie sua conta para começar a utilizar

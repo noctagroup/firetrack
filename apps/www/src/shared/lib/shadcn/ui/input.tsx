@@ -27,7 +27,7 @@ function Input({ className, ...props }: React.ComponentProps<"input">) {
   return (
     <input
       className={cn(
-        "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground w-full outline-0",
+        "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground w-full flex-1 outline-0",
         className
       )}
       {...props}
