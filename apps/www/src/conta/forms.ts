@@ -21,11 +21,6 @@ export const CadastrarForm = v.object({
   last_name: v.pipe(v.string("Insira seu sobrenome"), v.nonEmpty("Insira seu sobrenome"), v.trim()),
   email: v.pipe(v.string("Insira um email"), v.nonEmpty("Insira um email"), v.trim()),
   password: v.pipe(v.string("Insira sua senha"), v.nonEmpty("Insira sua senha"), v.trim()),
-  password_confirmation: v.pipe(
-    v.string("Confirme sua senha"),
-    v.nonEmpty("Confirme sua senha"),
-    v.trim()
-  ),
 })
 
 export type TCadastrarForm = v.InferInput<typeof CadastrarForm>

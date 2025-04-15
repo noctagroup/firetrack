@@ -14,8 +14,6 @@ from pydantic import (
     Field,
     ModelWrapValidatorHandler,
     ValidationError,
-    ValidationInfo,
-    field_validator,
     model_validator,
 )
 from pydantic import ValidationError as PydanticValidationError
@@ -87,15 +85,6 @@ class CadastrarForm(BaseModel):
         str, Field(min_length=1, max_length=254), BeforeValidator(validate_email)
     ]
     password: Annotated[str, Field(min_length=1, max_length=128)]
-    password_confirmation: Annotated[str, Field(min_length=1, max_length=128)]
-
-    @field_validator("password_confirmation", mode="after")
-    @classmethod
-    def check_passwords_match(cls, value: str, info: ValidationInfo) -> Self:
-        if value != info.data.get("password"):
-            raise ValueError("Password confirmation does not match password.")
-
-        return value
 
     @model_validator(mode="wrap")
     @classmethod

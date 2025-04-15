@@ -33,7 +33,6 @@ export default function ContaCadastrar() {
       last_name: "",
       email: "",
       password: "",
-      password_confirmation: "",
     },
   })
   const cadastrarMutation = useMutation({
@@ -61,20 +60,6 @@ export default function ContaCadastrar() {
             render={(props) => (
               <FormItem>
                 <FormLabel>Nome de usuário</FormLabel>
-                <FormControl>
-                  <Input {...props.field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={(props) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input {...props.field} />
                 </FormControl>
@@ -115,12 +100,12 @@ export default function ContaCadastrar() {
 
           <FormField
             control={form.control}
-            name="password"
+            name="email"
             render={(props) => (
               <FormItem>
-                <FormLabel>Senha</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...props.field} type="password" />
+                  <Input {...props.field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -129,10 +114,10 @@ export default function ContaCadastrar() {
 
           <FormField
             control={form.control}
-            name="password_confirmation"
+            name="password"
             render={(props) => (
               <FormItem>
-                <FormLabel>Confirme sua senha</FormLabel>
+                <FormLabel>Senha</FormLabel>
                 <FormControl>
                   <Input {...props.field} type="password" />
                 </FormControl>

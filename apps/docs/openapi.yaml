@@ -116,9 +116,6 @@ paths:
                 password:
                   type: string
                   example: "test123test456"
-                password_confirmation:
-                  type: string
-                  example: "test123test456"
                 first_name:
                   type: string
                   example: "Otávio"
@@ -129,7 +126,6 @@ paths:
                 - username
                 - email
                 - password
-                - password_confirmation
 
   /conta/sair:
     post:
