@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~shared/lib/shadcn/ui/form"
-import { Input } from "~shared/lib/shadcn/ui/input"
+import { Input, InputProvider } from "~shared/lib/shadcn/ui/input"
 
 export default function ContaEntrar() {
   const navigate = useNavigate()
@@ -56,7 +56,9 @@ export default function ContaEntrar() {
               <FormItem>
                 <FormLabel>Email ou nome de usuário</FormLabel>
                 <FormControl>
-                  <Input {...props.field} />
+                  <InputProvider>
+                    <Input {...props.field} />
+                  </InputProvider>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,7 +72,9 @@ export default function ContaEntrar() {
               <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input {...props.field} type="password" />
+                  <InputProvider>
+                    <Input {...props.field} type="password" />
+                  </InputProvider>
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~shared/lib/shadcn/ui/form"
-import { Input } from "~shared/lib/shadcn/ui/input"
+import { Input, InputProvider } from "~shared/lib/shadcn/ui/input"
 import { DetailedErrorListSchema } from "~shared/schemas"
 
 export default function ContaCadastrar() {
@@ -61,7 +61,9 @@ export default function ContaCadastrar() {
               <FormItem>
                 <FormLabel>Nome de usuário</FormLabel>
                 <FormControl>
-                  <Input {...props.field} />
+                  <InputProvider>
+                    <Input {...props.field} />
+                  </InputProvider>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -76,7 +78,9 @@ export default function ContaCadastrar() {
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input {...props.field} />
+                    <InputProvider>
+                      <Input {...props.field} />
+                    </InputProvider>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,7 +94,9 @@ export default function ContaCadastrar() {
                 <FormItem>
                   <FormLabel>Sobrenome</FormLabel>
                   <FormControl>
-                    <Input {...props.field} />
+                    <InputProvider>
+                      <Input {...props.field} />
+                    </InputProvider>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -105,7 +111,9 @@ export default function ContaCadastrar() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input {...props.field} />
+                  <InputProvider>
+                    <Input {...props.field} />
+                  </InputProvider>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -119,7 +127,9 @@ export default function ContaCadastrar() {
               <FormItem>
                 <FormLabel>Senha</FormLabel>
                 <FormControl>
-                  <Input {...props.field} type="password" />
+                  <InputProvider>
+                    <Input {...props.field} type="password" />
+                  </InputProvider>
                 </FormControl>
                 <FormMessage />
               </FormItem>
