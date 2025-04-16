@@ -1,3 +1,1 @@
-export const script = () => {
-  console.log("foi")
-}
+export const script = () => {}
