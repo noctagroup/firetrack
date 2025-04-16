@@ -1,5 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { AlignLeft, ChevronsUpDown, LogOut, PanelLeft, Waves, X } from "lucide-react"
+import {
+  AlignLeft,
+  ChevronsUpDown,
+  Cog,
+  Computer,
+  LogOut,
+  MonitorCog,
+  Moon,
+  PanelLeft,
+  Sun,
+  Waves,
+  X,
+} from "lucide-react"
 import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
@@ -111,9 +123,18 @@ export function FenomenoSidebar() {
                 <DropdownMenuRadioGroup
                   value={theme}
                   onValueChange={setTheme as (value: string) => void}>
-                  <DropdownMenuRadioItem value={Theme.System}>Sistema</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value={Theme.Light}>Claro</DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value={Theme.Dark}>Escuro</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={Theme.System}>
+                    <Computer />
+                    Sistema
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={Theme.Light}>
+                    <Sun />
+                    Claro
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={Theme.Dark}>
+                    <Moon />
+                    Escuro
+                  </DropdownMenuRadioItem>
                 </DropdownMenuRadioGroup>
 
                 <DropdownMenuSeparator />
