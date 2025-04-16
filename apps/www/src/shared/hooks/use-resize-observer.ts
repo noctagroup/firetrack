@@ -5,10 +5,12 @@ export function useResizeObserver(
   observerCallback: ResizeObserverCallback
 ): void {
   React.useEffect(() => {
-    const element = document.getElementById(elementId)!
+    const element = document.getElementById(elementId)
+
+    if (!element) return undefined
+
     const observer = new ResizeObserver(observerCallback)
     observer.observe(element)
-
     return () => observer.disconnect()
   }, [observerCallback, elementId])
 }

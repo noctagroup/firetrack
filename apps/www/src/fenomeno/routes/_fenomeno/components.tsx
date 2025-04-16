@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { AlignLeft, ChevronsUpDown, LogOut, Menu, PanelLeft, Waves, X } from "lucide-react"
+import { AlignLeft, ChevronsUpDown, LogOut, PanelLeft, Waves, X } from "lucide-react"
 import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
