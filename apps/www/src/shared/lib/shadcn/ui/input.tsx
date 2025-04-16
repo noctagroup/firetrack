@@ -26,6 +26,19 @@ const InputContext = React.createContext<InputContextProps>(defaultInputContext)
 
 const useInput = () => React.useContext(InputContext)
 
+const useSyncDisabledProp = ({
+  disabledProp,
+  setDisabledProp,
+}: {
+  disabledProp?: InputContextProps["disabled"]
+  setDisabledProp: InputContextProps["setDisabled"]
+}) => {
+  React.useEffect(() => {
+    if (typeof disabledProp !== "boolean") return undefined
+    setDisabledProp(disabledProp)
+  }, [disabledProp, setDisabledProp])
+}
+
 function InputProvider({
   className,
   onClick,
@@ -76,12 +89,10 @@ function InputProvider({
     [disabled, setDisabled, wrapClickHandler, wrapFocusHandler, wrapBlurHandler]
   )
 
-  React.useEffect(() => {
-    if (typeof disabledProp !== "boolean") return undefined
-    if (disabledProp === inputContext.disabled) return undefined
-
-    inputContext.setDisabled(disabledProp)
-  }, [disabledProp, inputContext])
+  useSyncDisabledProp({
+    disabledProp: disabledProp,
+    setDisabledProp: setDisabled,
+  })
 
   return (
     <InputContext.Provider value={inputContext}>
@@ -113,12 +124,10 @@ function Input({
 }: React.ComponentProps<"input">) {
   const inputContext = useInput()
 
-  React.useEffect(() => {
-    if (typeof disabledProp !== "boolean") return undefined
-    if (disabledProp === inputContext.disabled) return undefined
-
-    inputContext.setDisabled(disabledProp)
-  }, [disabledProp, inputContext])
+  useSyncDisabledProp({
+    disabledProp: disabledProp,
+    setDisabledProp: inputContext.setDisabled,
+  })
 
   return (
     <input
