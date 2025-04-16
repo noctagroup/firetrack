@@ -1,21 +1,20 @@
 import React, { useEffect, useMemo } from "react"
 
 import { useLocalStorage } from "~shared/hooks/use-local-storage"
+import { script } from "~shared/hooks/use-theme/script"
 
 export const Theme = {
   System: "system",
   Light: "light",
   Dark: "dark",
 } as const
+
 export type TTheme = (typeof Theme)[keyof typeof Theme]
+
 export type TThemeContextProps = {
   theme: TTheme
   setTheme: React.Dispatch<React.SetStateAction<TTheme>>
 }
-export type TThemeProviderProps = React.PropsWithChildren<{
-  defaultTheme?: TTheme
-  storageKey?: string
-}>
 
 const initialState: TThemeContextProps = {
   theme: Theme.System,
@@ -27,6 +26,11 @@ const ThemeContext = React.createContext(initialState)
 export function useTheme() {
   return React.useContext(ThemeContext)
 }
+
+export type TThemeProviderProps = React.PropsWithChildren<{
+  defaultTheme?: TTheme
+  storageKey?: string
+}>
 
 export function ThemeProvider({
   children,
@@ -62,3 +66,7 @@ export function ThemeProvider({
 
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>
 }
+
+export const ThemeInitScript = React.memo(function ThemeScript() {
+  return <script dangerouslySetInnerHTML={{ __html: `(${script.toString()})()` }} />
+})

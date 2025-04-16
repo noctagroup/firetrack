@@ -2,10 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   AlignLeft,
   ChevronsUpDown,
-  Cog,
   Computer,
   LogOut,
-  MonitorCog,
   Moon,
   PanelLeft,
   Sun,

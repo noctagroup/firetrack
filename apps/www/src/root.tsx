@@ -3,6 +3,7 @@ import { Waves } from "lucide-react"
 import { Links, Meta, Outlet, replace, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
+import { ThemeInitScript } from "~shared/hooks/use-theme"
 import { queryClient } from "~shared/lib/query/client"
 import { Toaster } from "~shared/lib/shadcn/ui/sonner"
 import tailwindUrl from "~shared/styles/tailwind.css?url"
@@ -69,9 +70,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <ThemeInitScript />
         <ScrollRestoration />
         <Scripts />
         <QueryClientProvider client={queryClient}>
+          {/* TODO: voltar o theme provider pra ca */}
           {children}
           <Toaster />
         </QueryClientProvider>
