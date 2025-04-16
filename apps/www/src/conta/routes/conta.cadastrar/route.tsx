@@ -1,11 +1,11 @@
 import { valibotResolver } from "@hookform/resolvers/valibot"
 import { type QueryClient, useMutation, useQueryClient } from "@tanstack/react-query"
-import { isAxiosError } from "axios"
+import { HttpStatusCode, isAxiosError } from "axios"
 import { Eye, EyeOff, LoaderCircle } from "lucide-react"
 import { useState } from "react"
 import { useForm, type UseFormReturn } from "react-hook-form"
 import { Link, type NavigateFunction, useNavigate } from "react-router"
-import { safeParse } from "valibot"
+import { safeParse, type SafeParseResult } from "valibot"
 
 import { CadastrarForm, type TCadastrarForm } from "~conta/forms"
 import { contaKeys, contaMutations } from "~conta/queries"
@@ -180,34 +180,59 @@ function handleFormSuccess(
 
 function handleFormError(error: Error, form: UseFormReturn<TCadastrarForm>) {
   if (!isAxiosError(error)) {
-    form.setFocus("username")
-    form.setError("username", { message: "Ocorreu um erro desconhecido ao se cadastrar" })
+    form.setError(
+      "username",
+      { message: "Ocorreu um erro desconhecido ao se cadastrar" },
+      { shouldFocus: true }
+    )
 
     return undefined
   }
 
-  const result = safeParse(DetailedErrorListSchema, error?.response?.data)
+  let errorSchemaParseResult: SafeParseResult<typeof DetailedErrorListSchema>
 
-  if (!result.success) {
-    form.setFocus("username")
-    form.setError("username", { message: "Ocorreu um erro desconhecido ao se cadastrar" })
+  switch (error.status) {
+    case HttpStatusCode.Conflict:
+      form.setError(
+        "username",
+        { message: "Já existe outro usuário com este mesmo nome" },
+        { shouldFocus: true }
+      )
+      break
+    case HttpStatusCode.BadRequest:
+      errorSchemaParseResult = safeParse(DetailedErrorListSchema, error?.response?.data)
 
-    return undefined
+      if (!errorSchemaParseResult.success) {
+        form.setError(
+          "username",
+          { message: "Ocorreu um erro desconhecido ao se cadastrar" },
+          { shouldFocus: true }
+        )
+        return undefined
+      }
+
+      for (const error of errorSchemaParseResult.output) {
+        const location = error.loc[0]
+
+        switch (location) {
+          case "email":
+            form.setError("email", { message: "Este email é inválido" }, { shouldFocus: true })
+            break
+          case "password":
+            form.setError(
+              "password",
+              { message: PasswordErrorTypeMessage[error.type] },
+              { shouldFocus: true }
+            )
+            break
+        }
+      }
+      break
   }
+}
 
-  const errors = result.output
-
-  for (const error of errors) {
-    const location = error.loc[0]
-
-    switch (location) {
-      case "email":
-        form.setFocus("email")
-        form.setError("email", { message: "Este email é inválido" })
-        break
-      case "password":
-        // TODO: falta isso aqui
-        throw Error("Not implemented.")
-    }
-  }
+const PasswordErrorTypeMessage: Record<string, string> = {
+  password_too_similar: "Esta senha tem muita similaridade com os outros campos",
+  password_too_short: "Esta senha é muito curta",
+  password_too_common: "Esta senha é muito comum",
 }

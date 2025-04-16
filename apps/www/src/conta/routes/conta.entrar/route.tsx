@@ -125,20 +125,20 @@ function handleFormSuccess(
 
 function handleFormError(error: Error, form: UseFormReturn<TEntrarForm>) {
   if (!isAxiosError(error)) {
-    form.setFocus("query")
-    form.setError("query", { message: "Ocorreu um erro desconhecido ao entrar" })
-
+    form.setError(
+      "query",
+      { message: "Ocorreu um erro desconhecido ao entrar" },
+      { shouldFocus: true }
+    )
     return undefined
   }
 
   switch (error.status) {
     case HttpStatusCode.NotFound:
-      form.setFocus("query")
-      form.setError("query", { message: "Usuário não encontrado" })
+      form.setError("query", { message: "Usuário não encontrado" }, { shouldFocus: true })
       break
     case HttpStatusCode.Unauthorized:
-      form.setFocus("password")
-      form.setError("password", { message: "Senha incorreta" })
+      form.setError("password", { message: "Senha incorreta" }, { shouldFocus: true })
       break
     default:
       form.setError("query", { message: "Usuário ou senha inválidos" })

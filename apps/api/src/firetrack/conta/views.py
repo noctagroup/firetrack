@@ -3,6 +3,7 @@ from http import HTTPStatus
 from django.contrib import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
+from django.db.utils import IntegrityError
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
@@ -14,7 +15,7 @@ from firetrack.conta.utils import is_email
 @require_GET
 def conta(request: WSGIRequest):
     if not request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.CONFLICT)
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
     user = serializers.serialize_authenticated_user(request.user)
 
@@ -24,7 +25,7 @@ def conta(request: WSGIRequest):
 @require_POST
 def entrar(request: WSGIRequest):
     if request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.CONFLICT)
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
     try:
         form = forms.EntrarForm.model_validate_json(request.body)
@@ -55,7 +56,7 @@ def entrar(request: WSGIRequest):
 @require_POST
 def cadastrar(request: WSGIRequest):
     if request.user.is_authenticated:
-        return HttpResponse(status=HTTPStatus.CONFLICT)
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
 
     try:
         form = forms.CadastrarForm.model_validate_json(request.body)
@@ -78,6 +79,8 @@ def cadastrar(request: WSGIRequest):
             status=HTTPStatus.BAD_REQUEST,
             content_type="application/json",
         )
+    except IntegrityError:
+        return HttpResponse(status=HTTPStatus.CONFLICT)
 
 
 @require_POST
