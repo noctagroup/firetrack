@@ -11,13 +11,14 @@ type InputContextProps = {
   wrapFocusHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
 }
 
-const noop = () => () => undefined
+const noopRef = () => ({ current: null })
+const noopHandler = () => () => undefined
 
 const InputContext = React.createContext<InputContextProps>({
-  inputRef: { current: null },
-  wrapBlurHandler: noop,
-  wrapClickHandler: noop,
-  wrapFocusHandler: noop,
+  inputRef: noopRef(),
+  wrapBlurHandler: noopHandler,
+  wrapClickHandler: noopHandler,
+  wrapFocusHandler: noopHandler,
 })
 
 const useInput = () => React.useContext(InputContext)
@@ -77,9 +78,9 @@ function InputProvider({
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           className
         )}
-        onClick={wrapClickHandler(onClick!)}
-        onFocus={wrapFocusHandler(onFocus!)}
-        onBlur={wrapBlurHandler(onBlur!)}
+        onClick={inputContext.wrapClickHandler(onClick!)}
+        onFocus={inputContext.wrapFocusHandler(onFocus!)}
+        onBlur={inputContext.wrapBlurHandler(onBlur!)}
         {...props}
       />
     </InputContext.Provider>
@@ -98,7 +99,7 @@ function Input({
 
   return (
     <input
-      ref={composeRefs(inputContext?.inputRef, ref)}
+      ref={composeRefs(inputContext.inputRef, ref)}
       className={cn(
         "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground w-full flex-1 outline-0",
         className
