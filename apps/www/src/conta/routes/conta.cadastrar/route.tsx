@@ -41,6 +41,7 @@ export default function ContaCadastrar() {
     onSuccess: (data) => handleFormSuccess(data, queryClient, navigate),
     onError: (error) => handleFormError(error, form),
   })
+  // NOTA: a atualização desse useState atualiza o componente inteiro, isso é um desperdício.
   const [passwordHidden, setPasswordHidden] = useState<boolean>(true)
 
   const togglePasswordHidden = () => setPasswordHidden((value) => !value)
@@ -205,6 +206,7 @@ function handleFormError(error: Error, form: UseFormReturn<TCadastrarForm>) {
         form.setError("email", { message: "Este email é inválido" })
         break
       case "password":
+        // TODO: falta isso aqui
         throw Error("Not implemented.")
     }
   }
