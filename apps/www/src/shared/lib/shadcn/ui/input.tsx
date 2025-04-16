@@ -6,20 +6,23 @@ import { composeEventHandlers, composeRefs } from "~shared/lib/utils"
 
 type InputContextProps = {
   inputRef: React.RefObject<HTMLInputElement | null>
+  disabled: boolean
+  setDisabled: React.Dispatch<React.SetStateAction<boolean>>
   wrapBlurHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
   wrapClickHandler: (handler: React.MouseEventHandler) => React.MouseEventHandler
   wrapFocusHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
 }
 
-const noopRef = () => ({ current: null })
-const noopHandler = () => () => undefined
+const defaultInputContext = {
+  inputRef: { current: null },
+  disabled: false,
+  setDisabled: () => undefined,
+  wrapBlurHandler: () => () => undefined,
+  wrapClickHandler: () => () => undefined,
+  wrapFocusHandler: () => () => undefined,
+}
 
-const InputContext = React.createContext<InputContextProps>({
-  inputRef: noopRef(),
-  wrapBlurHandler: noopHandler,
-  wrapClickHandler: noopHandler,
-  wrapFocusHandler: noopHandler,
-})
+const InputContext = React.createContext<InputContextProps>(defaultInputContext)
 
 const useInput = () => React.useContext(InputContext)
 
@@ -28,9 +31,11 @@ function InputProvider({
   onClick,
   onFocus,
   onBlur,
+  disabled: disabledProp,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"fieldset">) {
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const [disabled, setDisabled] = React.useState<boolean>(defaultInputContext.disabled)
 
   const wrapClickHandler = React.useCallback<InputContextProps["wrapClickHandler"]>(
     (onClick) =>
@@ -62,22 +67,32 @@ function InputProvider({
   const inputContext = React.useMemo<InputContextProps>(
     () => ({
       inputRef,
+      disabled,
+      setDisabled,
       wrapClickHandler,
       wrapFocusHandler,
       wrapBlurHandler,
     }),
-    [wrapClickHandler, wrapFocusHandler, wrapBlurHandler]
+    [disabled, setDisabled, wrapClickHandler, wrapFocusHandler, wrapBlurHandler]
   )
+
+  React.useEffect(() => {
+    if (typeof disabledProp !== "boolean") return undefined
+    if (disabledProp === inputContext.disabled) return undefined
+
+    inputContext.setDisabled(disabledProp)
+  }, [disabledProp, inputContext])
 
   return (
     <InputContext.Provider value={inputContext}>
-      <div
+      <fieldset
         className={cn(
           "border-input dark:bg-input/30 flex h-9 w-full min-w-0 items-center gap-2 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
           "focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-[3px]",
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           className
         )}
+        disabled={inputContext.disabled}
         onClick={inputContext.wrapClickHandler(onClick!)}
         onFocus={inputContext.wrapFocusHandler(onFocus!)}
         onBlur={inputContext.wrapBlurHandler(onBlur!)}
@@ -90,12 +105,20 @@ function InputProvider({
 function Input({
   className,
   ref,
+  disabled: disabledProp,
   onFocus,
   onBlur,
   onClick,
   ...props
 }: React.ComponentProps<"input">) {
   const inputContext = useInput()
+
+  React.useEffect(() => {
+    if (typeof disabledProp !== "boolean") return undefined
+    if (disabledProp === inputContext.disabled) return undefined
+
+    inputContext.setDisabled(disabledProp)
+  }, [disabledProp, inputContext])
 
   return (
     <input
@@ -104,6 +127,7 @@ function Input({
         "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground w-full flex-1 outline-0",
         className
       )}
+      disabled={inputContext.disabled}
       onClick={inputContext.wrapClickHandler(onClick!)}
       onFocus={inputContext.wrapFocusHandler(onFocus!)}
       onBlur={inputContext.wrapBlurHandler(onBlur!)}
