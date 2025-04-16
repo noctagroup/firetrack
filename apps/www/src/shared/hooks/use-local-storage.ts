@@ -6,7 +6,7 @@ export function useLocalStorage<T>(
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const getSnapshot = React.useCallback(() => getLocalStorageItem(key), [key])
 
-  const store = React.useSyncExternalStore(useLocalStorageSubscribe, getSnapshot)
+  const store = React.useSyncExternalStore<string | null>(useLocalStorageSubscribe, getSnapshot)
 
   const setState = React.useCallback<React.Dispatch<React.SetStateAction<T>>>(
     (_nextState) => {

@@ -13,7 +13,7 @@ type InputContextProps = {
   wrapFocusHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
 }
 
-const defaultInputContext = {
+const initialState = {
   inputRef: { current: null },
   disabled: false,
   setDisabled: () => undefined,
@@ -22,17 +22,19 @@ const defaultInputContext = {
   wrapFocusHandler: () => () => undefined,
 }
 
-const InputContext = React.createContext<InputContextProps>(defaultInputContext)
+const InputContext = React.createContext<InputContextProps>(initialState)
 
-const useInput = () => React.useContext(InputContext)
+function useInput() {
+  return React.useContext(InputContext)
+}
 
-const useSyncDisabledProp = ({
+function useSyncDisabledProp({
   disabledProp,
   setDisabledProp,
 }: {
   disabledProp?: InputContextProps["disabled"]
   setDisabledProp: InputContextProps["setDisabled"]
-}) => {
+}) {
   React.useEffect(() => {
     if (typeof disabledProp !== "boolean") return undefined
     setDisabledProp(disabledProp)
@@ -48,7 +50,7 @@ function InputProvider({
   ...props
 }: React.ComponentProps<"fieldset">) {
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const [disabled, setDisabled] = React.useState<boolean>(defaultInputContext.disabled)
+  const [disabled, setDisabled] = React.useState<boolean>(initialState.disabled)
 
   const wrapClickHandler = React.useCallback<InputContextProps["wrapClickHandler"]>(
     (onClick) =>

@@ -58,7 +58,12 @@ export async function clientLoader(args: Route.ClientLoaderArgs) {
 }
 
 export default function App() {
-  return <Outlet />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Outlet />
+      <Toaster />
+    </QueryClientProvider>
+  )
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -71,10 +76,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <ScrollRestoration />
         <Scripts />
-        <QueryClientProvider client={queryClient}>
-          {children}
-          <Toaster />
-        </QueryClientProvider>
+        {children}
       </body>
     </html>
   )
