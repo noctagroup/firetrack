@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { ChevronsUpDown, LogOut, PanelLeft, Waves } from "lucide-react"
+import { AlignLeft, ChevronsUpDown, LogOut, Menu, PanelLeft, Waves, X } from "lucide-react"
 import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
@@ -26,6 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~shared/lib/shadcn/ui/dropdown-menu"
+import { Separator } from "~shared/lib/shadcn/ui/separator"
 import {
   Sidebar,
   SidebarContent,
@@ -44,6 +45,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/t
 import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
+  const sidebar = useSidebar()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const sairMutation = useMutation({
@@ -65,13 +67,23 @@ export function FenomenoSidebar() {
           <Waves className="bg-muted size-8" />
         </Link>
 
-        <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
+        {sidebar.isMobile ? (
+          <Button
+            onClick={sidebar.toggleSidebar}
+            className="absolute right-0 size-6"
+            size="icon"
+            variant="ghost">
+            <X className="size-5" />
+          </Button>
+        ) : (
+          <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
+        )}
       </SidebarHeader>
 
       <SidebarContent />
 
       <SidebarFooter>
-        <FenomenoSidebarToggle hideOn="expanded" />
+        {!sidebar.isMobile && <FenomenoSidebarToggle hideOn="expanded" />}
 
         <SidebarMenu>
           <SidebarMenuItem>
@@ -171,11 +183,21 @@ function FenomenoSidebarToggle({
 }
 
 export function FenomenoInset() {
+  const sidebar = useSidebar()
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
 
   return (
     <SidebarInset>
       <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
+        {sidebar.isMobile && (
+          <>
+            <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="ghost">
+              <AlignLeft className="size-5" />
+            </Button>
+            <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
+          </>
+        )}
+
         <Breadcrumb>
           <BreadcrumbList>
             {matches.map((match, matchIndex) => {
