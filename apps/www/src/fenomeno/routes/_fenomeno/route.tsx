@@ -3,10 +3,10 @@ import { useLocalStorage } from "~shared/hooks/use-local-storage"
 import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 
 export default function Fenomeno() {
-  const [sidebarOpen, setSidebarOpen] = useLocalStorage("sidebar-open", true)
+  const [sidebar, setSidebar] = useLocalStorage("sidebar", true)
 
   return (
-    <SidebarProvider defaultOpen={sidebarOpen} open={sidebarOpen} onOpenChange={setSidebarOpen}>
+    <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
       <FenomenoSidebar />
       <FenomenoInset />
     </SidebarProvider>

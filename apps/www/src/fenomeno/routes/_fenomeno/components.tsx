@@ -64,7 +64,7 @@ export function FenomenoSidebar() {
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
       <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
         <Link to="/">
-          <Waves className="bg-muted size-8" />
+          <Waves className="size-8" />
         </Link>
 
         {sidebar.isMobile ? (

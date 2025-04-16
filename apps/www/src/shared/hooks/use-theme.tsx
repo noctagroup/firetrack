@@ -18,13 +18,16 @@ export type TThemeProviderProps = React.PropsWithChildren<{
 }>
 
 const initialState: TThemeContextProps = {
-  theme: "system",
+  theme: Theme.System,
   setTheme: () => undefined,
 }
 
 const ThemeContext = React.createContext(initialState)
 
-console.log(localStorage.getItem)
+export function useTheme() {
+  return React.useContext(ThemeContext)
+}
+
 export function ThemeProvider({
   children,
   defaultTheme = initialState.theme,
@@ -43,12 +46,12 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
-    root.classList.remove("light", "dark")
+    root.classList.remove(Theme.Light, Theme.Dark)
 
     if (theme === "system") {
       const systemTheme: TTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"
+        ? Theme.Dark
+        : Theme.Light
 
       root.classList.add(systemTheme)
       return undefined
@@ -58,8 +61,4 @@ export function ThemeProvider({
   }, [theme])
 
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>
-}
-
-export function useTheme() {
-  return React.useContext(ThemeContext)
 }
