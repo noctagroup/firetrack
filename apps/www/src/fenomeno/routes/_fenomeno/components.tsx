@@ -7,6 +7,7 @@ import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-route
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
 import { initials } from "~fenomeno/routes/_fenomeno/utils"
+import { Theme, useTheme } from "~shared/hooks/use-theme"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
 import {
   Breadcrumb,
@@ -23,6 +24,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~shared/lib/shadcn/ui/dropdown-menu"
@@ -46,6 +49,7 @@ import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
   const sidebar = useSidebar()
+  const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const sairMutation = useMutation({
@@ -99,6 +103,18 @@ export function FenomenoSidebar() {
                 <DropdownMenuLabel className="flex items-center gap-3 px-1 py-1.5 text-left text-sm">
                   <FenomenoSidebarContaInfo />
                 </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuLabel>Tema</DropdownMenuLabel>
+
+                <DropdownMenuRadioGroup
+                  value={theme}
+                  onValueChange={setTheme as (value: string) => void}>
+                  <DropdownMenuRadioItem value={Theme.System}>Sistema</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={Theme.Light}>Claro</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value={Theme.Dark}>Escuro</DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
 
                 <DropdownMenuSeparator />
 
