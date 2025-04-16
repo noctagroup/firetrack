@@ -6,18 +6,18 @@ import { composeEventHandlers, composeRefs } from "~shared/lib/utils"
 
 type InputContextProps = {
   inputRef: React.RefObject<HTMLInputElement | null>
-  handleBlur: (handler: React.FocusEventHandler) => React.FocusEventHandler
-  handleClick: (handler: React.MouseEventHandler) => React.MouseEventHandler
-  handleFocus: (handler: React.FocusEventHandler) => React.FocusEventHandler
+  wrapBlurHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
+  wrapClickHandler: (handler: React.MouseEventHandler) => React.MouseEventHandler
+  wrapFocusHandler: (handler: React.FocusEventHandler) => React.FocusEventHandler
 }
 
 const noop = () => () => undefined
 
 const InputContext = React.createContext<InputContextProps>({
   inputRef: { current: null },
-  handleBlur: noop,
-  handleClick: noop,
-  handleFocus: noop,
+  wrapBlurHandler: noop,
+  wrapClickHandler: noop,
+  wrapFocusHandler: noop,
 })
 
 const useInput = () => React.useContext(InputContext)
@@ -31,34 +31,28 @@ function InputProvider({
 }: React.ComponentProps<"div">) {
   const inputRef = React.useRef<HTMLInputElement>(null)
 
-  const handleClick = React.useCallback<InputContextProps["handleClick"]>(
+  const wrapClickHandler = React.useCallback<InputContextProps["wrapClickHandler"]>(
     (onClick) =>
-      composeEventHandlers(onClick, () => {
-        if (!inputRef.current) {
-          return undefined
-        }
+      composeEventHandlers(onClick, (event) => {
+        if (!(inputRef.current && event.currentTarget === event.target)) return undefined
         inputRef.current.focus()
       }),
     []
   )
 
-  const handleFocus = React.useCallback<InputContextProps["handleFocus"]>(
+  const wrapFocusHandler = React.useCallback<InputContextProps["wrapFocusHandler"]>(
     (onFocus) =>
-      composeEventHandlers(onFocus, () => {
-        if (!inputRef.current) {
-          return undefined
-        }
+      composeEventHandlers(onFocus, (event) => {
+        if (!(inputRef.current && event.currentTarget === event.target)) return undefined
         inputRef.current.focus()
       }),
     []
   )
 
-  const handleBlur = React.useCallback<InputContextProps["handleBlur"]>(
+  const wrapBlurHandler = React.useCallback<InputContextProps["wrapBlurHandler"]>(
     (onBlur) =>
-      composeEventHandlers(onBlur, () => {
-        if (!inputRef.current) {
-          return undefined
-        }
+      composeEventHandlers(onBlur, (event) => {
+        if (!(inputRef.current && event.currentTarget === event.target)) return undefined
         inputRef.current.blur()
       }),
     []
@@ -67,11 +61,11 @@ function InputProvider({
   const inputContext = React.useMemo<InputContextProps>(
     () => ({
       inputRef,
-      handleClick,
-      handleFocus,
-      handleBlur,
+      wrapClickHandler,
+      wrapFocusHandler,
+      wrapBlurHandler,
     }),
-    [handleClick, handleFocus, handleBlur]
+    [wrapClickHandler, wrapFocusHandler, wrapBlurHandler]
   )
 
   return (
@@ -83,16 +77,23 @@ function InputProvider({
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
           className
         )}
-        onClick={handleClick(onClick!)}
-        onFocus={handleFocus(onFocus!)}
-        onBlur={handleBlur(onBlur!)}
+        onClick={wrapClickHandler(onClick!)}
+        onFocus={wrapFocusHandler(onFocus!)}
+        onBlur={wrapBlurHandler(onBlur!)}
         {...props}
       />
     </InputContext.Provider>
   )
 }
 
-function Input({ className, ref, onFocus, onBlur, ...props }: React.ComponentProps<"input">) {
+function Input({
+  className,
+  ref,
+  onFocus,
+  onBlur,
+  onClick,
+  ...props
+}: React.ComponentProps<"input">) {
   const inputContext = useInput()
 
   return (
@@ -102,8 +103,9 @@ function Input({ className, ref, onFocus, onBlur, ...props }: React.ComponentPro
         "placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground w-full flex-1 outline-0",
         className
       )}
-      onFocus={inputContext.handleFocus(onFocus!)}
-      onBlur={inputContext.handleBlur(onBlur!)}
+      onClick={inputContext.wrapClickHandler(onClick!)}
+      onFocus={inputContext.wrapFocusHandler(onFocus!)}
+      onBlur={inputContext.wrapBlurHandler(onBlur!)}
       {...props}
     />
   )
