@@ -34,7 +34,7 @@ export default function themeScript(context: TThemeContextProps) {
 
     rootEl.classList.remove(Theme.Light, Theme.Dark)
 
-    if (theme === "system") {
+    if (theme === Theme.System) {
       const resolvedTheme: TTheme = window.matchMedia(PrefersDarkColorScheme).matches
         ? Theme.Dark
         : Theme.Light
