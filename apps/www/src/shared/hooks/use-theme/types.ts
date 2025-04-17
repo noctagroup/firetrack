@@ -8,6 +8,7 @@ export type TThemeContextProps = {
   defaultTheme: TTheme
   themeStorageKey: string
 }
+
 export type TThemeProviderProps = React.PropsWithChildren<{
   defaultTheme?: TTheme
   themeStorageKey?: string

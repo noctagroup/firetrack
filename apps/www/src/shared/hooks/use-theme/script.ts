@@ -1,5 +1,6 @@
 import type { TTheme, TThemeContextProps } from "~shared/hooks/use-theme/types"
 
+// TODO: tornar essa função aqui inline de verdade, assim como em Rust/C/C++ lidam com inline, inclusive seus imports, para excluir dependências manuais
 export default function themeScript(context: TThemeContextProps) {
   const Theme = {
     System: "system",
@@ -7,7 +8,7 @@ export default function themeScript(context: TThemeContextProps) {
     Dark: "dark",
   } as const
 
-  const PrefersDarkColorScheme = "(prefers-color-scheme: dark)"
+  const PrefersDarkColorScheme = "(prefers-color-scheme: dark)" as const
 
   function parseCookieTheme(): string | undefined {
     const cookie = window.document.cookie.split(";").reduce((cookieAcc, currCookie) => {

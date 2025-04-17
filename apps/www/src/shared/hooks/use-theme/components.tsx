@@ -1,12 +1,13 @@
 import React from "react"
 
 import { CookieStorage, useStorage } from "~shared/hooks/use-storage"
-import { PrefersDarkColorScheme, Theme } from "~shared/hooks/use-theme/constants"
 import { ThemeContext, ThemeContextInitialState } from "~shared/hooks/use-theme/context"
+import { applyTheme } from "~shared/hooks/use-theme/dom"
 import { useTheme } from "~shared/hooks/use-theme/hooks"
-import script from "~shared/hooks/use-theme/script?inline"
+import script from "~shared/hooks/use-theme/script"
 import type { TTheme, TThemeContextProps, TThemeProviderProps } from "~shared/hooks/use-theme/types"
 
+// TODO: tornar global
 const cookieStorage = new CookieStorage<TTheme>()
 
 export function ThemeProvider({
@@ -27,19 +28,7 @@ export function ThemeProvider({
   )
 
   React.useEffect(() => {
-    const rootEl = window.document.documentElement
-
-    rootEl.classList.remove(Theme.Light, Theme.Dark)
-
-    if (theme === Theme.System) {
-      const resolvedTheme: TTheme = window.matchMedia(PrefersDarkColorScheme).matches
-        ? Theme.Dark
-        : Theme.Light
-
-      rootEl.classList.add(resolvedTheme)
-    } else {
-      rootEl.classList.add(theme)
-    }
+    applyTheme(theme)
   }, [theme])
 
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>
@@ -48,11 +37,14 @@ export function ThemeProvider({
 export function ThemeProviderScript() {
   const themeContext = useTheme()
 
+  const scriptString = script.toString()
+  const argString = JSON.stringify(themeContext)
+
   return (
     <script
       suppressHydrationWarning
       dangerouslySetInnerHTML={{
-        __html: `(${script.toString()})(${JSON.stringify(themeContext)})`,
+        __html: `(${scriptString})(${argString})`,
       }}
     />
   )

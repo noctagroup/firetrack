@@ -64,7 +64,7 @@ export default function App() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html suppressHydrationWarning={true} lang="pt-br">
+    <html suppressHydrationWarning lang="pt-br">
       <head>
         <Meta />
         <Links />

@@ -40,7 +40,34 @@ export class CookieStorage<TStorageValue extends string> implements Storage<TSto
   }
 }
 
-export function useStorage<TStorageValue extends string>(
+export class LocalStorage<TStorageValue> implements Storage<TStorageValue> {
+  #eventType: string = "storage"
+
+  getItem(key: string): Nullable<TStorageValue> {
+    return window.localStorage.getItem(key) as Nullable<TStorageValue>
+  }
+
+  setItem(key: string, newValue: Nullable<TStorageValue>): void {
+    window.localStorage.setItem(key, JSON.stringify(newValue))
+    this.dispatchEvent(key, newValue)
+  }
+
+  removeItem(key: string): void {
+    window.localStorage.removeItem(key)
+    this.dispatchEvent(key, undefined)
+  }
+
+  dispatchEvent(key: string, newValue: Nullable<TStorageValue>): void {
+    window.dispatchEvent(new StorageEvent(this.#eventType, { key, newValue }))
+  }
+
+  subscribe(callback: AnyFn): Unsubscribe {
+    window.addEventListener(this.#eventType, callback)
+    return () => window.removeEventListener(this.#eventType, callback)
+  }
+}
+
+export function useStorage<TStorageValue>(
   storageKey: string,
   storageInitialValue: TStorageValue,
   storage: Storage<TStorageValue>
@@ -65,7 +92,7 @@ export function useStorage<TStorageValue extends string>(
     (_nextState) => {
       const nextState =
         typeof _nextState === "function"
-          ? (_nextState as (value: TStorageValue) => TStorageValue)(JSON.parse(store!))
+          ? (_nextState as (value: TStorageValue) => TStorageValue)(JSON.parse(store))
           : _nextState
 
       if (isNil(nextState)) {
