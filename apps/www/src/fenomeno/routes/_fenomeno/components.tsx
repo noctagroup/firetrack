@@ -59,7 +59,7 @@ import { cn } from "~shared/lib/shadcn/utils"
 
 export function FenomenoSidebar() {
   const sidebar = useSidebar()
-  const { theme, setTheme } = useTheme()
+  const themeContext = useTheme()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const sairMutation = useMutation({
@@ -119,8 +119,8 @@ export function FenomenoSidebar() {
                 <DropdownMenuLabel>Tema</DropdownMenuLabel>
 
                 <DropdownMenuRadioGroup
-                  value={theme}
-                  onValueChange={setTheme as (value: string) => void}>
+                  value={themeContext.theme}
+                  onValueChange={themeContext.setTheme as (value: string) => void}>
                   <DropdownMenuRadioItem value={Theme.System}>
                     <Computer />
                     Sistema

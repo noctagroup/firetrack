@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from "react"
 
 import { useLocalStorage } from "~shared/hooks/use-local-storage"
-import { script } from "~shared/hooks/use-theme/script"
 
 const PrefersDarkColorScheme = "(prefers-color-scheme: dark)"
 
@@ -16,11 +15,15 @@ export type TTheme = (typeof Theme)[keyof typeof Theme]
 export type TThemeContextProps = {
   theme: TTheme
   setTheme: React.Dispatch<React.SetStateAction<TTheme>>
+  defaultTheme: TTheme
+  themeStorageKey: string
 }
 
 const initialState: TThemeContextProps = {
   theme: Theme.System,
   setTheme: () => undefined,
+  defaultTheme: Theme.System,
+  themeStorageKey: "theme",
 }
 
 const ThemeContext = React.createContext(initialState)
@@ -31,22 +34,24 @@ export function useTheme() {
 
 export type TThemeProviderProps = React.PropsWithChildren<{
   defaultTheme?: TTheme
-  storageKey?: string
+  themeStorageKey?: string
 }>
 
 export function ThemeProvider({
   children,
-  defaultTheme = initialState.theme,
-  storageKey = "theme",
+  defaultTheme = initialState.defaultTheme,
+  themeStorageKey = initialState.themeStorageKey,
 }: TThemeProviderProps) {
-  const [theme, setTheme] = useLocalStorage<TTheme>(storageKey, defaultTheme)
+  const [theme, setTheme] = useLocalStorage<TTheme>(themeStorageKey, defaultTheme)
 
   const themeContext = useMemo<TThemeContextProps>(
     () => ({
       theme,
       setTheme,
+      defaultTheme,
+      themeStorageKey,
     }),
-    [theme, setTheme]
+    [theme, setTheme, defaultTheme, themeStorageKey]
   )
 
   useEffect(() => {
@@ -69,6 +74,19 @@ export function ThemeProvider({
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>
 }
 
-export function ThemeInitScript() {
-  return <script dangerouslySetInnerHTML={{ __html: `(${script.toString()})()` }} />
+export function ThemeProviderScript() {
+  const themeContext = useTheme()
+
+  return (
+    <script
+      dangerouslySetInnerHTML={{
+        __html: `(${script.toString()})(${JSON.stringify(themeContext)})`,
+      }}
+    />
+  )
+}
+
+const script = (context: TThemeContextProps) => {
+  window.document.documentElement.classList.add(context.theme)
+  console.log(context)
 }
