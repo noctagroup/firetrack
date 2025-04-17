@@ -14,6 +14,7 @@
       "~conta/*": ["./src/conta/*"],
       "~fenomeno/*": ["./src/fenomeno/*"]
     },
+    "noErrorTruncation": true,
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,

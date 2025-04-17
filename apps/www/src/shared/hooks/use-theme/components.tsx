@@ -15,7 +15,7 @@ export function ThemeProvider({
   defaultTheme = ThemeContextInitialState.defaultTheme,
   themeStorageKey = ThemeContextInitialState.themeStorageKey,
 }: TThemeProviderProps) {
-  const [theme, setTheme] = useStorage<TTheme>(themeStorageKey, defaultTheme, cookieStorage)
+  const [theme, setTheme] = useStorage(themeStorageKey, defaultTheme, cookieStorage)
 
   const themeContext = React.useMemo<TThemeContextProps>(
     () => ({

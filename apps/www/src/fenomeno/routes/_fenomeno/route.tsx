@@ -6,7 +6,7 @@ import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 const localStorage = new LocalStorage<boolean>()
 
 export default function Fenomeno() {
-  const [sidebar, setSidebar] = useStorage<boolean>("sidebar", true, localStorage)
+  const [sidebar, setSidebar] = useStorage("sidebar", true, localStorage)
 
   return (
     <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>

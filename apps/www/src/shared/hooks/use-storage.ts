@@ -5,24 +5,53 @@ import { isNil } from "~shared/utils/is"
 
 type Unsubscribe = () => void
 
-export interface Storage<TStorageValue> {
-  getItem: (key: string) => Nullable<TStorageValue>
-  setItem: (key: string, newValue: Nullable<TStorageValue>) => void
+export interface Storage<TStorageDecoded, TStorageEncoded> {
+  encode: (value: Nullable<TStorageDecoded>) => Nullable<TStorageEncoded>
+  decode: (value: Nullable<TStorageEncoded>) => Nullable<TStorageDecoded>
+  subscribe: (key: string, callback: AnyFn) => Unsubscribe
   removeItem: (key: string) => void
-  subscribe: (callback: AnyFn) => Unsubscribe
-  dispatchEvent: (key: string, newValue: Nullable<TStorageValue>) => void
+  getItem: (key: string) => Nullable<TStorageDecoded>
+  setItem: (key: string, newValue: Nullable<TStorageDecoded>) => void
+  dispatchEvent: (key: string, newValue: Nullable<TStorageDecoded>) => void
 }
 
-export class CookieStorage<TStorageValue extends string> implements Storage<TStorageValue> {
-  #eventType: string = "cookiechanged"
+export type CookieStorageEvent<T> = CustomEvent<CookieStorageEventDetails<T>>
 
-  getItem(key: string): Nullable<TStorageValue> {
-    return Cookie.get(key) as Nullable<TStorageValue>
+export type CookieStorageEventDetails<T> = {
+  key: string
+  newValue: Nullable<T>
+}
+
+export class CookieStorage<TStorageDecoded, TStorageEncoded extends string = string>
+  implements Storage<TStorageDecoded, TStorageEncoded>
+{
+  static readonly eventType = "cookiechanged" as const
+
+  encode(value: Nullable<TStorageDecoded>): Nullable<TStorageEncoded> {
+    try {
+      return JSON.stringify(value) as TStorageEncoded
+    } catch {
+      return undefined
+    }
   }
 
-  setItem(key: string, newValue: Nullable<TStorageValue>): void {
-    Cookie.set(key, JSON.stringify(newValue))
-    this.dispatchEvent(key, newValue)
+  decode(value: Nullable<TStorageEncoded>): Nullable<TStorageDecoded> {
+    try {
+      return JSON.parse(value!) as TStorageDecoded
+    } catch {
+      return undefined
+    }
+  }
+
+  subscribe(key: string, callback: AnyFn): Unsubscribe {
+    const listener = (event: CookieStorageEvent<TStorageDecoded>) => {
+      if (!isNil(event.detail?.key) && event.detail.key === key) {
+        callback()
+      }
+    }
+
+    window.addEventListener(CookieStorage.eventType, listener)
+    return () => window.removeEventListener(CookieStorage.eventType, listener)
   }
 
   removeItem(key: string): void {
@@ -30,26 +59,61 @@ export class CookieStorage<TStorageValue extends string> implements Storage<TSto
     this.dispatchEvent(key, undefined)
   }
 
-  dispatchEvent(key: string, newValue: Nullable<TStorageValue>): void {
-    window.dispatchEvent(new CustomEvent(this.#eventType, { detail: { key, newValue } }))
+  getItem(key: string): Nullable<TStorageDecoded> {
+    const cookie = Cookie.get(key)
+    const decoded = this.decode(cookie as Nullable<TStorageEncoded>)
+
+    return decoded
   }
 
-  subscribe(callback: AnyFn): Unsubscribe {
-    window.addEventListener(this.#eventType, callback)
-    return () => window.removeEventListener(this.#eventType, callback)
+  setItem(key: string, newValue: Nullable<TStorageDecoded>): void {
+    const encoded = this.encode(newValue)
+    Cookie.set(key, encoded!)
+    this.dispatchEvent(key, newValue)
+  }
+
+  dispatchEvent(key: string, newValue: Nullable<TStorageDecoded>): void {
+    window.dispatchEvent(
+      new CustomEvent<CookieStorageEventDetails<TStorageDecoded>>(CookieStorage.eventType, {
+        detail: {
+          key: key,
+          newValue: newValue,
+        },
+      })
+    )
   }
 }
 
-export class LocalStorage<TStorageValue> implements Storage<TStorageValue> {
-  #eventType: string = "storage"
+export class LocalStorage<TStorageDecoded, TStorageEncoded extends string = string>
+  implements Storage<TStorageDecoded, TStorageEncoded>
+{
+  static readonly eventType = "storage" as const
 
-  getItem(key: string): Nullable<TStorageValue> {
-    return window.localStorage.getItem(key) as Nullable<TStorageValue>
+  encode(value: Nullable<TStorageDecoded>): Nullable<TStorageEncoded> {
+    try {
+      return JSON.stringify(value) as TStorageEncoded
+    } catch {
+      return undefined
+    }
   }
 
-  setItem(key: string, newValue: Nullable<TStorageValue>): void {
-    window.localStorage.setItem(key, JSON.stringify(newValue))
-    this.dispatchEvent(key, newValue)
+  decode(value: Nullable<TStorageEncoded>): Nullable<TStorageDecoded> {
+    try {
+      return JSON.parse(value!) as TStorageDecoded
+    } catch {
+      return undefined
+    }
+  }
+
+  subscribe(key: string, callback: AnyFn): Unsubscribe {
+    const listener = (event: StorageEvent) => {
+      if (event.key === key) {
+        callback()
+      }
+    }
+
+    window.addEventListener(LocalStorage.eventType, listener)
+    return () => window.removeEventListener(LocalStorage.eventType, listener)
   }
 
   removeItem(key: string): void {
@@ -57,42 +121,55 @@ export class LocalStorage<TStorageValue> implements Storage<TStorageValue> {
     this.dispatchEvent(key, undefined)
   }
 
-  dispatchEvent(key: string, newValue: Nullable<TStorageValue>): void {
-    window.dispatchEvent(new StorageEvent(this.#eventType, { key, newValue }))
+  getItem(key: string): Nullable<TStorageDecoded> {
+    const item = window.localStorage.getItem(key)
+    const decoded = this.decode(item as Nullable<TStorageEncoded>)
+
+    return decoded
   }
 
-  subscribe(callback: AnyFn): Unsubscribe {
-    window.addEventListener(this.#eventType, callback)
-    return () => window.removeEventListener(this.#eventType, callback)
+  setItem(key: string, newValue: Nullable<TStorageDecoded>): void {
+    const encoded = this.encode(newValue)
+    window.localStorage.setItem(key, encoded!)
+    this.dispatchEvent(key, newValue)
+  }
+
+  dispatchEvent(key: string, newValue: Nullable<TStorageDecoded>): void {
+    window.dispatchEvent(
+      new StorageEvent(LocalStorage.eventType, {
+        key: key,
+        newValue: newValue?.toString?.(),
+      })
+    )
   }
 }
 
-export function useStorage<TStorageValue>(
+export function useStorage<TStorageDecoded, TStorageEncoded extends string = string>(
   storageKey: string,
-  storageInitialValue: TStorageValue,
-  storage: Storage<TStorageValue>
-): [TStorageValue, React.Dispatch<React.SetStateAction<TStorageValue>>] {
+  storageInitialValue: TStorageDecoded,
+  storage: Storage<TStorageDecoded, TStorageEncoded>
+): [TStorageDecoded, React.Dispatch<React.SetStateAction<TStorageDecoded>>] {
   const subscribe = React.useCallback(
-    (onStoreChange: () => void) => storage.subscribe(onStoreChange),
-    [storage]
+    (onStoreChange: () => void) => storage.subscribe(storageKey, onStoreChange),
+    [storageKey, storage]
   )
   const getServerSnapshot = React.useCallback<() => undefined>(() => undefined, [])
-  const getSnapshot = React.useCallback<() => Nullable<TStorageValue>>(
+  const getSnapshot = React.useCallback<() => Nullable<TStorageDecoded>>(
     () => storage.getItem(storageKey),
     [storage, storageKey]
   )
 
-  const store = React.useSyncExternalStore<Nullable<TStorageValue>>(
+  const store = React.useSyncExternalStore<Nullable<TStorageDecoded>>(
     subscribe,
     getSnapshot,
     getServerSnapshot
   )
 
-  const setState = React.useCallback<React.Dispatch<React.SetStateAction<TStorageValue>>>(
+  const setState = React.useCallback<React.Dispatch<React.SetStateAction<TStorageDecoded>>>(
     (_nextState) => {
       const nextState =
         typeof _nextState === "function"
-          ? (_nextState as (value: TStorageValue) => TStorageValue)(JSON.parse(store))
+          ? (_nextState as (value: Nullable<TStorageDecoded>) => Nullable<TStorageDecoded>)(store)
           : _nextState
 
       if (isNil(nextState)) {
@@ -105,12 +182,10 @@ export function useStorage<TStorageValue>(
   )
 
   React.useEffect(() => {
-    const value = storage.getItem(storageKey)
-
-    if (isNil(value) && typeof storageInitialValue !== "undefined") {
+    if (isNil(storage.getItem(storageKey)) && !isNil(storageInitialValue)) {
       storage.setItem(storageKey, storageInitialValue)
     }
   }, [storage, store, storageKey, storageInitialValue])
 
-  return [store ? JSON.parse(store) : storageInitialValue, setState]
+  return [store ?? storageInitialValue, setState]
 }
