@@ -76,7 +76,7 @@ export function FenomenoSidebar() {
 
   return (
     <Sidebar id={SIDEBAR_ID} collapsible="icon">
-      <SidebarHeader className="relative m-2 h-8 flex-row items-center p-0">
+      <SidebarHeader className="relative h-12 flex-row items-center border-b p-2">
         <Link to="/">
           <Waves className="size-8" />
         </Link>
@@ -84,13 +84,13 @@ export function FenomenoSidebar() {
         {sidebar.isMobile ? (
           <Button
             onClick={sidebar.toggleSidebar}
-            className="absolute right-0 size-6"
+            className="absolute right-0 mr-2 size-6"
             size="icon"
             variant="link">
             <X className="size-5" />
           </Button>
         ) : (
-          <FenomenoSidebarToggle className="absolute right-0" hideOn="collapsed" />
+          <FenomenoSidebarToggle className="absolute right-0 mr-2" hideOn="collapsed" />
         )}
       </SidebarHeader>
 
