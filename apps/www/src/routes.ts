@@ -3,6 +3,9 @@ import { flatRoutes } from "@react-router/fs-routes"
 
 const routes = (await Promise.all([
   flatRoutes({
+    rootDirectory: "./shared/routes",
+  }),
+  flatRoutes({
     rootDirectory: "./conta/routes",
   }),
   flatRoutes({
