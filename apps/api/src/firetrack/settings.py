@@ -38,9 +38,18 @@ ALLOWED_HOSTS = config(
 
 
 # CSRF
-CSRF_TRUSTED_ORIGINS = config(
-    "DJANGO_CSRF_TRUSTED_ORIGINS", default="http://localhost:5173", cast=Csv()
+CSRF_COOKIE_DOMAIN = config(
+    "DJANGO_CSRF_COOKIE_DOMAIN",
+    default=None,
+    # HACK: para não transformar None em 'None'
+    cast=lambda value: str(value) if value is not None else value,
 )
+CSRF_TRUSTED_ORIGINS = config(
+    "DJANGO_CSRF_TRUSTED_ORIGINS",
+    default="http://localhost:5173, http://localhost:8000",
+    cast=Csv(),
+)
+CSRF_COOKIE_HTTPONLY = False
 
 # CORS
 CORS_ALLOWED_ORIGINS = config(
