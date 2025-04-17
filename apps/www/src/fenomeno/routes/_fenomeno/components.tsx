@@ -86,7 +86,7 @@ export function FenomenoSidebar() {
             onClick={sidebar.toggleSidebar}
             className="absolute right-0 size-6"
             size="icon"
-            variant="ghost">
+            variant="link">
             <X className="size-5" />
           </Button>
         ) : (
@@ -204,7 +204,7 @@ function FenomenoSidebarToggle({
       )}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button onClick={sidebar.toggleSidebar} className="size-8" size="icon" variant="ghost">
+          <Button onClick={sidebar.toggleSidebar} className="size-8" size="icon" variant="link">
             <PanelLeft className="size-5" />
           </Button>
         </TooltipTrigger>
