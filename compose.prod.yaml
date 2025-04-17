@@ -21,8 +21,6 @@ services:
     depends_on:
       postgis:
         condition: service_healthy
-      nginx:
-        condition: service_started
     volumes:
       - type: volume
         source: django_static
@@ -36,9 +34,6 @@ services:
     command: sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
     expose:
       - 8001
-    depends_on:
-      nginx:
-        condition: service_started
     restart: always
 
   nginx:
@@ -48,6 +43,13 @@ services:
         published: 80
       - target: 443
         published: 443
+    depends_on:
+      vite:
+        condition: service_completed_successfully
+      django:
+        condition: service_started
+      docs:
+        condition: service_started
     volumes:
       - type: volume
         source: django_static
@@ -80,6 +82,9 @@ services:
       - type: bind
         source: ./devops/certbot/conf
         target: /etc/letsencrypt
+    depends_on:
+      nginx:
+        condition: service_started
     # Renova o certificado a cada 12h
     entrypoint: >
       /bin/sh -c "trap exit TERM; while :; do
