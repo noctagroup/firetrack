@@ -9,9 +9,14 @@ export function useCookie<T extends string>(
   cookieName: string,
   cookieInitialValue: T
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
+  const getServerSnapshot = React.useCallback(() => undefined, [])
   const getSnapshot = React.useCallback(() => getCookie(cookieName), [cookieName])
 
-  const store = React.useSyncExternalStore<string | undefined>(useCookieSubscribe, getSnapshot)
+  const store = React.useSyncExternalStore<string | undefined>(
+    useCookieSubscribe,
+    getSnapshot,
+    getServerSnapshot
+  )
 
   const setState = React.useCallback<React.Dispatch<React.SetStateAction<T>>>(
     (_nextState) => {
@@ -30,10 +35,11 @@ export function useCookie<T extends string>(
   )
 
   React.useEffect(() => {
-    if (isNil(getCookie(cookieName)) && typeof cookieInitialValue !== "undefined") {
+    const cookie = getCookie(cookieName)
+    if (isNil(cookie) && cookie !== store && typeof cookieInitialValue !== "undefined") {
       setCookie(cookieName, cookieInitialValue)
     }
-  }, [cookieName, cookieInitialValue])
+  }, [store, cookieName, cookieInitialValue])
 
   return [store ? JSON.parse(store) : cookieInitialValue, setState]
 }
