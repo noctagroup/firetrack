@@ -64,7 +64,7 @@ export default function App() {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
+    <html suppressHydrationWarning={true} lang="pt-br">
       <head>
         <Meta />
         <Links />
@@ -73,11 +73,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ScrollRestoration />
         <Scripts />
         <QueryClientProvider client={queryClient}>
-          {/* <ThemeProvider> */}
           <ThemeProviderScript />
           {children}
           <Toaster />
-          {/* </ThemeProvider> */}
         </QueryClientProvider>
       </body>
     </html>
