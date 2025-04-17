@@ -2,6 +2,7 @@ import React from "react"
 
 import { useStorage } from "~shared/hooks/use-storage"
 import { cookieStorage } from "~shared/hooks/use-storage/storage/cookie"
+import { PrefersDarkColorScheme } from "~shared/hooks/use-theme/constants"
 import { ThemeContext, ThemeContextInitialState } from "~shared/hooks/use-theme/context"
 import { applyTheme } from "~shared/hooks/use-theme/dom"
 import { useTheme } from "~shared/hooks/use-theme/hooks"
@@ -26,7 +27,16 @@ export function ThemeProvider({
   )
 
   React.useEffect(() => {
-    applyTheme(theme)
+    const media = window.matchMedia(PrefersDarkColorScheme)
+    const applyThemeListener = () => applyTheme(theme, media)
+
+    applyThemeListener()
+
+    media.addEventListener("change", applyThemeListener)
+
+    return () => {
+      media.removeEventListener("change", applyThemeListener)
+    }
   }, [theme])
 
   return <ThemeContext.Provider value={themeContext}>{children}</ThemeContext.Provider>
