@@ -96,7 +96,7 @@ export function FenomenoSidebar() {
 
       <SidebarContent />
 
-      <SidebarFooter>
+      <SidebarFooter className="border-t">
         {!sidebar.isMobile && <FenomenoSidebarToggle hideOn="expanded" />}
 
         <SidebarMenu>
@@ -194,9 +194,9 @@ function FenomenoSidebarToggle({
     <div
       {...props}
       className={cn(
-        "visible opacity-100 transition-all duration-75",
+        "visible opacity-100 transition-[display,visibility,opacity] duration-75",
         {
-          "invisible opacity-0":
+          "invisible hidden opacity-0":
             (hideOn === "collapsed" && sidebar.state === "collapsed") ||
             (hideOn === "expanded" && sidebar.state === "expanded"),
         },
