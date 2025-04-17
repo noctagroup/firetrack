@@ -10,7 +10,8 @@ export type CookieStorageEventDetails<T> = {
   newValue: Nullable<T>
 }
 
-export class CookieStorage<TStorageDecoded, TStorageEncoded extends string = string>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class CookieStorage<TStorageDecoded = any, TStorageEncoded extends string = string>
   implements Storage<TStorageDecoded, TStorageEncoded>
 {
   static readonly eventType = "cookiechanged" as const
@@ -71,3 +72,5 @@ export class CookieStorage<TStorageDecoded, TStorageEncoded extends string = str
     )
   }
 }
+
+export const cookieStorage = new CookieStorage()

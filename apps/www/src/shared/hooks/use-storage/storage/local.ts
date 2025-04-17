@@ -1,6 +1,7 @@
 import type { Storage, Unsubscribe } from "~shared/hooks/use-storage/storage"
 
-export class LocalStorage<TStorageDecoded, TStorageEncoded extends string = string>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class LocalStorage<TStorageDecoded = any, TStorageEncoded extends string = string>
   implements Storage<TStorageDecoded, TStorageEncoded>
 {
   static readonly eventType = "storage" as const
@@ -59,3 +60,5 @@ export class LocalStorage<TStorageDecoded, TStorageEncoded extends string = stri
     )
   }
 }
+
+export const localStorage = new LocalStorage()
