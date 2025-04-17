@@ -4,4 +4,4 @@ export const Theme = {
   Dark: "dark",
 } as const
 
-export const PrefersDarkColorScheme = "(prefers-color-scheme: dark)"
+export const PrefersDarkColorScheme = "(prefers-color-scheme: dark)" as const

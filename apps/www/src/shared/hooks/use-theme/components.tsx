@@ -1,18 +1,20 @@
 import React from "react"
 
-import { useCookie } from "~shared/hooks/use-cookie"
+import { CookieStorage, useStorage } from "~shared/hooks/use-storage"
 import { ThemeContext, ThemeContextInitialState } from "~shared/hooks/use-theme/context"
 import { applyTheme } from "~shared/hooks/use-theme/core"
 import { useTheme } from "~shared/hooks/use-theme/hooks"
 import script from "~shared/hooks/use-theme/script?inline"
 import type { TTheme, TThemeContextProps, TThemeProviderProps } from "~shared/hooks/use-theme/types"
 
+const cookieStorage = new CookieStorage<TTheme>()
+
 export function ThemeProvider({
   children,
   defaultTheme = ThemeContextInitialState.defaultTheme,
   themeStorageKey = ThemeContextInitialState.themeStorageKey,
 }: TThemeProviderProps) {
-  const [theme, setTheme] = useCookie<TTheme>(themeStorageKey, defaultTheme)
+  const [theme, setTheme] = useStorage<TTheme>(themeStorageKey, defaultTheme, cookieStorage)
 
   const themeContext = React.useMemo<TThemeContextProps>(
     () => ({
