@@ -1,5 +1,6 @@
 import { FenomenoInset, FenomenoSidebar } from "~fenomeno/routes/_fenomeno/components"
-import { LocalStorage, useStorage } from "~shared/hooks/use-storage"
+import { useStorage } from "~shared/hooks/use-storage"
+import { LocalStorage } from "~shared/hooks/use-storage/storage/local"
 import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 
 // TODO: tornar global

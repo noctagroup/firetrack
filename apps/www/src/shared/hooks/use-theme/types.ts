@@ -4,7 +4,7 @@ export type TTheme = (typeof Theme)[keyof typeof Theme]
 
 export type TThemeContextProps = {
   theme: TTheme
-  setTheme: React.Dispatch<React.SetStateAction<TTheme>>
+  setTheme: React.Dispatch<React.SetStateAction<Nullable<TTheme>>>
   defaultTheme: TTheme
   themeStorageKey: string
 }

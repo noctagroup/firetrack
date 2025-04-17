@@ -1,4 +1,4 @@
-import type { CookieStorage, CookieStorageEvent } from "~shared/hooks/use-storage"
+import type { CookieStorage, CookieStorageEvent } from "~shared/hooks/use-storage/storage/cookie"
 
 export {}
 

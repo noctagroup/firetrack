@@ -1,6 +1,7 @@
 import React from "react"
 
-import { CookieStorage, useStorage } from "~shared/hooks/use-storage"
+import { useStorage } from "~shared/hooks/use-storage"
+import { CookieStorage } from "~shared/hooks/use-storage/storage/cookie"
 import { ThemeContext, ThemeContextInitialState } from "~shared/hooks/use-theme/context"
 import { applyTheme } from "~shared/hooks/use-theme/dom"
 import { useTheme } from "~shared/hooks/use-theme/hooks"
