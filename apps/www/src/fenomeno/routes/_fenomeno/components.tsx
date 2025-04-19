@@ -7,6 +7,7 @@ import {
   type LucideIcon,
   Megaphone,
   Moon,
+  Palette,
   PanelLeft,
   Sun,
   Waves,
@@ -43,9 +44,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~shared/lib/shadcn/ui/dropdown-menu"
 import { Separator } from "~shared/lib/shadcn/ui/separator"
@@ -230,25 +235,35 @@ export function FenomenoSidebar() {
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent side="top" align="start" className="min-w-60">
+              <DropdownMenuContent side="top" align="start" className="min-w-48">
                 <DropdownMenuLabel className="flex items-center gap-3 px-1 py-1.5 text-left text-sm">
                   <ContaDetails />
                 </DropdownMenuLabel>
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuLabel>Tema</DropdownMenuLabel>
+                <DropdownMenuLabel>Preferências</DropdownMenuLabel>
 
-                <DropdownMenuRadioGroup
-                  value={themeContext.theme}
-                  onValueChange={themeContext.setTheme as (value: string) => void}>
-                  {themes.map((theme) => (
-                    <DropdownMenuRadioItem key={theme.value} value={theme.value}>
-                      <theme.icon />
-                      {theme.title}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger className="gap-2">
+                    <Palette className="text-muted-foreground size-4" />
+                    Tema
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuRadioGroup
+                        value={themeContext.theme}
+                        onValueChange={themeContext.setTheme as (value: string) => void}>
+                        {themes.map((theme) => (
+                          <DropdownMenuRadioItem key={theme.value} value={theme.value}>
+                            <theme.icon className="text-muted-foreground size-4" />
+                            {theme.title}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
 
                 <DropdownMenuSeparator />
 
