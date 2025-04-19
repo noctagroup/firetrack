@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   AlignLeft,
   ChevronsUpDown,
-  ClockAlert,
   Computer,
   LogOut,
+  Megaphone,
   Moon,
   PanelLeft,
   Sun,
@@ -47,9 +47,7 @@ import {
   type SidebarContextProps,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -106,8 +104,8 @@ export function FenomenoSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="..">
-                    <ClockAlert />
-                    <span>Fenômenos</span>
+                    <Megaphone />
+                    Fenômenos
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -205,35 +203,34 @@ function FenomenoSidebarContaInfo() {
 }
 
 function FenomenoSidebarToggle({
+  className,
   hideOn,
   ...props
-}: React.HTMLAttributes<HTMLDivElement> & { hideOn: SidebarContextProps["state"] }) {
+}: React.ComponentProps<"button"> & { hideOn: SidebarContextProps["state"] }) {
   const sidebar = useSidebar()
+  const isHidden = sidebar.state === hideOn
 
   return (
-    <div
-      {...props}
-      className={cn(
-        "visible opacity-100 transition-[display,visibility,opacity] duration-75",
-        {
-          "invisible hidden opacity-0":
-            (hideOn === "collapsed" && sidebar.state === "collapsed") ||
-            (hideOn === "expanded" && sidebar.state === "expanded"),
-        },
-        props.className
-      )}>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button onClick={sidebar.toggleSidebar} className="size-8" size="icon" variant="link">
-            <PanelLeft className="size-5" />
-          </Button>
-        </TooltipTrigger>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          data-hidden={isHidden}
+          onClick={sidebar.toggleSidebar}
+          className={cn(
+            "size-8 transition transition-discrete duration-150 data-[hidden=true]:hidden data-[hidden=true]:opacity-0 starting:opacity-0",
+            className
+          )}
+          size="icon"
+          variant="ghost"
+          {...props}>
+          <PanelLeft className="size-5" />
+        </Button>
+      </TooltipTrigger>
 
-        <TooltipContent side="right" align="center">
-          Alternar painel lateral
-        </TooltipContent>
-      </Tooltip>
-    </div>
+      <TooltipContent side="right" align="center">
+        Alternar painel lateral
+      </TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -246,7 +243,7 @@ export function FenomenoInset() {
       <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
         {sidebar.isMobile && (
           <>
-            <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="ghost">
+            <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="link">
               <AlignLeft className="size-5" />
             </Button>
             <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
