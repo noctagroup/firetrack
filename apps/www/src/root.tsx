@@ -53,8 +53,8 @@ export async function clientLoader(args: Route.ClientLoaderArgs) {
   try {
     const conta = await queryClient.ensureQueryData(contaOptions.conta())
 
-    if (conta.is_authenticated && url.pathname !== "/") {
-      return replace("/")
+    if (conta.is_authenticated && !url.pathname.startsWith("/fenomeno")) {
+      return replace("/fenomeno")
     }
   } catch {
     if (!url.pathname.startsWith("/conta")) {

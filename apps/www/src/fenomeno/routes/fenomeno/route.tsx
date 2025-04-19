@@ -1,7 +1,8 @@
-import { FenomenoSidebar, FenomenoSidebarInset } from "~fenomeno/routes/_fenomeno/components"
 import { useStorage } from "~shared/hooks/use-storage"
 import { localStorage } from "~shared/hooks/use-storage/storage/local"
 import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
+
+import { FenomenoSidebar, FenomenoSidebarInset } from "./components"
 
 export default function Fenomeno() {
   const [sidebar, setSidebar] = useStorage<boolean>("sidebar", true, localStorage)

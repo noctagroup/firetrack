@@ -25,7 +25,6 @@ import {
 } from "react-router"
 
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
-import { initials } from "~fenomeno/routes/_fenomeno/utils"
 import { Theme, useTheme } from "~shared/hooks/use-theme"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
 import {
@@ -72,12 +71,14 @@ import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
 import { cn } from "~shared/lib/shadcn/utils"
 
+import { initials } from "./utils"
+
 const navLinks = [
   {
     icon: Megaphone,
     title: "Fenômenos",
     tooltip: "Fenômenos",
-    to: "..",
+    to: ".",
   },
 ] as const satisfies {
   icon: LucideIcon
@@ -167,7 +168,7 @@ export function FenomenoSidebar() {
     ...contaMutations.sair(),
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: contaKeys.conta() })
-      navigate("/")
+      navigate("/conta")
     },
   })
 
