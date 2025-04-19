@@ -25,7 +25,6 @@ import {
 } from "react-router"
 
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
-import { SIDEBAR_ID } from "~fenomeno/constants"
 import { initials } from "~fenomeno/routes/_fenomeno/utils"
 import { Theme, useTheme } from "~shared/hooks/use-theme"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
@@ -177,7 +176,7 @@ export function FenomenoSidebar() {
   }
 
   return (
-    <Sidebar id={SIDEBAR_ID} collapsible="icon">
+    <Sidebar collapsible="icon">
       <SidebarHeader className="relative h-12 flex-row items-center border-b p-2">
         <Link to="/">
           <Waves className="size-8" />
@@ -304,11 +303,11 @@ function ContaDetails() {
       </Avatar>
 
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-semibold">
+        <span className="truncate font-medium">
           {contaQuery.data.full_name || contaQuery.data.username}
         </span>
 
-        <span className="truncate text-xs">{contaQuery.data.email}</span>
+        <span className="text-muted-foreground truncate text-xs">{contaQuery.data.email}</span>
       </div>
     </React.Fragment>
   )
