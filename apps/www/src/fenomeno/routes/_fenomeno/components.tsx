@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   AlignLeft,
   ChevronsUpDown,
+  ClockAlert,
   Computer,
   LogOut,
   Moon,
@@ -12,7 +13,7 @@ import {
 } from "lucide-react"
 import React from "react"
 import { Fragment } from "react/jsx-runtime"
-import { Link, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
+import { Link, NavLink, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
 
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
@@ -45,6 +46,10 @@ import {
   SidebarContent,
   type SidebarContextProps,
   SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -94,7 +99,22 @@ export function FenomenoSidebar() {
         )}
       </SidebarHeader>
 
-      <SidebarContent />
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="..">
+                    <ClockAlert />
+                    <span>Fenômenos</span>
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
 
       <SidebarFooter className="border-t">
         {!sidebar.isMobile && <FenomenoSidebarToggle hideOn="expanded" />}
