@@ -126,6 +126,7 @@ export default function ContaCadastrar() {
 
           <FormField
             control={form.control}
+            // TODO: melhorar a ux de exibição de erros pra esse componente, já que a senha pode ter mais de 1 erro diferente simultaneamente.
             name="password"
             render={(props) => (
               <FormItem>
