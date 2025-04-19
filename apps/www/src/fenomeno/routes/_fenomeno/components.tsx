@@ -4,6 +4,7 @@ import {
   ChevronsUpDown,
   Computer,
   LogOut,
+  type LucideIcon,
   Megaphone,
   Moon,
   PanelLeft,
@@ -12,8 +13,15 @@ import {
   X,
 } from "lucide-react"
 import React from "react"
-import { Fragment } from "react/jsx-runtime"
-import { Link, NavLink, Outlet, type UIMatch, useMatches, useNavigate } from "react-router"
+import {
+  Link,
+  Outlet,
+  resolvePath,
+  type UIMatch,
+  useLocation,
+  useMatches,
+  useNavigate,
+} from "react-router"
 
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
 import { SIDEBAR_ID } from "~fenomeno/constants"
@@ -64,8 +72,15 @@ const navLinks = [
   {
     icon: Megaphone,
     title: "Fenômenos",
+    tooltip: "Fenômenos",
+    to: "..",
   },
-]
+] as const satisfies {
+  icon: LucideIcon
+  title: string
+  tooltip: string
+  to: string
+}[]
 
 const themes = [
   {
@@ -83,9 +98,10 @@ const themes = [
     title: "Escuro",
     value: Theme.Dark,
   },
-]
+] as const satisfies { icon: LucideIcon; value: string; title: string }[]
 
 export function FenomenoSidebar() {
+  const location = useLocation()
   const sidebar = useSidebar()
   const themeContext = useTheme()
   const navigate = useNavigate()
@@ -126,16 +142,23 @@ export function FenomenoSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navLinks.map((navLink, navLinkIndex) => (
-                <SidebarMenuItem key={navLinkIndex}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="..">
-                      <navLink.icon />
-                      {navLink.title}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navLinks.map((navLink, navLinkIndex) => {
+                const resolvedPath = resolvePath(navLink.to)
+
+                return (
+                  <SidebarMenuItem key={navLinkIndex}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={resolvedPath.pathname === location.pathname}
+                      tooltip={navLink.tooltip}>
+                      <Link to={navLink.to}>
+                        <navLink.icon />
+                        {navLink.title}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -179,7 +202,7 @@ export function FenomenoSidebar() {
                 <DropdownMenuGroup>
                   <DropdownMenuItem onClick={handleSair}>
                     <LogOut />
-                    <span>Sair</span>
+                    Sair
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
@@ -282,7 +305,7 @@ export function FenomenoInset() {
               const lastMatchIndex = matches.length - 1
 
               return (
-                <Fragment key={matchIndex}>
+                <React.Fragment key={matchIndex}>
                   {matchIndex > 1 && <BreadcrumbSeparator className="hidden md:block" />}
 
                   <BreadcrumbItem>
@@ -294,7 +317,7 @@ export function FenomenoInset() {
                       </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>
-                </Fragment>
+                </React.Fragment>
               )
             })}
           </BreadcrumbList>
