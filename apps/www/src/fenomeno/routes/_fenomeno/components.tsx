@@ -60,6 +60,31 @@ import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
 import { cn } from "~shared/lib/shadcn/utils"
 
+const navLinks = [
+  {
+    icon: Megaphone,
+    title: "Fenômenos",
+  },
+]
+
+const themes = [
+  {
+    icon: Computer,
+    title: "Sistema",
+    value: Theme.System,
+  },
+  {
+    icon: Sun,
+    title: "Claro",
+    value: Theme.Light,
+  },
+  {
+    icon: Moon,
+    title: "Escuro",
+    value: Theme.Dark,
+  },
+]
+
 export function FenomenoSidebar() {
   const sidebar = useSidebar()
   const themeContext = useTheme()
@@ -101,14 +126,16 @@ export function FenomenoSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="..">
-                    <Megaphone />
-                    Fenômenos
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {navLinks.map((navLink, navLinkIndex) => (
+                <SidebarMenuItem key={navLinkIndex}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="..">
+                      <navLink.icon />
+                      {navLink.title}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -139,18 +166,12 @@ export function FenomenoSidebar() {
                 <DropdownMenuRadioGroup
                   value={themeContext.theme}
                   onValueChange={themeContext.setTheme as (value: string) => void}>
-                  <DropdownMenuRadioItem value={Theme.System}>
-                    <Computer />
-                    Sistema
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value={Theme.Light}>
-                    <Sun />
-                    Claro
-                  </DropdownMenuRadioItem>
-                  <DropdownMenuRadioItem value={Theme.Dark}>
-                    <Moon />
-                    Escuro
-                  </DropdownMenuRadioItem>
+                  {themes.map((theme) => (
+                    <DropdownMenuRadioItem key={theme.value} value={theme.value}>
+                      <theme.icon />
+                      {theme.title}
+                    </DropdownMenuRadioItem>
+                  ))}
                 </DropdownMenuRadioGroup>
 
                 <DropdownMenuSeparator />
