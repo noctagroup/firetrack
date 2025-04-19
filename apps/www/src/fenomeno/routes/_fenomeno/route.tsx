@@ -1,4 +1,4 @@
-import { FenomenoInset, FenomenoSidebar } from "~fenomeno/routes/_fenomeno/components"
+import { FenomenoSidebar, FenomenoSidebarInset } from "~fenomeno/routes/_fenomeno/components"
 import { useStorage } from "~shared/hooks/use-storage"
 import { localStorage } from "~shared/hooks/use-storage/storage/local"
 import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
@@ -9,7 +9,7 @@ export default function Fenomeno() {
   return (
     <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
       <FenomenoSidebar />
-      <FenomenoInset />
+      <FenomenoSidebarInset />
     </SidebarProvider>
   )
 }
