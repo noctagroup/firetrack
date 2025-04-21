@@ -13,7 +13,7 @@ import {
   Waves,
   X,
 } from "lucide-react"
-import React from "react"
+import React, { useMemo } from "react"
 import {
   Link,
   Outlet,
@@ -70,6 +70,7 @@ import {
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
 import { cn } from "~shared/lib/shadcn/utils"
+import { isNil } from "~shared/utils/is"
 
 import { initials } from "./utils"
 
@@ -108,6 +109,10 @@ const themes = [
 export function FenomenoSidebarInset() {
   const sidebar = useSidebar()
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
+  const lastMatchWithBreadcrumbIndex = useMemo(
+    () => matches.findLastIndex((match) => !isNil(match.handle?.breadcrumb)),
+    [matches]
+  )
 
   return (
     <SidebarInset>
@@ -129,14 +134,13 @@ export function FenomenoSidebarInset() {
               }
 
               const breadcrumb = match.handle.breadcrumb
-              const lastMatchIndex = matches.length - 1
 
               return (
                 <React.Fragment key={matchIndex}>
                   {matchIndex > 1 && <BreadcrumbSeparator className="hidden md:block" />}
 
                   <BreadcrumbItem>
-                    {matchIndex === lastMatchIndex ? (
+                    {matchIndex === lastMatchWithBreadcrumbIndex ? (
                       <BreadcrumbPage>{breadcrumb}</BreadcrumbPage>
                     ) : (
                       <BreadcrumbLink asChild className="hidden md:block">
@@ -201,13 +205,13 @@ export function FenomenoSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               {navLinks.map((navLink, navLinkIndex) => {
-                const resolvedPath = resolvePath(navLink.to)
+                const resolvedPath = resolvePath(navLink.to, location.pathname)
 
                 return (
                   <SidebarMenuItem key={navLinkIndex}>
                     <SidebarMenuButton
                       asChild
-                      isActive={resolvedPath.pathname === location.pathname}
+                      isActive={location.pathname.startsWith(resolvedPath.pathname)}
                       tooltip={navLink.tooltip}>
                       <Link to={navLink.to}>
                         <navLink.icon />

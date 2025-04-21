@@ -1,7 +1,12 @@
-export default function FenomenoIndex() {
-  return <div className="container mx-auto"></div>
-}
+import React from "react"
 
-export const handle = {
-  breadcrumb: "Queimadas",
+import { Mapbox } from "~fenomeno/components/mapbox"
+import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
+
+export default function FenomenoIndex() {
+  return (
+    <React.Suspense fallback={<Skeleton className="h-full" />}>
+      <Mapbox />
+    </React.Suspense>
+  )
 }
