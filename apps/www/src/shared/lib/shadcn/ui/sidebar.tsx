@@ -7,7 +7,13 @@ import { useIsMobile } from "~shared/hooks/use-mobile"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import { Input } from "~shared/lib/shadcn/ui/input"
 import { Separator } from "~shared/lib/shadcn/ui/separator"
-import { Sheet, SheetContent } from "~shared/lib/shadcn/ui/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "~shared/lib/shadcn/ui/sheet"
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
 import {
   Tooltip,
@@ -176,6 +182,10 @@ function Sidebar({
             } as React.CSSProperties
           }
           side={side}>
+          <SheetHeader className="sr-only">
+            <SheetTitle>Sidebar</SheetTitle>
+            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+          </SheetHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
         </SheetContent>
       </Sheet>
