@@ -40,9 +40,8 @@ ALLOWED_HOSTS = config(
 # CSRF
 CSRF_COOKIE_DOMAIN = config(
     "DJANGO_CSRF_COOKIE_DOMAIN",
-    default=None,
-    # HACK: para não transformar None em 'None'
-    cast=lambda value: str(value) if value is not None else value,
+    default=".localhost",
+    cast=str,
 )
 CSRF_TRUSTED_ORIGINS = config(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
@@ -149,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "UTC"
 
