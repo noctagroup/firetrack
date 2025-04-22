@@ -30,9 +30,9 @@
 Cada entrega foi realizada a partir da criação de uma branch neste repositório com um relatório completo de tudo o que foi desenvolvido naquela sprint. Observe a relação a seguir:
 | Sprint | Previsão de entrega | Status           | Histórico |
 |:--:|:----------:|:-------------------|:-------------------------------------------------:|
-| 01 | 22/04/2025 | ✔️ Concluída      |  [ver relatório]() |
-| 02 | -- | ✔️ Concluída    | [ver relatório]() | 
-| 03 | -- | ✔️ Concluída |  [ver relatório]() |
+| 01 | 22/04/2025 | **Em andamento** 🚧    |  [ver relatório](https://github.com/noctagroup/firetrack/tree/Sprint01) |
+| 02 | -- |     | [ver relatório]() | 
+| 03 | -- |  |  [ver relatório]() |
 
 
 → [Voltar ao topo](#topo)
