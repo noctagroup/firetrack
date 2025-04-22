@@ -1,78 +1,62 @@
-# firetrack
+<span id="topo">
 
-## como rodar o projeto?
+<h1 align="center">Sprint 1: entrega 22/04/2025</h1>
 
-### api
+<p align="center">
+    <a href="#objetivos">Objetivos da sprint</a> &nbsp |&nbsp &nbsp
+    <a href="#Resumo do trabalho da equipe">Resumo do trabalho da equipe</a> &nbsp |&nbsp &nbsp
+    <a href="#entregas">Entregas</a> &nbsp |&nbsp &nbsp
+    <a href="#documentação"> análise de requisitos</a>
+</p>
 
-pré-requisitos:
 
-- UV: <https://docs.astral.sh/uv/getting-started/installation/>
-- Docker Engine: <https://docs.docker.com/engine/install/>
+<span id="objetivos">
+    
+## :dart: Objetivos da Sprint
+- Prototipação
+- Elaboração do fluxo de processamento
+- metodologia de classificação  
+- Login
+- plataforma de desenvolvimento
 
-```sh
-docker compose up -d postgis
-cd apps/api
-uv sync
-uv venv
-source .venv/bin/activate
-uv run python manage.py migrate
-uv run python manage.py runserver
+
+
+<span id="Resumo do trabalho da equipe">
+    
+## :chart_with_upwards_trend: Resumo do trabalho da equipe
+
+
+- Empregamos o Kanban como uma ferramenta de gestão de tarefas.
+
+<img src="https://github.com/noctagroup/firetrack/blob/Doc/img/Kanban.jpg" /> 
+
+
+-Também empregamos o gráfico de burndown como uma ferramenta de gestão temporal para nossas entregas. Por meio disso, obtemos uma perspectiva abrangente do projeto, permitindo-nos identificar possíveis pontos de estrangulamento e corrigi-los antes que possam resultar em erros mais significativos.
+
+<img src="https://github.com/TerraGeoManager/TerraGeoManager/blob/main/img/RS/b78ca114-d689-415d-a224-d41f97a78a47.jpg" /> 
+
+
+
+
+
+
+→ [Voltar ao topo](#topo)
+    
+<span id="entregas">
+        
+## :rocket: Entregas
 ```
-
-### web
-
-pré-requisitos:
-
-- NVM: <https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script>
-
-```sh
-cd apps/www
-nvm install
-nvm use
-npm install
-npm run dev
+https://youtu.be/tKvCl0gpXMk
 ```
+<a href="https://youtu.be/tKvCl0gpXMk"><strong>Assista o video da sprint review clicando aqui </strong></a> 
 
-## como fazer o deploy?
-
-### rodar a máquina na digital ocean
-
-1. provisionar a máquina
-
-2. instalar o metrics agent <https://docs.digitalocean.com/products/monitoring/how-to/install-agent/>
-
-3. instalar o docker engine <https://docs.docker.com/engine/install/ubuntu/> e o postinstall também <https://docs.docker.com/engine/install/linux-postinstall/>
-
-4. subir o nginx
-
-> NOTA FUNDAMENTAL: se você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/*.conf`
-
-```sh
-docker compose --file compose.prod.yaml up --detach nginx
-
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach app.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
-
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach api.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
-
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach docs.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
-
-docker compose --file compose.prod.yaml up --detach --build
+ithub.com/TerraGeoManager/frontend
 ```
+→ [Voltar ao topo](#topo)    
+    
+<span id="documentação">
+    
 
-### limpar a máquina
 
-tome **extremo cuidado** ao limpar os **volumes**, por que pode deletar todos os dados dentro do banco.
 
-```sh
-docker system prune --all --force
-docker volume prune --all --force
-```
+→ [Voltar ao topo](#topo)
