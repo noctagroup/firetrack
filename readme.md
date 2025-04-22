@@ -56,9 +56,6 @@ Cada entrega foi realizada a partir da criação de uma branch neste repositóri
 | RF-09  | Funcional  | Acessar Metadados do Processamento     | O sistema deve permitir acessar os metadados do processamento, incluindo data, área analisada e detalhes das imagens utilizadas.                       |
 
 
-###  Planejamento Das Sprints
-![banner]()
-
 
 → [Voltar ao topo](#topo)
     
@@ -95,6 +92,7 @@ As seguintes ferramentas, linguagens, bibliotecas e tecnologias foram usadas na 
 |  Product Owner  | João Vitor Cabral Procópio |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://linkedin.com/in/joao-procopio) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/joaoprocopio)      |
 |  Dev Team   | Beatriz Roberto Montanini  |           [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/beatriz-montanini-b69b451b9/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/BiaMontanini)   
 |  Dev Team  | Flavio Eduardo Linguanotto |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/flavio-linguanotto-b587361a4/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/linguanotto)      |
+|  Dev Team  | Gabriel Henrique Siqueira Pinto |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/gabriel-siqueira-54b535279/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/gaSiqueira)      |
 
     
 → [Voltar ao topo](#topo)
