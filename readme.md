@@ -1,6 +1,6 @@
 <span id="topo">
 
-<h1 align="center">Sprint 1: entrega 22/04/2025</h1>
+<h1 align="center">Sprint 1: Entrega 22/04/2025</h1>
 
 <p align="center">
     <a href="#objetivos">Objetivos da sprint</a> &nbsp |&nbsp &nbsp
