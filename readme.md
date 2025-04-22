@@ -41,11 +41,20 @@ Cada entrega foi realizada a partir da criação de uma branch neste repositóri
 
 ## 🎯 Backlogs, Épicos & User Stories
 
-###  Requisitos
-![banner]()
+## 📋 Requisitos Funcionais - Backlog de Processamento de Imagens
 
-###  Epic, User Store
-![banner]() 
+| ID     | Tipo       | Nome da Funcionalidade                 | Descrição                                                                                                                                              |
+|--------|------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| RF-01  | Funcional  | Iniciar Análise de Imagens             | O sistema deve permitir confirmar um processamento para iniciar a análise das imagens.                                                                 |
+| RF-02  | Funcional  | Visualizar Imagens Filtradas           | O sistema deve permitir visualizar as imagens filtradas pelas opções passadas na criação do processamento para escolha das imagens candidatas.         |
+| RF-03  | Funcional  | Selecionar Imagens Candidatas          | O sistema deve permitir selecionar as melhores imagens candidatas ao processamento.                                                                    |
+| RF-04  | Funcional  | Classificação Automática               | O sistema deve iniciar automaticamente a classificação das cicatrizes de queimadas após o pré-processamento.                                           |
+| RF-05  | Funcional  | Acompanhar Status do Processamento     | O sistema deve permitir acompanhar o status do processamento em tempo real para saber quando os resultados estarão prontos.                            |
+| RF-06  | Funcional  | Visualizar Vetores Classificados       | O sistema deve permitir visualizar os vetores gerados após a classificação ser concluída.                                                              |
+| RF-07  | Funcional  | Mapa Interativo com Resultados         | O sistema deve permitir visualizar os resultados do processamento diretamente em um mapa interativo.                                                   |
+| RF-08  | Funcional  | Download dos Vetores                   | O sistema deve permitir baixar os vetores das cicatrizes de queimadas para análise offline.                                                             |
+| RF-09  | Funcional  | Acessar Metadados do Processamento     | O sistema deve permitir acessar os metadados do processamento, incluindo data, área analisada e detalhes das imagens utilizadas.                       |
+
 
 ###  Planejamento Das Sprints
 ![banner]()
