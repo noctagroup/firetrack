@@ -1,78 +1,91 @@
-# firetrack
+<span id="topo">
+<div align="center">
+    
+![banner]()
 
-## como rodar o projeto?
+</div>
+    
+<p align="center">
+    <a href="#sobre">Sobre</a>  |  
+    <a href="#backlogs">Backlogs</a>  |  
+    <a href="#tecnologias">Tecnologias</a>  |  
+    <a href="#equipe">Equipe</a>
+</p>    
+    
+<span id="sobre">
+    
+## 📑 Sobre o projeto
 
-### api
 
-pré-requisitos:
 
-- UV: <https://docs.astral.sh/uv/getting-started/installation/>
-- Docker Engine: <https://docs.docker.com/engine/install/>
 
-```sh
-docker compose up -d postgis
-cd apps/api
-uv sync
-uv venv
-source .venv/bin/activate
-uv run python manage.py migrate
-uv run python manage.py runserver
-```
+> _Projeto baseado na metodologia ágil SCRUM, procurando desenvolver a Proatividade, Autonomia, Colaboração e Entrega de Resultados dos estudantes envolvidos_
+    
 
-### web
+<a href="">📌<strong>Documentação</strong></a>   
 
-pré-requisitos:
+📌Status do Projeto: **Em andamento** 🚧
 
-- NVM: <https://github.com/nvm-sh/nvm?tab=readme-ov-file#install--update-script>
+### 🏁 Entregas de Sprints
+Cada entrega foi realizada a partir da criação de uma branch neste repositório com um relatório completo de tudo o que foi desenvolvido naquela sprint. Observe a relação a seguir:
+| Sprint | Previsão de entrega | Status           | Histórico |
+|:--:|:----------:|:-------------------|:-------------------------------------------------:|
+| 01 | 22/04/2025 | ✔️ Concluída      |  [ver relatório]() |
+| 02 | -- | ✔️ Concluída    | [ver relatório]() | 
+| 03 | -- | ✔️ Concluída |  [ver relatório]() |
 
-```sh
-cd apps/www
-nvm install
-nvm use
-npm install
-npm run dev
-```
 
-## como fazer o deploy?
+→ [Voltar ao topo](#topo)
 
-### rodar a máquina na digital ocean
+<span id="backlogs">
 
-1. provisionar a máquina
+## 🎯 Backlogs, Épicos & User Stories
 
-2. instalar o metrics agent <https://docs.digitalocean.com/products/monitoring/how-to/install-agent/>
+###  Requisitos
+![banner]()
 
-3. instalar o docker engine <https://docs.docker.com/engine/install/ubuntu/> e o postinstall também <https://docs.docker.com/engine/install/linux-postinstall/>
+###  Epic, User Store
+![banner]() 
 
-4. subir o nginx
+###  Planejamento Das Sprints
+![banner]()
 
-> NOTA FUNDAMENTAL: se você estiver subindo pela primeira vez, precisa comentar todos os `server { listen 443 ssl ... }` dentro de `devops/nginx/*.conf`
 
-```sh
-docker compose --file compose.prod.yaml up --detach nginx
+→ [Voltar ao topo](#topo)
+    
+<span id="tecnologias">
 
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach app.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
+## 🛠️ Tecnologias
 
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach api.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
+As seguintes ferramentas, linguagens, bibliotecas e tecnologias foram usadas na construção do projeto:
 
-docker compose --file compose.prod.yaml run --rm --entrypoint certbot \
-    certbot certonly --webroot -w /var/www/certbot \
-    --detach docs.firetrack.nocta-software-dsm.com \
-    --email joaovitorcprocopio@gmail.com --agree-tos --no-eff-email
 
-docker compose --file compose.prod.yaml up --detach --build
-```
+![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
+![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
-### limpar a máquina
+![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Canva](https://img.shields.io/badge/Canva-%2300C4CC.svg?style=for-the-badge&logo=Canva&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Jest](https://img.shields.io/badge/-jest-%23C21325?style=for-the-badge&logo=jest&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 
-tome **extremo cuidado** ao limpar os **volumes**, por que pode deletar todos os dados dentro do banco.
 
-```sh
-docker system prune --all --force
-docker volume prune --all --force
-```
+→ [Voltar ao topo](#topo)
+
+<span id="equipe">
+
+ ## 👥 Equipe  
+    
+|    Função     | Nome                                  |                                                                                                                                                      LinkedIn & GitHub                                                                                                                                                      |
+| :-----------: | :------------------------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+|  Scrum Master   | Otavio Lucas Abreu  |  [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/o-abreu/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/otavioabreu27)|            |
+|  Product Owner  | |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)]() [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)]()      |
+|  Dev Team   | Beatriz Roberto Montanini  |           [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/beatriz-montanini-b69b451b9/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/BiaMontanini)   
+|  Dev Team  | Flavio Eduardo Linguanotto |      [![Linkedin Badge](https://img.shields.io/badge/Linkedin-blue?style=flat-square&logo=Linkedin&logoColor=white)](https://www.linkedin.com/in/flavio-linguanotto-b587361a4/) [![GitHub Badge](https://img.shields.io/badge/GitHub-111217?style=flat-square&logo=github&logoColor=white)](https://github.com/linguanotto)      |
+
+    
+→ [Voltar ao topo](#topo)
