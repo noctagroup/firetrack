@@ -50,13 +50,3 @@ https://youtu.be/tKvCl0gpXMk
 ```
 <a href="https://youtu.be/tKvCl0gpXMk"><strong>Assista o video da sprint review clicando aqui </strong></a> 
 
-ithub.com/TerraGeoManager/frontend
-```
-→ [Voltar ao topo](#topo)    
-    
-<span id="documentação">
-    
-
-
-
-→ [Voltar ao topo](#topo)
