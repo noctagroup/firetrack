@@ -6,7 +6,7 @@
     <a href="#objetivos">Objetivos da sprint</a> &nbsp |&nbsp &nbsp
     <a href="#Resumo do trabalho da equipe">Resumo do trabalho da equipe</a> &nbsp |&nbsp &nbsp
     <a href="#entregas">Entregas</a> &nbsp |&nbsp &nbsp
-    <a href="#documentação"> análise de requisitos</a>
+
 </p>
 
 
