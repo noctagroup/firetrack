@@ -236,4 +236,5 @@ const PasswordErrorTypeMessage: Record<string, string> = {
   password_too_similar: "Esta senha tem muita similaridade com os outros campos",
   password_too_short: "Esta senha é muito curta",
   password_too_common: "Esta senha é muito comum",
+  password_entirely_numeric: "A senha não deve ser completamente numérica",
 }
