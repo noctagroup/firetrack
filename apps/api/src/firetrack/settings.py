@@ -116,7 +116,7 @@ WSGI_APPLICATION = "firetrack.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("DJANGO_POSTGIS_DB", default="postgres", cast=str),
         "USER": config("DJANGO_POSTGIS_USER", default="postgres", cast=str),
         "PASSWORD": config("DJANGO_POSTGIS_PASSWORD", default="postgres", cast=str),
@@ -167,3 +167,4 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+APPEND_SLASH=False
