@@ -5,6 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+import firetrack.fenomeno.serializers as serializer
 import firetrack.fenomeno.services as services
 
 
@@ -16,7 +17,7 @@ def create_fenomeno(request: WSGIRequest):
 
     fenomeno = services.create_and_start_fenomeno(request.user)
 
-    return JsonResponse({"id": fenomeno.id, "status": fenomeno.state})
+    return JsonResponse(serializer.serialize_fenomeno_to_status_and_id(fenomeno))
 
 
 def fenomeno_index(_):

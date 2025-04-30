@@ -5,8 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.utils import IntegrityError
 from django.http.response import HttpResponse, JsonResponse
-from django.views.decorators.http import require_GET, require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
 
 from firetrack.conta import forms, serializers, services
