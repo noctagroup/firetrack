@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.handlers.wsgi import WSGIRequest
 from django.db.utils import IntegrityError
 from django.http.response import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
 
@@ -23,6 +24,7 @@ def conta(request: WSGIRequest):
 
 
 @require_POST
+@csrf_exempt
 def entrar(request: WSGIRequest):
     if request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
@@ -54,6 +56,7 @@ def entrar(request: WSGIRequest):
 
 
 @require_POST
+@csrf_exempt
 def cadastrar(request: WSGIRequest):
     if request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)

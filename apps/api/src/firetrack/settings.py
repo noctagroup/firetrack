@@ -40,9 +40,8 @@ ALLOWED_HOSTS = config(
 # CSRF
 CSRF_COOKIE_DOMAIN = config(
     "DJANGO_CSRF_COOKIE_DOMAIN",
-    default=None,
-    # HACK: para não transformar None em 'None'
-    cast=lambda value: str(value) if value is not None else value,
+    default=".localhost",
+    cast=str,
 )
 CSRF_TRUSTED_ORIGINS = config(
     "DJANGO_CSRF_TRUSTED_ORIGINS",
@@ -117,7 +116,7 @@ WSGI_APPLICATION = "firetrack.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": config("DJANGO_POSTGIS_DB", default="postgres", cast=str),
         "USER": config("DJANGO_POSTGIS_USER", default="postgres", cast=str),
         "PASSWORD": config("DJANGO_POSTGIS_PASSWORD", default="postgres", cast=str),
@@ -149,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 
 TIME_ZONE = "UTC"
 
@@ -168,3 +167,4 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+APPEND_SLASH=False

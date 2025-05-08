@@ -3,6 +3,7 @@ import { Waves } from "lucide-react"
 import { Links, Meta, Outlet, replace, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
+import faviconUrl from "~shared/assets/favicon.svg?url"
 import { ThemeProvider, ThemeProviderScript } from "~shared/hooks/use-theme"
 import { queryClient } from "~shared/lib/query/client"
 import { Toaster } from "~shared/lib/shadcn/ui/sonner"
@@ -12,6 +13,12 @@ import type { Route } from "./+types/root"
 
 export function links() {
   return [
+    {
+      rel: "icon",
+      type: "image/svg+xml",
+      sizes: "any",
+      href: faviconUrl,
+    },
     {
       rel: "stylesheet",
       href: tailwindUrl,
@@ -46,8 +53,8 @@ export async function clientLoader(args: Route.ClientLoaderArgs) {
   try {
     const conta = await queryClient.ensureQueryData(contaOptions.conta())
 
-    if (conta.is_authenticated && url.pathname !== "/") {
-      return replace("/")
+    if (conta.is_authenticated && !url.pathname.startsWith("/fenomeno")) {
+      return replace("/fenomeno")
     }
   } catch {
     if (!url.pathname.startsWith("/conta")) {

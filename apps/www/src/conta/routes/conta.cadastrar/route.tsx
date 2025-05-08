@@ -126,6 +126,7 @@ export default function ContaCadastrar() {
 
           <FormField
             control={form.control}
+            // TODO: melhorar a ux de exibição de erros pra esse componente, já que a senha pode ter mais de 1 erro diferente simultaneamente.
             name="password"
             render={(props) => (
               <FormItem>
@@ -175,7 +176,7 @@ function handleFormSuccess(
   navigate: NavigateFunction
 ) {
   queryClient.setQueryData(contaKeys.conta(), data)
-  navigate("/")
+  navigate("/fenomeno")
 }
 
 function handleFormError(error: Error, form: UseFormReturn<TCadastrarForm>) {
@@ -235,4 +236,5 @@ const PasswordErrorTypeMessage: Record<string, string> = {
   password_too_similar: "Esta senha tem muita similaridade com os outros campos",
   password_too_short: "Esta senha é muito curta",
   password_too_common: "Esta senha é muito comum",
+  password_entirely_numeric: "A senha não deve ser completamente numérica",
 }
