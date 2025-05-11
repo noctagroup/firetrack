@@ -1,19 +1,14 @@
-from http import HTTPStatus
 import json
-from datetime import datetime, time
+from http import HTTPStatus
 
-from django.core.handlers.wsgi import WSGIRequest
 from django.core.exceptions import PermissionDenied
+from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST, require_GET, require_http_methods
+from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
-from firetrack import fenomeno
-from firetrack.fenomeno.models import Fenomeno
 import firetrack.fenomeno.serializers as serializer
 import firetrack.fenomeno.services as services
-from firetrack.fenomeno.state import FenomenoFSM
 
 
 @require_POST
@@ -27,17 +22,14 @@ def create_fenomeno(request: WSGIRequest):
     return JsonResponse(serializer.serialize_fenomeno_to_status_and_id(fenomeno))
 
 @require_GET
-@csrf_exempt
 def get_fenomenos(request: WSGIRequest):
     if not request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
     
     data = services.list_user_fenomenos(request.user)
-    return JsonResponse({"fenomenos": data}, status=HTTPStatus.OK)
-
+    return JsonResponse(serializer.serialize_fenomenos_to_admin_info(data))
 
 @require_http_methods(["PATCH"])
-@csrf_exempt
 def update_fenomeno_period(request: WSGIRequest, queimadas_id: int):
     if not request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)

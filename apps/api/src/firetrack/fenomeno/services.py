@@ -1,18 +1,13 @@
-from datetime import datetime, time
+from datetime import datetime
+from typing import List
 
 from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import get_object_or_404
 
+from firetrack.core.exceptions import InvalidDateFormat, InvalidDateRange
 from firetrack.fenomeno.models import Fenomeno
 from firetrack.fenomeno.state import FenomenoFSM
-
-
-class InvalidDateFormat(Exception):
-    pass
-
-class InvalidDateRange(Exception):
-    pass
 
 
 def create_and_start_fenomeno(user: User) -> Fenomeno:
@@ -23,28 +18,10 @@ def create_and_start_fenomeno(user: User) -> Fenomeno:
 
     return fenomeno
 
-def list_user_fenomenos(user):
+def list_user_fenomenos(user: User) -> List[Fenomeno]:
     fenomenos = Fenomeno.objects.filter(user=user).order_by('-created_at')
 
-    def format_datetime(d, end=False):
-        if not d:
-            return None
-        t = time.max if end else time.min
-        dt = datetime.combine(d, t)
-        return dt.isoformat(timespec='seconds') + 'Z'
-
-    return [
-        {
-            "id": f.id,
-            "state": f.state,
-            "product_name": f.product_name,
-            "filter_start_date": format_datetime(f.filter_start_date),
-            "filter_end_date": format_datetime(f.filter_end_date, end=True),
-            "created_at": f.created_at.isoformat(timespec='seconds') + 'Z',
-            "updated_at": f.updated_at.isoformat(timespec='seconds') + 'Z',
-        }
-        for f in fenomenos
-    ]
+    return fenomenos
 
 def update_fenomeno_period(user, queimadas_id, start_date_str, end_date_str) -> Fenomeno:
     fenomeno = get_object_or_404(Fenomeno, id=queimadas_id)
