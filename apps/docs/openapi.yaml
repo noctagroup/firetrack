@@ -2,12 +2,12 @@ openapi: "3.1.0"
 
 info:
   title: Firetracker Backend
+  version: 0.0.1
   contact:
     email: otavio.abreu96@gmail.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  version: 0.0.1
 
 servers:
   - url: https://api.firetrack.nocta-software-dsm.com
@@ -18,12 +18,13 @@ tags:
     description: Módulo responsável pela autenticação, autorização e gerenciamento de contas dos usuários.
   - name: fenomeno
     description: Módulo responsável pelo processamento de fenomenos, como o de Queimadas.
+  - name: produto
+    description: Módulo responsável por listar produtos disponíveis na STAC API do INPE e registrar produtos utilizados na aplicação.
 
 paths:
   /conta:
     get:
-      tags:
-        - conta
+      tags: [conta]
       summary: Consulta se o usuário atual está logado.
       responses:
         "200":
@@ -37,8 +38,7 @@ paths:
 
   /conta/entrar:
     post:
-      tags:
-        - conta
+      tags: [conta]
       summary: Realiza o login.
       requestBody:
         required: true
@@ -47,18 +47,12 @@ paths:
           application/json:
             schema:
               type: object
+              required: [query, password]
               properties:
                 query:
                   type: string
-                  examples:
-                    - "otavio.abreu92@gmail.com"
-                    - "otavio.abreu92"
                 password:
                   type: string
-                  example: "test123test456"
-              required:
-                - query
-                - password
       responses:
         "200":
           description: Sucesso. O usuário foi logado.
@@ -69,88 +63,121 @@ paths:
 
   /conta/cadastrar:
     post:
-      tags:
-        - conta
+      tags: [conta]
       summary: Cadastra um novo usuário.
-      responses:
-        "201":
-          description: Sucesso. O usuário foi registrado e logado.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  username:
-                    type: string
-                    example: "otavio.abreu92"
-                  email:
-                    type: string
-                    example: "otavio.abreu92@gmail.com"
-                  first_name:
-                    type: string
-                    example: "Otávio"
-                  last_name:
-                    type: string
-                    example: "Abreu"
-        "409":
-          description: Conflito. Existe outro usuário com esse nome de usuário ou email.
-        "400":
-          description: Requisição inválida. O corpo da requisição não está de acordo com o esperado.
-
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [username, email, password]
               properties:
                 username:
                   type: string
-                  example: "otavio.abreu92"
                 email:
                   type: string
-                  example: "otavio.abreu92@gmail.com"
                 password:
                   type: string
-                  example: "test123test456"
                 first_name:
                   type: string
-                  example: "Otávio"
                 last_name:
                   type: string
-                  example: "Abreu"
-              required:
-                - username
-                - email
-                - password
+      responses:
+        "201":
+          description: Sucesso. O usuário foi registrado e logado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
+        "409":
+          description: Conflito. Já existe um usuário com esse email ou username.
+        "400":
+          description: Requisição inválida.
 
   /conta/sair:
     post:
-      tags:
-        - conta
+      tags: [conta]
       summary: Desloga o usuário logado.
       responses:
         "200":
           description: Sucesso. O usuário foi deslogado.
         "401":
-          description: Desautorizado. O usuário que tentou deslogar não estava logado.
+          description: O usuário não estava logado.
+
+  /produtos:
+    get:
+      tags: [produto]
+      summary: Lista os produtos registrados no banco de dados.
+      responses:
+        "200":
+          description: Lista de produtos registrados.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Produto"
+        "401":
+          description: Não autorizado.
+
+  /produtos/all:
+    get:
+      tags: [produto]
+      summary: Lista todos os produtos disponíveis via STAC.
+      responses:
+        "200":
+          description: Lista de produtos da STAC API.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StacProduto"
+        "401":
+          description: Não autorizado.
+
+  /produtos/create:
+    post:
+      tags: [produto]
+      summary: Registra um novo produto.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_id]
+              properties:
+                product_id:
+                  type: string
+      responses:
+        "200":
+          description: Produto registrado.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Produto"
+        "400":
+          description: Requisição inválida.
+        "401":
+          description: Não autorizado.
+        "403":
+          description: Produto já registrado.
 
   /fenomeno/queimadas:
     get:
-      tags:
-        - fenomeno
+      tags: [fenomeno]
       summary: Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.
-      # TODO: falta descrever os detalhes do endpoint, ele vai ser utilizado pra listar todos os processos de cicatriz de queimadas quando o usuário abrir a página inicial, esse endpoint será fundamental, é importante ser desenhado conforme os requisitos do frontend
+      responses:
+        "200":
+          description: Lista de processamentos.
     post:
-      tags:
-        - fenomeno
+      tags: [fenomeno]
       summary: Cria e inicializa um processamento vazio de Cicatriz de Queimadas.
       responses:
         "200":
-          description: Success
+          description: Processamento criado.
           content:
             application/json:
               schema:
@@ -158,32 +185,29 @@ paths:
 
   /fenomeno/queimadas/{queimadas_id}:
     get:
-      tags:
-        - fenomeno
-      summary: Retorna os detalhes do processamento de Cicatriz de Queimadas selecionado.
+      tags: [fenomeno]
+      summary: Retorna os detalhes do processamento selecionado.
       parameters:
         - name: queimadas_id
           in: path
           required: true
           schema:
             type: number
-            example: 145438
-      # TODO: falta detalhar a resposta desse endpoint, ele vai ser utilizado quando o usuário clica em um processamento já existente dentro da listagem e ele vai poder visualizar e interagir com os detalhes, trazendo as informações úteis pra ele
+      responses:
+        "200":
+          description: Detalhes do processamento.
 
   /fenomeno/queimadas/{queimadas_id}/area_de_interesse:
     patch:
-      tags:
-        - fenomeno
-      summary: Muda a Área de Interesse (Bounding Box) do processamento selecionado.
+      tags: [fenomeno]
+      summary: Muda a Área de Interesse do processamento selecionado.
       parameters:
         - name: queimadas_id
           in: path
           required: true
           schema:
             type: number
-            example: 145438
       requestBody:
-        description: The min_x, max_x, min_y and max_y.
         required: true
         content:
           application/json:
@@ -191,26 +215,23 @@ paths:
               type: array
               items:
                 type: number
-                format: float
               minItems: 4
               maxItems: 4
-              example: [-123.123, 123.123, -45.123, 45.123]
       responses:
         "200":
-          description: Successful operation
+          description: Área alterada.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/AddProcessAoi"
         "400":
-          description: Invalid input
+          description: Entrada inválida.
         "404":
-          description: Process not found
+          description: Processamento não encontrado.
 
   /fenomeno/queimadas/{queimadas_id}/period:
     patch:
-      tags:
-        - fenomeno
+      tags: [fenomeno]
       summary: Muda o período do processamento selecionado.
       parameters:
         - name: queimadas_id
@@ -218,9 +239,7 @@ paths:
           required: true
           schema:
             type: number
-            example: 145438
       requestBody:
-        description: The period in the isoformat.
         required: true
         content:
           application/json:
@@ -229,57 +248,51 @@ paths:
               properties:
                 start_datetime:
                   type: string
-                  format: isoformat
-                  example: "2021-08-01T00:00:00Z"
+                  format: date-time
                 end_datetime:
                   type: string
-                  format: isoformat
-                  example: "2021-08-31T23:59:59Z"
+                  format: date-time
       responses:
         "200":
-          description: Successful operation
+          description: Período alterado.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/AddProcessAoi"
         "400":
-          description: Invalid input
+          description: Entrada inválida.
         "404":
-          description: Process not found
+          description: Processamento não encontrado.
 
   /fenomeno/queimadas/{queimadas_id}/confirm:
     patch:
-      tags:
-        - fenomeno
-      summary: Confirma e valida o processamento selecionado. Prepara e encaminha o processamento para a análise visual.
+      tags: [fenomeno]
+      summary: Confirma e valida o processamento selecionado.
       parameters:
         - name: queimadas_id
           in: path
           required: true
           schema:
             type: number
-            example: 145438
       responses:
         "200":
-          description: Successful operation
+          description: Processamento confirmado.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ConfirmProcess"
         "400":
-          description: Invalid input
+          description: Entrada inválida.
         "404":
-          description: Process not found
+          description: Processamento não encontrado.
 
   /fenomeno/queimadas/{queimadas_id}/analise_visual:
     get:
-      summary: Retorna os thumbnails para análise visual do processamento selecionado em sua respectiva Área de Interesse e Período.
-      tags:
-        - fenomeno
+      tags: [fenomeno]
+      summary: Retorna os thumbnails para análise visual do processamento.
     post:
-      summary: Recebe os IDs dos thumbnails eleitos pela fase de análise visual do usuário.
-      tags:
-        - fenomeno
+      tags: [fenomeno]
+      summary: Recebe os thumbnails selecionados pelo usuário.
 
 components:
   schemas:
@@ -288,82 +301,66 @@ components:
       properties:
         id:
           type: number
-          example: 1
         username:
           type: string
-          example: "otavio.abreu92"
         email:
           type: string
-          example: "otavio.abreu92@gmail.com"
         full_name:
           type: string
-          example: "Otávio Abreu"
         first_name:
           type: string
-          example: "Otávio"
         last_name:
           type: string
-          example: "Abreu"
         is_authenticated:
           type: boolean
-          example: true
+
+    Produto:
+      type: object
+      properties:
+        product_id:
+          type: string
+        description:
+          type: string
+
+    StacProduto:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        start_date:
+          type: string
+          format: date-time
+        end_date:
+          type: string
+          format: date-time
 
     CreateProcess:
       type: object
       properties:
         id:
           type: number
-          example: 145438
         status:
           type: string
-          description: Estado atual do processamento de classificação de cicatriz de queimadas.
-          enum:
-            - IDLE
-            - ABORTED
-            - INTERRUPTED
-          example: STARTED
+          enum: [IDLE, ABORTED, INTERRUPTED]
 
     AddProcessAoi:
       type: object
       properties:
         id:
           type: number
-          example: 145438
         status:
           type: string
-          description: The current status of the fire scar classification process.
-          enum:
-            - BBOX_SELECTED
-            - ABORTED
-            - INTERRUPTED
-          example: BBOX_SELECTED
-
-    AddProcessPeriod:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 145438
-        status:
-          type: string
-          description: The current status of the fire scar classification process.
-          enum:
-            - PERIOD_SELECTED
-            - ABORTED
-            - INTERRUPTED
-          example: PERIOD_SELECTED
+          enum: [BBOX_SELECTED, ABORTED, INTERRUPTED]
 
     ConfirmProcess:
       type: object
       properties:
         id:
           type: number
-          example: 145438
         status:
           type: string
-          description: The current status of the fire scar classification process.
-          enum:
-            - READY_FOR_VISUAL_ANALYSIS
-            - ABORTED
-            - INTERRUPTED
-          example: READY_FOR_VISUAL_ANALYSIS
+          enum: [READY_FOR_VISUAL_ANALYSIS, ABORTED, INTERRUPTED]

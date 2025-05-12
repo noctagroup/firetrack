@@ -22,4 +22,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("conta/", include("firetrack.conta.urls")),
     path("fenomeno/", include("firetrack.fenomeno.urls")),
+    path("produtos/", include("firetrack.produtos.urls")),
 ]
