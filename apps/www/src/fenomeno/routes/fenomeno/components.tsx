@@ -181,7 +181,7 @@ export function FenomenoSidebar() {
   }
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar id="fenomeno_sidebar" collapsible="icon">
       <SidebarHeader className="relative h-12 flex-row items-center border-b p-2">
         <Link to="/">
           <Waves className="size-8" />
