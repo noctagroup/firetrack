@@ -76,6 +76,7 @@
 }
 
 @theme inline {
+  --spacing-header: 2.625rem;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);

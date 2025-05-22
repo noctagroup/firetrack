@@ -116,7 +116,7 @@ export function FenomenoSidebarInset() {
 
   return (
     <SidebarInset>
-      <header className="flex h-12 shrink-0 items-center gap-2 border-b px-4">
+      <header className="h-header flex shrink-0 items-center gap-2 border-b px-4">
         {sidebar.isMobile && (
           <>
             <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="link">
@@ -182,7 +182,7 @@ export function FenomenoSidebar() {
 
   return (
     <Sidebar id="fenomeno_sidebar" collapsible="icon">
-      <SidebarHeader className="relative h-12 flex-row items-center border-b p-2">
+      <SidebarHeader className="h-header relative flex-row items-center border-b p-2">
         <Link to="/">
           <Waves className="size-8" />
         </Link>
