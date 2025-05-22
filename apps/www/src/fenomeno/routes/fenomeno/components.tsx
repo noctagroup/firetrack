@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
-  ChevronsUpDown,
+  ChevronDown,
   Computer,
   LogOut,
   type LucideIcon,
@@ -9,7 +9,6 @@ import {
   Palette,
   PanelLeft,
   Sun,
-  Waves,
   X,
 } from "lucide-react"
 import React from "react"
@@ -51,7 +50,6 @@ import {
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -152,17 +150,57 @@ export function FenomenoSidebar() {
 
   return (
     <Sidebar id="fenomeno_sidebar" collapsible="offcanvas" variant="sidebar">
-      <SidebarHeader className="relative flex-row items-center p-2">
-        <Link to="/">
-          <Waves className="size-8" />
-        </Link>
+      <SidebarHeader className="flex-row items-center justify-between">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton className="w-auto truncate">
+              <ContaAvatar />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent side="top" align="start" className="min-w-48">
+            <DropdownMenuLabel className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+              <ContaDetails />
+            </DropdownMenuLabel>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuLabel>Preferências</DropdownMenuLabel>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="gap-2">
+                <Palette className="text-muted-foreground size-4" />
+                Tema
+              </DropdownMenuSubTrigger>
+              <DropdownMenuPortal>
+                <DropdownMenuSubContent>
+                  <DropdownMenuRadioGroup
+                    value={themeContext.theme}
+                    onValueChange={themeContext.setTheme as (value: string) => void}>
+                    {themes.map((theme) => (
+                      <DropdownMenuRadioItem key={theme.value} value={theme.value}>
+                        <theme.icon className="text-muted-foreground size-4" />
+                        {theme.title}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuRadioGroup>
+                </DropdownMenuSubContent>
+              </DropdownMenuPortal>
+            </DropdownMenuSub>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuGroup>
+              <DropdownMenuItem onClick={handleSair}>
+                <LogOut />
+                Sair
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {sidebar.isMobile && (
-          <Button
-            onClick={sidebar.toggleSidebar}
-            className="absolute right-0 mr-2 size-6"
-            size="icon"
-            variant="link">
+          <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="link">
             <X className="size-5" />
           </Button>
         )}
@@ -194,63 +232,30 @@ export function FenomenoSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg" className="gap-3">
-                  <ContaDetails />
-                  <ChevronsUpDown className="size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent side="top" align="start" className="min-w-48">
-                <DropdownMenuLabel className="flex items-center gap-3 px-1 py-1.5 text-left text-sm">
-                  <ContaDetails />
-                </DropdownMenuLabel>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuLabel>Preferências</DropdownMenuLabel>
-
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger className="gap-2">
-                    <Palette className="text-muted-foreground size-4" />
-                    Tema
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuRadioGroup
-                        value={themeContext.theme}
-                        onValueChange={themeContext.setTheme as (value: string) => void}>
-                        {themes.map((theme) => (
-                          <DropdownMenuRadioItem key={theme.value} value={theme.value}>
-                            <theme.icon className="text-muted-foreground size-4" />
-                            {theme.title}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuRadioGroup>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={handleSair}>
-                    <LogOut />
-                    Sair
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-
       <SidebarRail />
     </Sidebar>
+  )
+}
+
+function ContaAvatar() {
+  const contaQuery = useQuery(contaOptions.conta())
+
+  if (contaQuery.isLoading || !contaQuery.data) {
+    return "TODO"
+  }
+
+  return (
+    <React.Fragment>
+      <Avatar className="size-6">
+        <AvatarFallback className="text-xs">{initials(contaQuery.data)}</AvatarFallback>
+      </Avatar>
+
+      <span className="truncate text-sm font-medium">
+        {contaQuery.data.full_name || contaQuery.data.username}
+      </span>
+
+      <ChevronDown className="text-sidebar-ring size-4" />
+    </React.Fragment>
   )
 }
 
@@ -277,7 +282,6 @@ function ContaDetails() {
         <span className="truncate font-medium">
           {contaQuery.data.full_name || contaQuery.data.username}
         </span>
-
         <span className="text-muted-foreground truncate text-xs">{contaQuery.data.email}</span>
       </div>
     </React.Fragment>
