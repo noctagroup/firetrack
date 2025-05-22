@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
-  AlignLeft,
   ChevronsUpDown,
   Computer,
   LogOut,
@@ -13,7 +12,7 @@ import {
   Waves,
   X,
 } from "lucide-react"
-import React, { useMemo } from "react"
+import React from "react"
 import {
   Link,
   Outlet,
@@ -30,10 +29,8 @@ import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "~shared/lib/shadcn/ui/breadcrumb"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import {
@@ -51,11 +48,9 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "~shared/lib/shadcn/ui/dropdown-menu"
-import { Separator } from "~shared/lib/shadcn/ui/separator"
 import {
   Sidebar,
   SidebarContent,
-  type SidebarContextProps,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
@@ -68,8 +63,6 @@ import {
   useSidebar,
 } from "~shared/lib/shadcn/ui/sidebar"
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
-import { Tooltip, TooltipContent, TooltipTrigger } from "~shared/lib/shadcn/ui/tooltip"
-import { cn } from "~shared/lib/shadcn/utils"
 import { isNil } from "~shared/utils/is"
 
 import { initials } from "./utils"
@@ -109,48 +102,25 @@ const themes = [
 export function FenomenoSidebarInset() {
   const sidebar = useSidebar()
   const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
-  const lastMatchWithBreadcrumbIndex = useMemo(
+  const lastMatchWithBreadcrumbIndex = React.useMemo(
     () => matches.findLastIndex((match) => !isNil(match.handle?.breadcrumb)),
     [matches]
   )
 
   return (
     <SidebarInset>
-      <header className="h-header flex shrink-0 items-center gap-2 border-b px-4">
-        {sidebar.isMobile && (
-          <>
-            <Button onClick={sidebar.toggleSidebar} className="size-6" size="icon" variant="link">
-              <AlignLeft className="size-5" />
-            </Button>
-            <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" />
-          </>
-        )}
+      <header className="bg-background/60 sticky top-0 flex h-10 shrink-0 items-center gap-2 border-b px-4 backdrop-blur">
+        <Button onClick={sidebar.toggleSidebar} size="icon" variant="link" className="size-6">
+          <PanelLeft className="size-4" strokeWidth={2.0} />
+        </Button>
 
         <Breadcrumb>
           <BreadcrumbList>
-            {matches.map((match, matchIndex) => {
-              if (!match.handle?.breadcrumb) {
-                return undefined
-              }
-
-              const breadcrumb = match.handle.breadcrumb
-
-              return (
-                <React.Fragment key={matchIndex}>
-                  {matchIndex > 1 && <BreadcrumbSeparator className="hidden md:block" />}
-
-                  <BreadcrumbItem>
-                    {matchIndex === lastMatchWithBreadcrumbIndex ? (
-                      <BreadcrumbPage>{breadcrumb}</BreadcrumbPage>
-                    ) : (
-                      <BreadcrumbLink asChild className="hidden md:block">
-                        <Link to={match.pathname}>{breadcrumb}</Link>
-                      </BreadcrumbLink>
-                    )}
-                  </BreadcrumbItem>
-                </React.Fragment>
-              )
-            })}
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                {matches[lastMatchWithBreadcrumbIndex]?.handle?.breadcrumb}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
       </header>
@@ -181,13 +151,13 @@ export function FenomenoSidebar() {
   }
 
   return (
-    <Sidebar id="fenomeno_sidebar" collapsible="icon">
-      <SidebarHeader className="h-header relative flex-row items-center border-b p-2">
+    <Sidebar id="fenomeno_sidebar" collapsible="offcanvas" variant="sidebar">
+      <SidebarHeader className="relative flex-row items-center p-2">
         <Link to="/">
           <Waves className="size-8" />
         </Link>
 
-        {sidebar.isMobile ? (
+        {sidebar.isMobile && (
           <Button
             onClick={sidebar.toggleSidebar}
             className="absolute right-0 mr-2 size-6"
@@ -195,8 +165,6 @@ export function FenomenoSidebar() {
             variant="link">
             <X className="size-5" />
           </Button>
-        ) : (
-          <SidebarToggle className="absolute right-0 mr-2" hideOn="collapsed" />
         )}
       </SidebarHeader>
 
@@ -226,9 +194,7 @@ export function FenomenoSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t">
-        {!sidebar.isMobile && <SidebarToggle hideOn="expanded" />}
-
+      <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -315,37 +281,5 @@ function ContaDetails() {
         <span className="text-muted-foreground truncate text-xs">{contaQuery.data.email}</span>
       </div>
     </React.Fragment>
-  )
-}
-
-function SidebarToggle({
-  className,
-  hideOn,
-  ...props
-}: React.ComponentProps<"button"> & { hideOn: SidebarContextProps["state"] }) {
-  const sidebar = useSidebar()
-  const isHidden = sidebar.state === hideOn
-
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          data-hidden={isHidden}
-          onClick={sidebar.toggleSidebar}
-          className={cn(
-            "size-8 transition transition-discrete duration-150 data-[hidden=true]:hidden data-[hidden=true]:opacity-0 starting:opacity-0",
-            className
-          )}
-          size="icon"
-          variant="ghost"
-          {...props}>
-          <PanelLeft className="size-5" />
-        </Button>
-      </TooltipTrigger>
-
-      <TooltipContent side="right" align="center">
-        Alternar painel lateral
-      </TooltipContent>
-    </Tooltip>
   )
 }
