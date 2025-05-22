@@ -3,11 +3,15 @@ import * as React from "react"
 import type { Storage } from "~shared/hooks/use-storage/storage"
 import { isNil } from "~shared/utils/is"
 
-export function useStorage<TStorageDecoded, TStorageEncoded extends string = string>(
-  storageKey: string,
-  storageInitialValue: TStorageDecoded,
+export function useStorage<TStorageDecoded, TStorageEncoded extends string = string>({
+  storageKey,
+  storageInitialValue,
+  storage,
+}: {
+  storageKey: string
+  storageInitialValue: TStorageDecoded
   storage: Storage<TStorageDecoded, TStorageEncoded>
-): [TStorageDecoded, React.Dispatch<React.SetStateAction<Nullable<TStorageDecoded>>>] {
+}): [TStorageDecoded, React.Dispatch<React.SetStateAction<Nullable<TStorageDecoded>>>] {
   const subscribe = React.useCallback(
     (onStoreChange: () => void) => storage.subscribe(storageKey, onStoreChange),
     [storageKey, storage]

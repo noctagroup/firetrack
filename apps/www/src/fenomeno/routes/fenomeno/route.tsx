@@ -5,7 +5,11 @@ import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 import { FenomenoSidebar, FenomenoSidebarInset } from "./components"
 
 export default function Fenomeno() {
-  const [sidebar, setSidebar] = useStorage<boolean>("sidebar", true, localStorage)
+  const [sidebar, setSidebar] = useStorage<boolean>({
+    storageKey: "sidebar",
+    storageInitialValue: true,
+    storage: localStorage,
+  })
 
   return (
     <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
