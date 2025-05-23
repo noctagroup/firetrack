@@ -175,7 +175,7 @@ function handleFormSuccess(
   queryClient: QueryClient,
   navigate: NavigateFunction
 ) {
-  queryClient.setQueryData(contaKeys.conta(), data)
+  queryClient.setQueryData(contaKeys.atual(), data)
   navigate("/fenomeno")
 }
 

@@ -139,7 +139,7 @@ export function FenomenoSidebar() {
   const sairMutation = useMutation({
     ...contaMutations.sair(),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: contaKeys.conta() })
+      queryClient.removeQueries({ queryKey: contaKeys.atual() })
       navigate("/conta")
     },
   })
@@ -238,10 +238,16 @@ export function FenomenoSidebar() {
 }
 
 function ContaAvatar() {
-  const contaQuery = useQuery(contaOptions.conta())
+  const contaQuery = useQuery(contaOptions.atual())
 
   if (contaQuery.isLoading || !contaQuery.data) {
-    return "TODO"
+    return (
+      <React.Fragment>
+        <Skeleton className="aspect-square size-6 rounded" />
+
+        <Skeleton className="h-6 w-32 rounded" />
+      </React.Fragment>
+    )
   }
 
   return (
@@ -260,7 +266,7 @@ function ContaAvatar() {
 }
 
 function ContaDetails() {
-  const contaQuery = useQuery(contaOptions.conta())
+  const contaQuery = useQuery(contaOptions.atual())
 
   if (contaQuery.isLoading || !contaQuery.data) {
     return (

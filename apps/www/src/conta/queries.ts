@@ -4,13 +4,13 @@ import { mutationOptions, queryOptions } from "~shared/lib/query/utils"
 
 export const contaKeys = {
   all: () => ["conta"],
-  conta: () => [...contaKeys.all(), "logada"],
+  atual: () => [...contaKeys.all(), "atual"],
 } as const satisfies Keyring
 
 export const contaOptions = {
-  conta: () =>
+  atual: () =>
     queryOptions({
-      queryKey: contaKeys.conta(),
+      queryKey: contaKeys.atual(),
       queryFn: ContaServices.conta,
     }),
 } as const satisfies OptionsKeyring

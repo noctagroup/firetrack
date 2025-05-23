@@ -52,7 +52,7 @@ export async function clientLoader(args: Route.ClientLoaderArgs) {
   const url = new URL(args.request.url)
 
   try {
-    const conta = await queryClient.ensureQueryData(contaOptions.conta())
+    const conta = await queryClient.ensureQueryData(contaOptions.atual())
 
     if (conta.is_authenticated && !url.pathname.startsWith("/fenomeno")) {
       return replace("/fenomeno")
