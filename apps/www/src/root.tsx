@@ -3,6 +3,7 @@ import { Waves } from "lucide-react"
 import { Links, Meta, Outlet, replace, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
+import { QueryDevtools } from "~fenomeno/components/devtools/query"
 import faviconUrl from "~shared/assets/favicon.svg?url"
 import { ThemeProvider, ThemeProviderScript } from "~shared/hooks/use-theme"
 import { queryClient } from "~shared/lib/query/client"
@@ -83,6 +84,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <ThemeProvider>
             <ThemeProviderScript />
             {children}
+            <QueryDevtools />
             <Toaster />
           </ThemeProvider>
         </QueryClientProvider>
