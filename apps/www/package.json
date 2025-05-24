@@ -9,7 +9,7 @@
   "scripts": {
     "preinstall": "npx only-allow npm",
     "postinstall": "react-router typegen",
-    "clean": "git clean -xdf node_modules build .react-router",
+    "clean": "git clean -xdf mnt node_modules build .react-router",
     "dev": "react-router dev",
     "build": "react-router build",
     "typecheck": "react-router typegen && tsc -b",

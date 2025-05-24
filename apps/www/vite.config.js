@@ -9,7 +9,7 @@ export default defineConfig({
     alias: {
       "~shared": url.fileURLToPath(new url.URL("./src/shared", import.meta.url)),
       "~conta": url.fileURLToPath(new url.URL("./src/conta", import.meta.url)),
-      "~fenomeno": url.fileURLToPath(new url.URL("./src/fenomeno", import.meta.url)),
+      "~deteccao": url.fileURLToPath(new url.URL("./src/deteccao", import.meta.url)),
     },
   },
 })

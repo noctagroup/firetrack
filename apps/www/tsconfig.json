@@ -12,7 +12,7 @@
     "paths": {
       "~shared/*": ["./src/shared/*"],
       "~conta/*": ["./src/conta/*"],
-      "~fenomeno/*": ["./src/fenomeno/*"]
+      "~deteccao/*": ["./src/deteccao/*"]
     },
     "noErrorTruncation": true,
     "esModuleInterop": true,

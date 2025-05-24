@@ -9,7 +9,7 @@ const routes = (await Promise.all([
     rootDirectory: "./conta/routes",
   }),
   flatRoutes({
-    rootDirectory: "./fenomeno/routes",
+    rootDirectory: "./deteccao/routes",
   }),
 ])) satisfies RouteConfigEntry[][]
 

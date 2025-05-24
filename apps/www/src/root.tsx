@@ -3,10 +3,10 @@ import { Waves } from "lucide-react"
 import { Links, Meta, Outlet, replace, Scripts, ScrollRestoration } from "react-router"
 
 import { contaOptions } from "~conta/queries"
-import { QueryDevtools } from "~fenomeno/components/devtools/query"
 import faviconUrl from "~shared/assets/favicon.svg?url"
 import { ThemeProvider, ThemeProviderScript } from "~shared/hooks/use-theme"
 import { queryClient } from "~shared/lib/query/client"
+import { QueryDevtools } from "~shared/lib/query/devtools"
 import { Toaster } from "~shared/lib/shadcn/ui/sonner"
 import tailwindUrl from "~shared/styles/tailwind.css?url"
 
@@ -54,8 +54,8 @@ export async function clientLoader(args: Route.ClientLoaderArgs) {
   try {
     const conta = await queryClient.ensureQueryData(contaOptions.atual())
 
-    if (conta.is_authenticated && !url.pathname.startsWith("/fenomeno")) {
-      return replace("/fenomeno")
+    if (conta.is_authenticated && !url.pathname.startsWith("/deteccao")) {
+      return replace("/deteccao")
     }
   } catch {
     if (!url.pathname.startsWith("/conta")) {

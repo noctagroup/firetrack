@@ -2,9 +2,9 @@ import { useStorage } from "~shared/hooks/use-storage"
 import { localStorage } from "~shared/hooks/use-storage/storage/local"
 import { SidebarProvider } from "~shared/lib/shadcn/ui/sidebar"
 
-import { FenomenoSidebar, FenomenoSidebarInset } from "./components"
+import { Sidebar, SidebarInset } from "./components"
 
-export default function Fenomeno() {
+export default function Deteccao() {
   const [sidebar, setSidebar] = useStorage<boolean>({
     storageKey: "sidebar",
     storageInitialValue: true,
@@ -13,12 +13,8 @@ export default function Fenomeno() {
 
   return (
     <SidebarProvider defaultOpen={sidebar} open={sidebar} onOpenChange={setSidebar}>
-      <FenomenoSidebar />
-      <FenomenoSidebarInset />
+      <Sidebar />
+      <SidebarInset />
     </SidebarProvider>
   )
-}
-
-export const handle = {
-  breadcrumb: "Fenômenos",
 }

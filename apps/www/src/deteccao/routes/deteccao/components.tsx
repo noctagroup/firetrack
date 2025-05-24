@@ -2,9 +2,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import {
   ChevronDown,
   Computer,
+  GalleryVerticalEnd,
   LogOut,
   type LucideIcon,
-  Megaphone,
   Moon,
   Palette,
   PanelLeft,
@@ -12,25 +12,11 @@ import {
   X,
 } from "lucide-react"
 import React from "react"
-import {
-  Link,
-  Outlet,
-  resolvePath,
-  type UIMatch,
-  useLocation,
-  useMatches,
-  useNavigate,
-} from "react-router"
+import { Link, Outlet, resolvePath, useLocation, useNavigate } from "react-router"
 
 import { contaKeys, contaMutations, contaOptions } from "~conta/queries"
 import { Theme, useTheme } from "~shared/hooks/use-theme"
 import { Avatar, AvatarFallback } from "~shared/lib/shadcn/ui/avatar"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-} from "~shared/lib/shadcn/ui/breadcrumb"
 import { Button } from "~shared/lib/shadcn/ui/button"
 import {
   DropdownMenu,
@@ -48,12 +34,12 @@ import {
   DropdownMenuTrigger,
 } from "~shared/lib/shadcn/ui/dropdown-menu"
 import {
-  Sidebar,
+  Sidebar as _Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
-  SidebarInset,
+  SidebarInset as _SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -61,15 +47,14 @@ import {
   useSidebar,
 } from "~shared/lib/shadcn/ui/sidebar"
 import { Skeleton } from "~shared/lib/shadcn/ui/skeleton"
-import { isNil } from "~shared/utils/is"
 
 import { initials } from "./utils"
 
 const navLinks = [
   {
-    icon: Megaphone,
-    title: "Fenômenos",
-    tooltip: "Fenômenos",
+    icon: GalleryVerticalEnd,
+    title: "Detecções",
+    tooltip: "Detecções",
     to: ".",
   },
 ] as const satisfies {
@@ -97,40 +82,27 @@ const themes = [
   },
 ] as const satisfies { icon: LucideIcon; value: string; title: string }[]
 
-export function FenomenoSidebarInset() {
+export function SidebarInset() {
   const sidebar = useSidebar()
-  const matches = useMatches() as UIMatch<unknown, { breadcrumb?: string }>[]
-  const lastMatchWithBreadcrumbIndex = React.useMemo(
-    () => matches.findLastIndex((match) => !isNil(match.handle?.breadcrumb)),
-    [matches]
-  )
 
   return (
-    <SidebarInset>
+    <_SidebarInset>
       <header className="bg-background/60 sticky top-0 flex h-10 shrink-0 items-center gap-2 border-b px-4 backdrop-blur">
         <Button onClick={sidebar.toggleSidebar} size="icon" variant="link" className="size-6">
-          <PanelLeft className="size-4" strokeWidth={2.0} />
+          <PanelLeft className="size-4" />
         </Button>
 
-        <Breadcrumb>
-          <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>
-                {matches[lastMatchWithBreadcrumbIndex]?.handle?.breadcrumb}
-              </BreadcrumbPage>
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
+        {/* TODO: fazer os portais pra usar aqui dentro  */}
       </header>
 
       <div className="shrink-0 grow-1 basis-auto">
         <Outlet />
       </div>
-    </SidebarInset>
+    </_SidebarInset>
   )
 }
 
-export function FenomenoSidebar() {
+export function Sidebar() {
   const location = useLocation()
   const sidebar = useSidebar()
   const themeContext = useTheme()
@@ -149,18 +121,18 @@ export function FenomenoSidebar() {
   }
 
   return (
-    <Sidebar id="fenomeno_sidebar" collapsible="offcanvas" variant="sidebar">
+    <_Sidebar collapsible="offcanvas" variant="sidebar">
       <SidebarHeader className="flex-row items-center justify-between">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton className="w-auto truncate">
-              <ContaAvatar />
+              <Conta />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent side="top" align="start" className="min-w-48">
             <DropdownMenuLabel className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-              <ContaDetails />
+              <ContaDetailed />
             </DropdownMenuLabel>
 
             <DropdownMenuSeparator />
@@ -169,7 +141,7 @@ export function FenomenoSidebar() {
 
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="gap-2">
-                <Palette className="text-muted-foreground size-4" />
+                <Palette className="text-muted-foreground" />
                 Tema
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
@@ -179,7 +151,7 @@ export function FenomenoSidebar() {
                     onValueChange={themeContext.setTheme as (value: string) => void}>
                     {themes.map((theme) => (
                       <DropdownMenuRadioItem key={theme.value} value={theme.value}>
-                        <theme.icon className="text-muted-foreground size-4" />
+                        <theme.icon className="text-muted-foreground" />
                         {theme.title}
                       </DropdownMenuRadioItem>
                     ))}
@@ -233,11 +205,11 @@ export function FenomenoSidebar() {
       </SidebarContent>
 
       <SidebarRail />
-    </Sidebar>
+    </_Sidebar>
   )
 }
 
-function ContaAvatar() {
+function Conta() {
   const contaQuery = useQuery(contaOptions.atual())
 
   if (contaQuery.isLoading || !contaQuery.data) {
@@ -265,7 +237,7 @@ function ContaAvatar() {
   )
 }
 
-function ContaDetails() {
+function ContaDetailed() {
   const contaQuery = useQuery(contaOptions.atual())
 
   if (contaQuery.isLoading || !contaQuery.data) {

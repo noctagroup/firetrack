@@ -176,7 +176,7 @@ function handleFormSuccess(
   navigate: NavigateFunction
 ) {
   queryClient.setQueryData(contaKeys.atual(), data)
-  navigate("/fenomeno")
+  navigate("/deteccao")
 }
 
 function handleFormError(error: Error, form: UseFormReturn<TCadastrarForm>) {
