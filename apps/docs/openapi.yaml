@@ -197,7 +197,38 @@ paths:
         "200":
           description: Detalhes do processamento.
 
-  /fenomeno/queimadas/{queimadas_id}/area_de_interesse:
+  /fenomeno/queimadas/{queimadas_id}/product:
+    patch:
+      tags: [fenomeno]
+      summary: Adiciona um produto ao processamento selecionado.
+      parameters:
+        - name: queimadas_id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: string
+      responses:
+        "200":
+          description: Produto adicionado ao processamento.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddProcessAoi"
+        "400":
+          description: Entrada inválida.
+        "404":
+          description: Processamento não encontrado.
+
+  /fenomeno/queimadas/{queimadas_id}/aoi:
     patch:
       tags: [fenomeno]
       summary: Muda a Área de Interesse do processamento selecionado.

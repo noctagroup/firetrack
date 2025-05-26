@@ -6,10 +6,16 @@ from django.contrib.gis.geos import Polygon
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
-from firetrack.core.exceptions import InvalidDateFormat, InvalidDateRange
+from firetrack.candidatos.services import register_candidatos
+from firetrack.core.exceptions import (
+    InvalidDateFormat,
+    InvalidDateRange,
+    NoCandidatesError,
+)
 from firetrack.fenomeno.models import Fenomeno
 from firetrack.fenomeno.state import FenomenoFSM
 from firetrack.produtos.services import list_registered_products
+from firetrack.stac.services import query_product_by_bbox_and_period
 
 
 def create_and_start_fenomeno(user: User) -> Fenomeno:
@@ -33,8 +39,11 @@ def update_selected_product(user: User, queimadas_id: int, product: str) -> Feno
     if fenomeno.user != user:
         raise PermissionDenied("Usuário não tem permissão para alterar esse fenômeno")
 
-    if product not in ["MODIS", "VIIRS"]:
-        raise ValueError("Produto inválido. Use 'MODIS' ou 'VIIRS'.")
+    if product not in [
+        registered_product.product_id
+        for registered_product in list_registered_products()
+    ]:
+        raise ValueError("Produto inválido. O produto não está cadastrado.")
 
     fenomeno.selected_product = product
     fenomeno.save()
@@ -110,5 +119,31 @@ def update_fenomeno_product(user: User, queimadas_id: int, product: str) -> Feno
     fenomeno.save()
     fsm = FenomenoFSM(fenomeno)
     fsm.select_product()
+
+    return fenomeno
+
+
+def confirm_fenomeno(user: User, queimadas_id: int) -> Fenomeno:
+    fenomeno: Fenomeno = get_object_or_404(Fenomeno, id=queimadas_id)
+
+    if fenomeno.user != user:
+        raise PermissionDenied("Usuário não tem permissão para confirmar esse fenômeno")
+
+    fsm = FenomenoFSM(fenomeno)
+
+    try:
+        register_candidatos(
+            query_product_by_bbox_and_period(
+                fenomeno.product_name,
+                fenomeno.aoi.extent,
+                fenomeno.filter_start_date.isoformat(),
+                fenomeno.filter_end_date.isoformat(),
+            )
+        )
+
+        fsm.confirm_processing_scope()
+
+    except NoCandidatesError:
+        fsm.no_found_candidates()
 
     return fenomeno

@@ -28,6 +28,7 @@ class FenomenoState(str, Enum):
     PUBLISHED = "Published"
     ERROR = "Error"
     ABORTED = "Aborted"
+    NO_CANDIDATES = "No Candidates Found"
 
     @classmethod
     @lru_cache
@@ -74,6 +75,11 @@ class FenomenoFSM:
             "trigger": "confirm_processing_scope",
             "source": FenomenoState.AOI_SELECTED.value,
             "dest": FenomenoState.READY_FOR_VISUAL_ANALYSIS.value,
+        },
+        {
+            "trigger": "no_found_candidates",
+            "source": FenomenoState.AOI_SELECTED.value,
+            "dest": FenomenoState.NO_CANDIDATES.value,
         },
         {
             "trigger": "start_visual_analysis",

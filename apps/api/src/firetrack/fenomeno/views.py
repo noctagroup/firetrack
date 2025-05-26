@@ -96,7 +96,7 @@ def update_fenomeno_product(request: WSGIRequest, queimadas_id: int):
 
     try:
         data = json.loads(request.body)
-        product = data.get("product_name")
+        product = data.get("product_id")
         if not product:
             return JsonResponse(
                 {"error": "O produto é obrigatório."},
@@ -111,7 +111,11 @@ def update_fenomeno_product(request: WSGIRequest, queimadas_id: int):
 
 @require_http_methods(["PATCH"])
 def confirm_fenomeno(request: WSGIRequest, queimadas_id: int):
-    
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+
+    fenomeno = services.confirm_fenomeno(request.user, queimadas_id)
+    return JsonResponse(serializer.serialize_fenomeno_to_status_and_id(fenomeno))
 
 
 def fenomeno_index(_):
