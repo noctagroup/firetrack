@@ -2,12 +2,14 @@ from datetime import datetime
 from typing import List
 
 from django.contrib.auth.models import User
+from django.contrib.gis.geos import Polygon
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
 from firetrack.core.exceptions import InvalidDateFormat, InvalidDateRange
 from firetrack.fenomeno.models import Fenomeno
 from firetrack.fenomeno.state import FenomenoFSM
+from firetrack.produtos.services import list_registered_products
 
 
 def create_and_start_fenomeno(user: User) -> Fenomeno:
@@ -65,5 +67,48 @@ def update_fenomeno_period(
     fsm = FenomenoFSM(fenomeno)
     """ fsm.select_product() """
     fsm.select_timespan()
+
+    return fenomeno
+
+
+def update_fenomeno_aoi(user: User, queimadas_id: int, aoi: list) -> Fenomeno:
+    fenomeno = get_object_or_404(Fenomeno, id=queimadas_id)
+
+    if fenomeno.user != user:
+        raise PermissionDenied("Usuário não tem permissão para alterar esse fenômeno")
+
+    if not isinstance(aoi, list) or len(aoi) != 4:
+        raise ValueError(
+            "Área de interesse (AOI) deve ser uma lista com 4 coordenadas representando os vértices do Bounding Box."
+        )
+
+    try:
+        polygon = Polygon.from_bbox(aoi)
+    except Exception as e:
+        raise ValueError(f"Erro ao criar o polígono: {e}")
+
+    fenomeno.aoi = polygon
+    fenomeno.save()
+    fsm = FenomenoFSM(fenomeno)
+    fsm.select_aoi()
+
+    return fenomeno
+
+
+def update_fenomeno_product(user: User, queimadas_id: int, product: str) -> Fenomeno:
+    fenomeno = get_object_or_404(Fenomeno, id=queimadas_id)
+
+    if fenomeno.user != user:
+        raise PermissionDenied("Usuário não tem permissão para alterar esse fenômeno")
+
+    registered_products = [p.product_id for p in list_registered_products()]
+
+    if product not in registered_products:
+        raise ValueError("Produto inválido. O produto não está cadastrado.")
+
+    fenomeno.product_name = product
+    fenomeno.save()
+    fsm = FenomenoFSM(fenomeno)
+    fsm.select_product()
 
     return fenomeno
