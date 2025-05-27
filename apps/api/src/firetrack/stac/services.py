@@ -4,7 +4,7 @@ from typing import List
 import pystac_client
 
 import firetrack.stac.serializers as Serializers
-from firetrack.core.exceptions import ProductNotFoundError
+from firetrack.core.exceptions import NoCandidatesError, ProductNotFoundError
 
 
 def list_all_products() -> List[dict]:
@@ -29,12 +29,34 @@ def get_product_by_id(product_id: str) -> dict:
     raise ProductNotFoundError(product_id)
 
 
-if __name__ == "__main__":
-    products = list_all_products()
-    for product in products[0:4]:
-        print(json.dumps(product, indent=2))
+def query_product_by_bbox_and_period(
+    product_id: str, bbox: List[float], start_date: str, end_date: str
+) -> List[dict]:
+    service = pystac_client.Client.open("https://data.inpe.br/bdc/stac/v1/")
 
-    print("teste")
-    # Obter detalhes de um produto específico
-    product_details = get_product_by_id("MODIS/006/MOD14A1")
-    print(product_details)
+    search = service.search(
+        collections=[product_id],
+        bbox=bbox,
+        datetime=f"{start_date}/{end_date}",
+    )
+
+    items = search.get_items()
+
+    if not items:
+        raise NoCandidatesError(product_id)
+
+    return [Serializers.serialize_item_to_dict(item) for item in items]
+
+
+if __name__ == "__main__":
+    print(
+        json.dumps(
+            query_product_by_bbox_and_period(
+                "CB4-WFI-L2-DN-1",
+                [-60.0, -10.0, -50.0, 0.0],
+                "2023-01-01T00:00:00Z",
+                "2023-01-31T23:59:59Z",
+            ),
+            indent=2,
+        )
+    )

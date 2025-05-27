@@ -1,0 +1,256 @@
+{
+    "type": "Feature",
+    "stac_version": "1.1.0",
+    "stac_extensions": [
+        "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+    ],
+    "id": "CBERS_4_AWFI_DRD_20230102_172_111_L2",
+    "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [
+                    -65.130049,
+                    -13.648697
+                ],
+                [
+                    -55.547107,
+                    -13.648697
+                ],
+                [
+                    -55.547107,
+                    -5.638248
+                ],
+                [
+                    -65.130049,
+                    -5.638248
+                ],
+                [
+                    -65.130049,
+                    -13.648697
+                ]
+            ]
+        ]
+    },
+    "bbox": [
+        -65.130049,
+        -13.648697,
+        -55.547107,
+        -5.638248
+    ],
+    "properties": {
+        "datetime": "2023-01-02T14:14:00Z",
+        "start_datetime": "2023-01-02T14:14:00.000000Z",
+        "end_datetime": "2023-01-02T14:14:00.000000Z",
+        "created": "2025-02-13T17:12:22.202721Z",
+        "updated": "2025-02-13T17:12:22.201750Z",
+        "bdc:tile": "172_111",
+        "eo:cloud_cover": null
+    },
+    "links": [
+        {
+            "rel": "self",
+            "href": "https://data.inpe.br/bdc/stac/v1/collections/CB4-WFI-L2-DN-1/items/CBERS_4_AWFI_DRD_20230102_172_111_L2"
+        },
+        {
+            "rel": "parent",
+            "href": "https://data.inpe.br/bdc/stac/v1/collections/CB4-WFI-L2-DN-1"
+        },
+        {
+            "rel": "collection",
+            "href": "https://data.inpe.br/bdc/stac/v1/collections/CB4-WFI-L2-DN-1"
+        },
+        {
+            "rel": "root",
+            "href": "https://data.inpe.br/bdc/stac/v1/",
+            "type": "application/json",
+            "title": "INPE STAC Server"
+        }
+    ],
+    "assets": {
+        "BAND13": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND13.tif",
+            "type": "image/tiff",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 72633923,
+            "bdc:raster_size": {
+                "x": 13976,
+                "y": 16294
+            },
+            "checksum:multihash": "1220aa4f0fc78870a048e337163616f0f7a40e1411743b46d7c14fe06b3bae7ed83b",
+            "eo:bands": [
+                {
+                    "name": "BAND13",
+                    "common_name": "blue",
+                    "description": "BAND13 blue band from 0.45 to 0.52 micrometers",
+                    "min": 0.0,
+                    "max": 1024.0,
+                    "nodata": 0.0,
+                    "scale": 1.0,
+                    "scale_add": null,
+                    "data_type": "uint8",
+                    "resolution_x": 64,
+                    "resolution_y": 64,
+                    "center_wavelength": 0.485,
+                    "full_width_half_max": 0.07
+                }
+            ],
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND14": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND14.tif",
+            "type": "image/tiff",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 116574855,
+            "bdc:raster_size": {
+                "x": 13976,
+                "y": 16294
+            },
+            "checksum:multihash": "12204cebf299899d3f86ce2c51358f34262c36dbff73b12749eaddebc98ce76b4036",
+            "eo:bands": [
+                {
+                    "name": "BAND14",
+                    "common_name": "green",
+                    "description": "BAND14 green band from 0.52 to 0.59 micrometers",
+                    "min": 0.0,
+                    "max": 1024.0,
+                    "nodata": 0.0,
+                    "scale": 1.0,
+                    "scale_add": null,
+                    "data_type": "uint8",
+                    "resolution_x": 64,
+                    "resolution_y": 64,
+                    "center_wavelength": 0.555,
+                    "full_width_half_max": 0.07
+                }
+            ],
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND15": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND15.tif",
+            "type": "image/tiff",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 108239051,
+            "bdc:raster_size": {
+                "x": 13976,
+                "y": 16294
+            },
+            "checksum:multihash": "12201e843048b6e58164726152dbeb99b5848261e2dcbf4a7db5e03185ca3018ad57",
+            "eo:bands": [
+                {
+                    "name": "BAND15",
+                    "common_name": "red",
+                    "description": "BAND15 red band from 0.63 to 0.69 micrometers",
+                    "min": 0.0,
+                    "max": 1024.0,
+                    "nodata": 0.0,
+                    "scale": 1.0,
+                    "scale_add": null,
+                    "data_type": "uint8",
+                    "resolution_x": 64,
+                    "resolution_y": 64,
+                    "center_wavelength": 0.66,
+                    "full_width_half_max": 0.06
+                }
+            ],
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND16": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND16.tif",
+            "type": "image/tiff",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 131931433,
+            "bdc:raster_size": {
+                "x": 13976,
+                "y": 16294
+            },
+            "checksum:multihash": "1220657286bdef284c261091d5364ba0b28b440f39073181f42bf0c202721a3c373d",
+            "eo:bands": [
+                {
+                    "name": "BAND16",
+                    "common_name": "nir",
+                    "description": "B16 nir band from 0.77 to 0.89 micrometers",
+                    "min": 0.0,
+                    "max": 1024.0,
+                    "nodata": 0.0,
+                    "scale": 1.0,
+                    "scale_add": null,
+                    "data_type": "uint8",
+                    "resolution_x": 64,
+                    "resolution_y": 64,
+                    "center_wavelength": 0.83,
+                    "full_width_half_max": 0.12
+                }
+            ],
+            "roles": [
+                "data"
+            ]
+        },
+        "thumbnail": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111.png",
+            "type": "image/png",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 1546360,
+            "checksum:multihash": "122014223c029d3a65077c98037898fd237f68396eca7eb33899f20c11526f1ec3a1",
+            "roles": [
+                "thumbnail"
+            ]
+        },
+        "BAND13_xml": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND13.xml",
+            "type": "application/xml",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 79913,
+            "checksum:multihash": "122048d7bd1be76246c7945d8000ce4e1cd6eda488a2aa1f6d4a3cabb4eb1e0a02ab",
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND14_xml": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND14.xml",
+            "type": "application/xml",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 79913,
+            "checksum:multihash": "1220cd5c7ea02edad5b2c11e90fadc687ba05979e86a36272474b5eff3903dfb2d6c",
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND15_xml": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND15.xml",
+            "type": "application/xml",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 79913,
+            "checksum:multihash": "122030ce3a4c6acf4a099698e3b40482b17fdb28b90950103db5ff634367a278f566",
+            "roles": [
+                "data"
+            ]
+        },
+        "BAND16_xml": {
+            "href": "https://data.inpe.br/bdc/data/cbers4/2023_01/CBERS_4_AWFI_DRD_2023_01_02.14_14_00_CB11/172_111_0/2_BC_UTM_WGS84/CBERS_4_AWFI_20230102_172_111_L2_BAND16.xml",
+            "type": "application/xml",
+            "created": "2025-02-13T17:12:22",
+            "updated": "2025-02-13T17:12:22",
+            "bdc:size": 79913,
+            "checksum:multihash": "12203837a370f22ba39746d403a9e0adc3b7c15b6182bbdadb2efbbf8f2c4d9137f4",
+            "roles": [
+                "data"
+            ]
+        }
+    },
+    "collection": "CB4-WFI-L2-DN-1"
+}

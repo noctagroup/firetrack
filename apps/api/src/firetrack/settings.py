@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     "firetrack.conta",
     "firetrack.fenomeno",
     "firetrack.produtos",
+    "firetrack.candidatos",
     # Third-party Apps
     "corsheaders",
 ]
