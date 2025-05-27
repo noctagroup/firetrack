@@ -4,11 +4,11 @@ from firetrack.candidatos.models import Candidato
 def register_candidatos(candidatos: list[dict], fenomeno_id: str) -> None:
     for candidato in candidatos:
         Candidato.objects.update_or_create(
-            id=candidato["id"],
             fenomeno_id=fenomeno_id,
+            id_img=candidato["id"],
             defaults={
-                "nir": candidato["nir"],
-                "red": candidato["red"],
+                "nir": candidato["bands"]["nir"],
+                "red": candidato["bands"]["red"],
                 "thumbnail": candidato["thumbnail"],
                 "datetime": candidato["datetime"],
                 "valido": None,

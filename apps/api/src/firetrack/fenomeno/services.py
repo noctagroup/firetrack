@@ -74,7 +74,6 @@ def update_fenomeno_period(
     fenomeno.filter_end_date = end_date
     fenomeno.save()
     fsm = FenomenoFSM(fenomeno)
-    """ fsm.select_product() """
     fsm.select_timespan()
 
     return fenomeno
@@ -123,8 +122,8 @@ def update_fenomeno_product(user: User, queimadas_id: int, product: str) -> Feno
     return fenomeno
 
 
-def confirm_fenomeno(user: User, queimadas_id: int) -> Fenomeno:
-    fenomeno: Fenomeno = get_object_or_404(Fenomeno, id=queimadas_id)
+def confirm_fenomeno(user: User, fenomeno_id: int) -> Fenomeno:
+    fenomeno: Fenomeno = get_object_or_404(Fenomeno, id=fenomeno_id)
 
     if fenomeno.user != user:
         raise PermissionDenied("Usuário não tem permissão para confirmar esse fenômeno")
@@ -138,12 +137,16 @@ def confirm_fenomeno(user: User, queimadas_id: int) -> Fenomeno:
                 fenomeno.aoi.extent,
                 fenomeno.filter_start_date.isoformat(),
                 fenomeno.filter_end_date.isoformat(),
-            )
+            ),
+            fenomeno_id,
         )
 
         fsm.confirm_processing_scope()
 
     except NoCandidatesError:
         fsm.no_found_candidates()
+
+    except Exception:
+        fsm.error()
 
     return fenomeno

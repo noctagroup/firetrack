@@ -25,7 +25,7 @@ class Candidato(models.Model):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["id", "fenomeno"], name="unique_candidato_id_fenomeno"
+                fields=["id_img", "fenomeno"], name="unique_candidato_id_fenomeno"
             )
         ]
 
