@@ -141,7 +141,7 @@ export function Sidebar() {
 
             <DropdownMenuSub>
               <DropdownMenuSubTrigger className="gap-2">
-                <Palette className="text-muted-foreground" />
+                <Palette className="text-muted-foreground size-4" />
                 Tema
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
