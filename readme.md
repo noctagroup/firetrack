@@ -43,7 +43,7 @@
         
 ## :rocket: Entregas
 ```
-https://youtu.be/tKvCl0gpXMk
+https://www.youtube.com/watch?v=4Aq1ixhojRM
 ```
-<a href="https://youtu.be/tKvCl0gpXMk"><strong>Assista o video da sprint review clicando aqui </strong></a> 
+<a href="https://www.youtube.com/watch?v=4Aq1ixhojRM"><strong>Assista o video da sprint review clicando aqui </strong></a> 
 
