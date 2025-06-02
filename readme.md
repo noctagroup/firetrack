@@ -13,9 +13,9 @@
 <span id="objetivos">
     
 ## :dart: Objetivos da Sprint
--Implementação do sistema de autenticação concluída.
--Desenvolvimento parcial do sistema de autenticação de fenômeno, com estrutura inicial em funcionamento.
--Avanço na integração de Inteligência Artificial, com testes iniciais realizados e funcionalidades básicas em desenvolvimento.
+- Implementação do sistema de autenticação concluída  
+- Desenvolvimento parcial do sistema de autenticação de fenômeno, com estrutura inicial em funcionamento
+- Avanço na integração de Inteligência Artificial, com testes iniciais realizados e funcionalidades básicas em desenvolvimento
 
 
 <span id="Resumo do trabalho da equipe">
