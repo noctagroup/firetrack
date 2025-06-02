@@ -1,6 +1,6 @@
 <span id="topo">
 
-<h1 align="center">Sprint 1: Entrega 22/04/2025</h1>
+<h1 align="center">Sprint 1: Entrega 22/05/2025</h1>
 
 <p align="center">
     <a href="#objetivos">Objetivos da sprint</a> &nbsp |&nbsp &nbsp
@@ -13,12 +13,9 @@
 <span id="objetivos">
     
 ## :dart: Objetivos da Sprint
-- Prototipação
-- Elaboração do fluxo de processamento
-- metodologia de classificação  
-- Login
-- plataforma de desenvolvimento
-
+-Implementação do sistema de autenticação concluída.
+-Desenvolvimento parcial do sistema de autenticação de fenômeno, com estrutura inicial em funcionamento.
+-Avanço na integração de Inteligência Artificial, com testes iniciais realizados e funcionalidades básicas em desenvolvimento.
 
 
 <span id="Resumo do trabalho da equipe">
