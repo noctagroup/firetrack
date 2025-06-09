@@ -44,10 +44,13 @@ services:
     depends_on:
       postgis:
         condition: service_healthy
-    volumes:
-      - type: bind
-        source: ./apps/api
-        target: /app
+
+    #resolve problema do windows e se descomentar quebra no windows
+
+    # volumes:
+    #   - type: bind
+    #     source: ./apps/api
+    #     target: /app
     restart: on-failure
 
   postgis:
