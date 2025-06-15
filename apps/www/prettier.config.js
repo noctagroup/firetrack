@@ -6,5 +6,6 @@ export default {
   trailingComma: "es5",
   printWidth: 100,
   quoteProps: "consistent",
+  endOfLine: "lf",
   plugins: ["prettier-plugin-tailwindcss"],
 }
