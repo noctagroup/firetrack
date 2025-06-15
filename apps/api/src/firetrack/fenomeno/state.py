@@ -18,6 +18,7 @@ class FenomenoState(str, Enum):
     IN_VISUAL_ANALYSIS = "In Visual Analysis"
     READY_FOR_VALID_PAIR_SEPARATION = "Ready for Valid Pair Separation"
     IN_VALID_PAIR_SEPARATION = "In Valid Pair Separation"
+    NO_VALID_PAIRS = "No Valid Pairs Found"
     READY_FOR_INDEXES_CREATION = "Ready for Indexes Creation"
     IN_INDEXES_CREATION = "In Indexes Creation"
     READY_FOR_DIFFERENCE_IMAGE_CREATION = "Ready for Difference Image Creation"
@@ -87,6 +88,11 @@ class FenomenoFSM:
             "dest": FenomenoState.IN_VISUAL_ANALYSIS.value,
         },
         {
+            "trigger": "resume_visual_analysis",
+            "source": FenomenoState.IN_VISUAL_ANALYSIS.value,
+            "dest": FenomenoState.IN_VISUAL_ANALYSIS.value,
+        },
+        {
             "trigger": "finish_visual_analysis",
             "source": FenomenoState.IN_VISUAL_ANALYSIS.value,
             "dest": FenomenoState.READY_FOR_VALID_PAIR_SEPARATION.value,
@@ -95,6 +101,11 @@ class FenomenoFSM:
             "trigger": "start_valid_pair_separation",
             "source": FenomenoState.READY_FOR_VALID_PAIR_SEPARATION.value,
             "dest": FenomenoState.IN_VALID_PAIR_SEPARATION.value,
+        },
+        {
+            "trigger": "no_valid_pairs",
+            "source": FenomenoState.IN_VALID_PAIR_SEPARATION.value,
+            "dest": FenomenoState.NO_VALID_PAIRS.value,
         },
         {
             "trigger": "finish_valid_pair_separation",

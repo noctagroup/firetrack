@@ -6,14 +6,18 @@ from django.contrib.gis.geos import Polygon
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
-from firetrack.candidatos.services import register_candidatos
+from firetrack.candidatos.models import Candidato
+from firetrack.candidatos.services import (
+    register_candidatos,
+    search_candidatos_fenomeno_for_visual_analysis,
+)
 from firetrack.core.exceptions import (
     InvalidDateFormat,
     InvalidDateRange,
     NoCandidatesError,
 )
 from firetrack.fenomeno.models import Fenomeno
-from firetrack.fenomeno.state import FenomenoFSM
+from firetrack.fenomeno.state import FenomenoFSM, FenomenoState
 from firetrack.produtos.services import list_registered_products
 from firetrack.stac.services import query_product_by_bbox_and_period
 
@@ -142,11 +146,42 @@ def confirm_fenomeno(user: User, fenomeno_id: int) -> Fenomeno:
         )
 
         fsm.confirm_processing_scope()
-
     except NoCandidatesError:
         fsm.no_found_candidates()
 
     except Exception:
         fsm.error()
 
+    return fenomeno
+
+
+def list_candidatos_visual_analysis(
+    user: User, fenomeno_id: int
+) -> tuple[str, List[Candidato]]:
+    fenomeno: Fenomeno = get_object_or_404(Fenomeno, id=fenomeno_id)
+
+    if fenomeno.user != user:
+        raise PermissionDenied("Usuário não tem permissão para acessar esse fenômeno")
+
+    fsm = FenomenoFSM(fenomeno)
+
+    try:
+        if fenomeno.state == FenomenoState.READY_FOR_VISUAL_ANALYSIS.value:
+            fsm.start_visual_analysis()
+        elif fenomeno.state == FenomenoState.IN_VISUAL_ANALYSIS.value:
+            fsm.resume_visual_analysis()
+        else:
+            raise ValueError(
+                f"Transição inválida: o estado atual '{fenomeno.state}' não permite análise visual."
+            )
+    except Exception as e:
+        raise ValueError(f"Erro ao realizar a transição de estado: {e}")
+
+    candidatos = search_candidatos_fenomeno_for_visual_analysis(fenomeno)
+
+    return (fenomeno.state, candidatos)
+
+
+def get_fenomeno_by_id(fenomeno_id: int) -> Fenomeno:
+    fenomeno = get_object_or_404(Fenomeno, id=fenomeno_id)
     return fenomeno
