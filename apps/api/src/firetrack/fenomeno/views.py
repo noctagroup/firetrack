@@ -4,7 +4,6 @@ from http import HTTPStatus
 from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
 import firetrack.candidatos.services as CandidatosServices
@@ -15,7 +14,6 @@ import firetrack.fenomeno.services as services
 
 
 @require_POST
-@csrf_exempt
 def create_fenomeno(request: WSGIRequest):
     if not request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
@@ -173,6 +171,11 @@ def confirm_visual_analysis(request: WSGIRequest, queimadas_id: int):
     except json.JSONDecodeError:
         return JsonResponse({"error": "JSON inválido."}, status=HTTPStatus.BAD_REQUEST)
 
+@require_GET
+def fenomeno_index(request: WSGIRequest):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+    
+    fenomenos = services.list_user_fenomenos(request.user)
 
-def fenomeno_index(_):
-    return JsonResponse({"fenomeno": "fenomeno"})
+    return JsonResponse(serializer.serialize_fenomenos_to_visualization(fenomenos))

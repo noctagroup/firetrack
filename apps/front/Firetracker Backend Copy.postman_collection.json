@@ -1,0 +1,1952 @@
+{
+	"info": {
+		"_postman_id": "98454e13-37cf-4d92-a4fd-34379d68a01b",
+		"name": "Firetracker Backend Copy",
+		"description": "Contact Support:\n Email: otavio.abreu96@gmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23094037"
+	},
+	"item": [
+		{
+			"name": "conta",
+			"item": [
+				{
+					"name": "Consulta se o usuário atual está logado.",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/conta",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"conta"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sucesso. O usuário atual está logado.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/conta",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"full_name\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"is_authenticated\": \"<boolean>\"\n}"
+						},
+						{
+							"name": "Não autorizado. O usuário atual não está logado.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/conta",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"is_authenticated\": \"<boolean>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Realiza o login.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let csrfCookie = pm.cookies.get(\"csrftoken\");",
+									"",
+									"if (csrfCookie) {",
+									"    pm.environment.set(\"token\", csrfCookie);",
+									"    console.log(\"CSRF token definido como variável de ambiente:\", csrfCookie);",
+									"} else {",
+									"    console.warn(\"CSRF token não encontrado nos cookies.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "lu4aQ5ihAadvi5inb6TexqqXFuY8cNZF",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"query\": \"otavio.abreu\",\n  \"password\": \"Peppa96@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}conta/entrar/",
+							"host": [
+								"{{baseUrl}}conta"
+							],
+							"path": [
+								"entrar",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sucesso. O usuário foi logado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"query\": \"<string>\",\n  \"password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/conta/entrar",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"entrar"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"full_name\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\",\n  \"is_authenticated\": \"<boolean>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Cadastra um novo usuário.",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"otavio.abreu\",\n  \"email\": \"otavio.abreu96@gmail.com\",\n  \"password\": \"Peppa96@\",\n  \"password_confirmation\": \"Peppa96@\",\n  \"first_name\": \"Otávio\",\n  \"last_name\": \"Abreu\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/conta/cadastrar/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"conta",
+								"cadastrar",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sucesso. O usuário foi registrado e logado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\",\n  \"password_confirmation\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/conta/cadastrar",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"cadastrar"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\"\n}"
+						},
+						{
+							"name": "Requisição inválida. O corpo da requisição não está de acordo com o esperado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\",\n  \"password_confirmation\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/conta/cadastrar",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"cadastrar"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Conflito. Existe outro usuário com esse nome de usuário ou email.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"password\": \"<string>\",\n  \"password_confirmation\": \"<string>\",\n  \"first_name\": \"<string>\",\n  \"last_name\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/conta/cadastrar",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"cadastrar"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Desloga o usuário logado.",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/conta/sair",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"conta",
+								"sair"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Sucesso. O usuário foi deslogado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/conta/sair",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"sair"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Desautorizado. O usuário que tentou deslogar não estava logado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/conta/sair",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"conta",
+										"sair"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "fenomeno/queimadas",
+			"item": [
+				{
+					"name": "{queimadas_id}",
+					"item": [
+						{
+							"name": "analise_visual",
+							"item": [
+								{
+									"name": "Retorna os thumbnails para análise visual do processamento selecionado em sua respectiva Área de Interesse e Período.",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/analise_visual",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"analise_visual"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Recebe os IDs dos thumbnails eleitos pela fase de análise visual do usuário.",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/analise_visual",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"analise_visual"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Retorna os detalhes do processamento de Cicatriz de Queimadas selecionado.",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Seleciona a AOI",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRFToken",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    -62.534180,\n    1.076597,\n    -59.941406,\n    2.877208\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/aoi",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"aoi"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "{{queimadas_id}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"area_de_interesse"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+								},
+								{
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"area_de_interesse"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Process not found",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"area_de_interesse"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Seleciona o periodo",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRFToken",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"start_datetime\": \"2024-05-11T00:00:00Z\",\n  \"end_datetime\": \"2025-05-11T23:59:59Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"period"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "{{queimadas_id}}",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+								},
+								{
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Process not found",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Seleciona o produto",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRFToken",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"product_id\": \"CB4-WFI-L2-DN-1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/product",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"product"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "{{queimadas_id}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+								},
+								{
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Process not found",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"start_datetime\": \"<isoformat>\",\n  \"end_datetime\": \"<isoformat>\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/period",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"period"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						},
+						{
+							"name": "Confirma e valida o processamento selecionado. Prepara e encaminha o processamento para a análise visual.",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-CSRFToken",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/confirm",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"confirm"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "{{queimadas_id}}",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/confirm",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"confirm"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+								},
+								{
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/confirm",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"confirm"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "Process not found",
+									"originalRequest": {
+										"method": "PATCH",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/confirm",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"fenomeno",
+												"queimadas",
+												":queimadas_id",
+												"confirm"
+											],
+											"variable": [
+												{
+													"key": "queimadas_id",
+													"value": "<number>",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Not Found",
+									"code": 404,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Retorna todos os processamentos de Cicatriz de Queimadas do usuário logado.",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-CSRFToken",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/fenomeno/queimadas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fenomeno",
+								"queimadas"
+							],
+							"query": [
+								{
+									"key": "X-CSRFToken",
+									"value": "{{token}}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cria e inicializa um processamento vazio de Cicatriz de Queimadas.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = JSON.parse(responseBody);",
+									"const queimadas_id = response.id;",
+									"",
+									"// Define a variável de ambiente (ou use setCollectionVariable para variável de coleção)",
+									"pm.environment.set(\"queimadas_id\", queimadas_id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}fenomeno/queimadas/",
+							"host": [
+								"{{baseUrl}}fenomeno"
+							],
+							"path": [
+								"queimadas",
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Cria produtos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}produtos/",
+							"host": [
+								"{{baseUrl}}produtos"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Lista Análise Visual",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var template = `",
+									"<style type=\"text/css\">",
+									"    .tftable {font-size:14px;color:#333333;width:100%;border-width: 1px;border-color: #87ceeb;border-collapse: collapse;}",
+									"    .tftable th {font-size:18px;background-color:#87ceeb;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;text-align:left;}",
+									"    .tftable tr {background-color:#ffffff;}",
+									"    .tftable td {font-size:14px;border-width: 1px;padding: 8px;border-style: solid;border-color: #87ceeb;}",
+									"    .tftable tr:hover {background-color:#e0ffff;}",
+									"</style>",
+									"",
+									"<table class=\"tftable\" border=\"1\">",
+									"    <tr>",
+									"        <th>ID</th>",
+									"        <th>Status</th>",
+									"    </tr>",
+									"    ",
+									"    <tr>",
+									"        <td>{{response.id}}</td>",
+									"        <td>{{response.status}}</td>",
+									"    </tr>",
+									"</table>",
+									"`;",
+									"",
+									"function constructVisualizerPayload() {",
+									"    return { response: pm.response.json() }",
+									"}",
+									"",
+									"pm.visualizer.set(template, constructVisualizerPayload());"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/list_analise_visual",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fenomeno",
+								"queimadas",
+								":queimadas_id",
+								"list_analise_visual"
+							],
+							"variable": [
+								{
+									"key": "queimadas_id",
+									"value": "{{queimadas_id}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+						},
+						{
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Process not found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Confirm visual analise",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-CSRFToken",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"validated_candidates\": [\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230201_162_123_L2\",\n            \"valid\": true\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230201_162_105_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230201_162_099_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_153_099_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_153_105_L2\",\n            \"valid\": true\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_153_111_L2\",\n            \"valid\": true\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_179_117_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_179_111_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230202_179_105_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230203_170_117_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230203_170_123_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230204_161_099_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230205_178_099_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230205_178_117_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230205_178_111_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230205_178_105_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230206_169_111_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230206_169_117_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230206_169_099_L2\",\n            \"valid\": false\n        },\n        {\n            \"id_img\": \"CBERS_4_AWFI_DRD_20230207_160_105_L2\",\n            \"valid\": true\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/confirm_visual_analysis",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fenomeno",
+								"queimadas",
+								":queimadas_id",
+								"confirm_visual_analysis"
+							],
+							"variable": [
+								{
+									"key": "queimadas_id",
+									"value": "{{queimadas_id}}"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+						},
+						{
+							"name": "Invalid input",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Process not found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n  \"<float>\",\n  \"<float>\",\n  \"<float>\",\n  \"<float>\"\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/fenomeno/queimadas/:queimadas_id/area_de_interesse",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"fenomeno",
+										"queimadas",
+										":queimadas_id",
+										"area_de_interesse"
+									],
+									"variable": [
+										{
+											"key": "queimadas_id",
+											"value": "<number>",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Cria produtos",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "X-CSRFToken",
+						"value": "aKL6uTRvXPHk0PWwFwAkBiScfn2IShrk",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_id\": \"CB4A-WPM-L2-DN-1\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}produtos/create",
+					"host": [
+						"{{baseUrl}}produtos"
+					],
+					"path": [
+						"create"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/fenomeno/queimadas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fenomeno",
+								"queimadas"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n  \"id\": \"<number>\",\n  \"status\": \"<string>\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}

@@ -4,6 +4,42 @@ from firetrack.candidatos.models import Candidato
 from firetrack.fenomeno.models import Fenomeno
 from firetrack.pares.models import Pares
 
+def serialize_fenomenos_to_visualization(fenomenos: list[Fenomeno]) -> dict:
+    fenomenos_dict = {"fenomenos": [], "aguardandoAnalise": [], "emProcessamento": []}
+    for fenomeno in fenomenos:
+        if fenomeno.state == "PUBLISHED":
+            fenomenos_dict["fenomenos"].append(
+                {
+                    "id": fenomeno.id,
+                    "title": "Processamento" + str(fenomeno.id),
+                    "dataInicio": fenomeno.filter_start_date,
+                    "dataFim": fenomeno.filter_end_date,
+                    "produto": fenomeno.product_name,
+                }
+            )
+        elif fenomeno.state == "READY_FOR_VISUAL_ANALYSIS":
+            fenomenos_dict["aguardandoAnalise"].append(
+                {
+                    "id": fenomeno.id,
+                    "title": "Processamento " + str(fenomeno.id),
+                    "dataInicio": fenomeno.filter_start_date,
+                    "dataFim": fenomeno.filter_end_date,
+                    "produto": fenomeno.product_name,
+                }
+            )
+        else:
+            fenomenos_dict["emProcessamento"].append(
+                {
+                    "id": fenomeno.id,
+                    "title": "Processamento " + str(fenomeno.id),
+                    "dataInicio": fenomeno.filter_start_date,
+                    "dataFim": fenomeno.filter_end_date,
+                    "produto": fenomeno.product_name,
+                    "estado": fenomeno.state,
+                }
+            )
+    
+    return fenomenos_dict
 
 def serialize_fenomeno_to_status_and_id(fenomeno: Fenomeno):
     return {"id": fenomeno.id, "status": fenomeno.state}
