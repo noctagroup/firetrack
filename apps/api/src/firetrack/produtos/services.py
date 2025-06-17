@@ -15,15 +15,19 @@ def list_all_products() -> List[dict]:
     return StacService.list_all_products()
 
 
-def register_product(product_id: str) -> Produto:
+def register_product(
+    product_id: str,
+    regrowth_threshold: int,
+) -> tuple[Produto, bool]:
     if Produto.objects.filter(product_id=product_id).exists():
         raise PermissionDenied("Produto já registrado.")
 
     product_dict = StacService.get_product_by_id(product_id)
 
-    return Produto.objects.create(
+    return Produto.objects.update_or_create(
         product_id=product_dict["id"],
         description=product_dict["description"],
+        regrowth_threshold=regrowth_threshold,
     )
 
 

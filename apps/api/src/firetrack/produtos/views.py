@@ -38,10 +38,24 @@ def register_produto(request: WSGIRequest):
         data = json.loads(request.body)
 
         product_id = data.get("product_id")
+        regrowth_threshold = data.get("regrowth_threshold")
 
-        return JsonResponse(
-            serialize_produto(services.register_product(product_id)), safe=True
-        )
+        if not product_id:
+            return JsonResponse(
+                {"error": "product_id é obrigatório."}, status=HTTPStatus.BAD_REQUEST
+            )
+
+        if regrowth_threshold is None:
+            return JsonResponse(
+                {"error": "regrowth_threshold é obrigatório."},
+                status=HTTPStatus.BAD_REQUEST,
+            )
+
+        produto, created = services.register_product(product_id, regrowth_threshold)
+
+        status = HTTPStatus.CREATED if created else HTTPStatus.OK
+
+        return JsonResponse(serialize_produto(produto), status=status)
 
     except json.JSONDecodeError:
         return JsonResponse({"error": "JSON inválido."}, status=HTTPStatus.BAD_REQUEST)
