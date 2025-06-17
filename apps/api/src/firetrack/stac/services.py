@@ -1,10 +1,12 @@
 import json
+import logging
 from typing import List
 
 import pystac_client
-
 import firetrack.stac.serializers as Serializers
 from firetrack.core.exceptions import NoCandidatesError, ProductNotFoundError
+
+logger = logging.getLogger(__name__)
 
 
 def list_all_products() -> List[dict]:
@@ -34,28 +36,48 @@ def query_product_by_bbox_and_period(
 ) -> List[dict]:
     service = pystac_client.Client.open("https://data.inpe.br/bdc/stac/v1/")
 
+    logger.debug(
+        "Starting search for product: {product_id}, bbox: {bbox}, "
+        "start_date: {start_date}, end_date: {end_date}".format(
+            product_id=product_id, bbox=bbox, start_date=start_date, end_date=end_date
+        )
+    )
     search = service.search(
         collections=[product_id],
         bbox=bbox,
         datetime=f"{start_date}/{end_date}",
     )
 
-    items = search.get_items()
+    items = search.items()
 
     if not items:
         raise NoCandidatesError(product_id)
 
-    return [Serializers.serialize_item_to_dict(item) for item in items]
+    serialized_items = [Serializers.serialize_item_to_dict(item) for item in items]
+
+    logger.debug(f"Found {len(serialized_items)} items for product {product_id}")
+
+    return serialized_items
 
 
 if __name__ == "__main__":
+
+    a = query_product_by_bbox_and_period(
+        "CB4-WFI-L2-DN-1",
+        [-54.404297, -25.562265, -42.890625, -18.687879],
+        "2025-03-04T00:00:00Z",
+        "2025-05-11T23:59:59Z",
+    )
+
+    print(len(a))
+
     print(
         json.dumps(
             query_product_by_bbox_and_period(
                 "CB4-WFI-L2-DN-1",
-                [-60.0, -10.0, -50.0, 0.0],
-                "2023-01-01T00:00:00Z",
-                "2023-01-31T23:59:59Z",
+                [-54.404297, -25.562265, -42.890625, -18.687879],
+                "2025-03-04T00:00:00Z",
+                "2025-05-11T23:59:59Z",
             ),
             indent=2,
         )

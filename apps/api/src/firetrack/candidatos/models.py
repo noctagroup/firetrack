@@ -16,7 +16,13 @@ class Candidato(models.Model):
     red = models.URLField(help_text="Link para o arquivo da banda RED")
     thumbnail = models.URLField(help_text="Link para o arquivo do thumbnail")
     datetime = models.DateTimeField(help_text="Data e hora do fenômeno")
-    valido = models.BooleanField(
+    path = models.IntegerField(help_text="Órbita do satélite")
+    row = models.IntegerField(help_text="Ponto do satélite")
+    path_row = models.CharField(
+        max_length=20,
+        help_text="Combinação de path e row no formato 'path_row' (ex: 172_111)",
+    )
+    valid = models.BooleanField(
         null=True,
         blank=True,
         help_text="Indica se o candidato é válido ou não",

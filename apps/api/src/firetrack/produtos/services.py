@@ -2,6 +2,7 @@ from typing import List
 
 from django.core.exceptions import PermissionDenied
 
+from firetrack.core.exceptions import ProductNotFoundError
 import firetrack.stac.services as StacService
 from firetrack.produtos.models import Produto
 
@@ -24,3 +25,11 @@ def register_product(product_id: str) -> Produto:
         product_id=product_dict["id"],
         description=product_dict["description"],
     )
+
+
+def get_product_threshold(product_id: int) -> int:
+    try:
+        product = Produto.objects.get(product_id=product_id)
+        return product.regrowth_threshold
+    except Produto.DoesNotExist:
+        raise ProductNotFoundError("Produto não encontrado.")

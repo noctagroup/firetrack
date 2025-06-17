@@ -33,7 +33,7 @@ SECRET_KEY = config(
 DEBUG = config("DJANGO_DEBUG", default=True, cast=bool)
 
 ALLOWED_HOSTS = config(
-    "DJANGO_ALLOWED_HOSTS", default=".localhost, 127.0.0.1, [::1]", cast=Csv()
+    "DJANGO_ALLOWED_HOSTS", default="localhost, 127.0.0.1, [::1]", cast=Csv()
 )
 
 
@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "firetrack.fenomeno",
     "firetrack.produtos",
     "firetrack.candidatos",
+    "firetrack.pares",
     # Third-party Apps
     "corsheaders",
 ]
@@ -170,3 +171,41 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 APPEND_SLASH = False
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "[{asctime}] {levelname} {name} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+        },
+        "firetrack.stac.services": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "firetrack.candidatos.services": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+        "firetrack.pares.services": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}

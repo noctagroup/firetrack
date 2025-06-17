@@ -4,15 +4,16 @@ from http import HTTPStatus
 from django.core.exceptions import PermissionDenied
 from django.core.handlers.wsgi import WSGIRequest
 from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
 
+import firetrack.candidatos.services as CandidatosServices
+import firetrack.pares.services as ParesServices
+import firetrack.produtos.services as ProdutosService
 import firetrack.fenomeno.serializers as serializer
 import firetrack.fenomeno.services as services
 
 
 @require_POST
-@csrf_exempt
 def create_fenomeno(request: WSGIRequest):
     if not request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
@@ -118,5 +119,63 @@ def confirm_fenomeno(request: WSGIRequest, queimadas_id: int):
     return JsonResponse(serializer.serialize_fenomeno_to_status_and_id(fenomeno))
 
 
-def fenomeno_index(_):
-    return JsonResponse({"fenomeno": "fenomeno"})
+@require_GET
+def list_candidatos_visual_analysis(request: WSGIRequest, queimadas_id: int):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+
+    state, candidates = services.list_candidatos_visual_analysis(
+        request.user, queimadas_id
+    )
+    return JsonResponse(
+        serializer.serialize_candidatos_to_visual_analysis(state, candidates)
+    )
+
+
+@require_POST
+def confirm_visual_analysis(request: WSGIRequest, queimadas_id: int):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+
+    try:
+        data = json.loads(request.body)
+        candidates = data.get("validated_candidates")
+        if not candidates or not isinstance(candidates, list):
+            return JsonResponse(
+                {"error": "A lista de candidatos é obrigatória."},
+                status=HTTPStatus.BAD_REQUEST,
+            )
+
+        CandidatosServices.confirm_candidatos_visual_analysis(
+            request.user, queimadas_id, candidates
+        )
+
+        candidatos_path_row = CandidatosServices.get_candidatos_validados_por_path_row(
+            queimadas_id
+        )
+
+        fenomeno = services.get_fenomeno_by_id(queimadas_id)
+
+        regrowth_threshold = ProdutosService.get_product_threshold(
+            fenomeno.product_name
+        )
+
+        pares_validos = ParesServices.separate_pares(
+            fenomeno, candidatos_path_row, regrowth_threshold
+        )
+
+        return JsonResponse(
+            {"valid_pairs": serializer.serialize_valid_pairs(pares_validos)}
+        )
+
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "JSON inválido."}, status=HTTPStatus.BAD_REQUEST)
+
+@require_GET
+def fenomeno_index(request: WSGIRequest):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+    
+    fenomenos = services.list_user_fenomenos(request.user)
+
+    return JsonResponse(serializer.serialize_fenomenos_to_visualization(fenomenos))
