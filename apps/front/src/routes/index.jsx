@@ -67,11 +67,9 @@ export default function AppRoutes() {
           </PrivateRoute>
         } />
         <Route path="/analise-visual" element={
-          <PrivateRoute>
             <BaseHeader>
               <AnaliseVisual />
             </BaseHeader>
-          </PrivateRoute>
         } />
       </Routes>
     </Router>

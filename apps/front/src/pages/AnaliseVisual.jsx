@@ -12,7 +12,6 @@ import {
     Modal,
     Button
 } from '@mui/material';
-import { useFiretrack } from '../store/FiretrackContext';
 import BaseNavigationButtons from '../components/BaseNavigationButtons';
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
