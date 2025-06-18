@@ -4,10 +4,12 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null); 
 
   useEffect(() => {
-    fetch("http://localhost:8000/conta/", {
+    fetch("https://api.firetrack.nocta-software-dsm.com/conta/", {
       credentials: "include",
+
     })
       .then(res => res.ok ? res.json() : null)
       .then(data => {
@@ -17,7 +19,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, token, setToken }}>
       {children}
     </AuthContext.Provider>
   );

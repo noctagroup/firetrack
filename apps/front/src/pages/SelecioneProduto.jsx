@@ -16,7 +16,7 @@ export default function SelecioneProduto() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch("http://localhost:8000/produtos/", {
+            const res = await fetch("https://api.firetrack.nocta-software-dsm.com/produtos/", {
                 headers: {
                     "Content-Type": "application/json",
                     "X-CSRFToken": document.cookie.match(/csrftoken=([^;]+)/)?.[1] || ""
@@ -39,7 +39,7 @@ export default function SelecioneProduto() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch(`http://localhost:8000/fenomeno/queimadas/${fenomenoId}/product`, {
+            const res = await fetch(`https://api.firetrack.nocta-software-dsm.com/fenomeno/queimadas/${fenomenoId}/product`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 export async function getProcessamentos() {
-  const res = await fetch("http://localhost:8000/fenomeno/", {
+  const res = await fetch("https://api.firetrack.nocta-software-dsm.com/fenomeno/", {
     credentials: "include",
   });
   if (!res.ok) throw new Error("Erro ao buscar processamentos");
