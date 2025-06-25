@@ -5,6 +5,7 @@ import { getProcessamentos } from '../services/processamentoService';
 import { useNavigate } from 'react-router-dom';
 import { useLoading } from '../store/LoadingContext';
 import { useFiretrack } from '../store/FiretrackContext';
+import { id } from 'date-fns/locale';
 
 export default function Processamentos() {
   const [fenomenos, setFenomenos] = useState([]);
@@ -16,7 +17,7 @@ export default function Processamentos() {
 
   const handleStartNewProcessing = async () => {
     setLoading(true);
-    const res = await fetch("https://api.firetrack.nocta-software-dsm.com/fenomeno/queimadas/", {
+    const res = await fetch("http://localhost:8000/fenomeno/queimadas/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -36,6 +37,11 @@ export default function Processamentos() {
       navigate('/selecione-produto');
     }
   };
+
+  const handleClickOnExistigProcessing = (id) => {
+    setFenomenoId(id);
+    navigate('/selecione-produto');
+  }
 
   useEffect(() => {
     getProcessamentos().then(data => {

@@ -1,15 +1,19 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getCookie } from "../services/csrf";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
+    const csrftoken = getCookie("csrftoken");
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null); 
 
   useEffect(() => {
-    fetch("https://api.firetrack.nocta-software-dsm.com/conta/", {
+    fetch("http://localhost:8000/conta/", {
       credentials: "include",
-
+        headers: {
+        "X-CSRFToken": csrftoken,
+      },
     })
       .then(res => res.ok ? res.json() : null)
       .then(data => {

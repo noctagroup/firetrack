@@ -9,7 +9,7 @@ export default function BaseHeader({ children }) {
   const handleLogout = async () => {
     const match = document.cookie.match(/csrftoken=([^;]+)/);
     const csrfToken = match ? match[1] : null;
-    await fetch("https://api.firetrack.nocta-software-dsm.com/conta/sair/", {
+    await fetch("http://localhost:8000/conta/sair/", {
       method: "POST",
       credentials: "include",
       headers: { "X-CSRFToken": csrfToken },

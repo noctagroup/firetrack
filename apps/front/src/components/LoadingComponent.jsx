@@ -2,7 +2,7 @@ import { Box, Typography, Modal, CircularProgress, Alert } from '@mui/material';
 import { useLoading } from '../store/LoadingContext';
 
 export default function LoadingComponent({children}) {
-  const { loading, error } = useLoading();
+  const { loading, error, setError } = useLoading();
 
   return (
     <>
@@ -31,6 +31,11 @@ export default function LoadingComponent({children}) {
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
+            <Box sx={{ mt: 1 }} onClick={() => setError(null)} style={{ cursor: 'pointer' }}>
+              <Typography variant="body2" color="textSecondary">
+                Clique para fechar.
+              </Typography>
+            </Box>
           </Alert>
         )}
       </Box>

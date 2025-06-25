@@ -4,6 +4,7 @@ from firetrack.candidatos.models import Candidato
 from firetrack.fenomeno.models import Fenomeno
 from firetrack.pares.models import Pares
 
+
 def serialize_fenomenos_to_visualization(fenomenos: list[Fenomeno]) -> dict:
     fenomenos_dict = {"fenomenos": [], "aguardandoAnalise": [], "emProcessamento": []}
     for fenomeno in fenomenos:
@@ -38,8 +39,9 @@ def serialize_fenomenos_to_visualization(fenomenos: list[Fenomeno]) -> dict:
                     "estado": fenomeno.state,
                 }
             )
-    
+
     return fenomenos_dict
+
 
 def serialize_fenomeno_to_status_and_id(fenomeno: Fenomeno):
     return {"id": fenomeno.id, "status": fenomeno.state}
@@ -51,7 +53,10 @@ def serialize_fenomenos_to_admin_info(fenomenos: List[Fenomeno]):
             "id": fenomeno.id,
             "state": fenomeno.state,
             "product_name": fenomeno.product_name,
-            "createad_at": fenomeno.created_at,
+            "aoi": fenomeno.aoi.extent,
+            "filter_start_date": fenomeno.filter_start_date.isoformat(),
+            "filter_end_date": fenomeno.filter_end_date.isoformat(),
+            "created_at": fenomeno.created_at.isoformat(),
         }
         for fenomeno in fenomenos
     ]

@@ -15,7 +15,7 @@ export default function Login() {
     setLoading(true);
     e.preventDefault();
     setError("");
-    const res = await fetch("https://api.firetrack.nocta-software-dsm.com/conta/entrar/", {
+    const res = await fetch("http://localhost:8000/conta/entrar/", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -25,6 +25,7 @@ export default function Login() {
     });
     if (!res.ok) {
       setError("Usuário ou senha inválidos.");
+      setLoading(false);
       return;
     }
     const data = await res.json();

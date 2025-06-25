@@ -10,7 +10,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 
 servers:
-  - url: https://api.firetrack.nocta-software-dsm.com
+  - url: http://localhost:8000
   - url: http://localhost:8000
 
 tags:

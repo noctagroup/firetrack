@@ -32,6 +32,16 @@ def get_fenomenos(request: WSGIRequest):
     return JsonResponse(serializer.serialize_fenomenos_to_admin_info(data))
 
 
+@require_GET
+def get_fenomeno_by_id(request: WSGIRequest, queimadas_id: int):
+    if not request.user.is_authenticated:
+        return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
+
+    fenomeno = services.get_fenomeno_by_id(queimadas_id)
+
+    return JsonResponse(serializer.serialize_fenomenos_to_admin_info(fenomeno))
+
+
 @require_http_methods(["PATCH"])
 def update_fenomeno_period(request: WSGIRequest, queimadas_id: int):
     if not request.user.is_authenticated:
@@ -171,11 +181,12 @@ def confirm_visual_analysis(request: WSGIRequest, queimadas_id: int):
     except json.JSONDecodeError:
         return JsonResponse({"error": "JSON inválido."}, status=HTTPStatus.BAD_REQUEST)
 
+
 @require_GET
 def fenomeno_index(request: WSGIRequest):
     if not request.user.is_authenticated:
         return HttpResponse(status=HTTPStatus.UNAUTHORIZED)
-    
+
     fenomenos = services.list_user_fenomenos(request.user)
 
     return JsonResponse(serializer.serialize_fenomenos_to_visualization(fenomenos))
