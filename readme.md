@@ -1,6 +1,6 @@
 <span id="topo">
 
-<h1 align="center">Sprint 1: Entrega 22/05/2025</h1>
+<h1 align="center">Sprint 3: Entrega 16/06/2025</h1>
 
 <p align="center">
     <a href="#objetivos">Objetivos da sprint</a> &nbsp |&nbsp &nbsp
@@ -14,8 +14,9 @@
     
 ## :dart: Objetivos da Sprint
 - Implementação do sistema de autenticação concluída  
-- Desenvolvimento parcial do sistema de autenticação de fenômeno, com estrutura inicial em funcionamento
-- Avanço na integração de Inteligência Artificial, com testes iniciais realizados e funcionalidades básicas em desenvolvimento
+- Finalização do sistema de autenticação de fenômeno
+- Entrega do Sistema de Inteligência Artificial
+- criar Workers de Execução da execução de classificação no ambiente 
 
 
 <span id="Resumo do trabalho da equipe">
@@ -39,11 +40,3 @@
 
 → [Voltar ao topo](#topo)
     
-<span id="entregas">
-        
-## :rocket: Entregas
-```
-https://www.youtube.com/watch?v=4Aq1ixhojRM
-```
-<a href="https://www.youtube.com/watch?v=4Aq1ixhojRM"><strong>Assista o video da sprint review clicando aqui </strong></a> 
-
